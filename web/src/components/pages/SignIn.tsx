@@ -197,9 +197,9 @@ export default function SignIn() {
               <Button type="submit" fullWidth>
                 Sign in
               </Button>
-               {/* <Link fontSize="sm" href="#sign-up" fontWeight="lg">
+               <Link fontSize="sm" href="#sign-up" fontWeight="lg">
                 Newcomer? Sign Up Now!
-                </Link> */}
+                </Link>
             </form>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
