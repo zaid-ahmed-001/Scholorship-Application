@@ -11,9 +11,8 @@ import IconButton, { IconButtonProps } from '@mui/joy/IconButton';
 import Link from '@mui/joy/Link';
 import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
-import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
-import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
-
+import { useNavigate } from "react-router-dom";
+import ColorSchemeToggle from '../tools/ColorSchemeToggle';
 interface FormElements extends HTMLFormControlsCollection {
   text: HTMLInputElement;
   password: HTMLInputElement;
@@ -23,42 +22,14 @@ interface SignInFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
 
-function ColorSchemeToggle({ onClick, ...props }: IconButtonProps) {
-  const { mode, setMode } = useColorScheme();
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-  if (!mounted) {
-    return <IconButton size="sm" variant="plain" color="neutral" disabled />;
-  }
-  return (
-    <IconButton
-      id="toggle-mode"
-      size="sm"
-      variant="plain"
-      color="neutral"
-      aria-label="toggle light/dark mode"
-      {...props}
-      onClick={(event) => {
-        if (mode === 'light') {
-          setMode('dark');
-        } else {
-          setMode('light');
-        }
-        onClick?.(event);
-      }}
-    >
-      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
-    </IconButton>
-  );
-}
-
 /**
  * This template uses [`Inter`](https://fonts.google.com/specimen/Inter?query=inter) font.
  */
 export default function SignIn() {
-    
+  const navigate = useNavigate();
+  function handleClick() {
+    navigate("/SignUp");
+  }
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -197,7 +168,7 @@ export default function SignIn() {
               <Button type="submit" fullWidth>
                 Sign in
               </Button>
-               <Link fontSize="sm" href="#sign-up" fontWeight="lg">
+               <Link fontSize="sm" onClick={handleClick} fontWeight="lg">
                 Newcomer? Sign Up Now!
                 </Link>
             </form>
