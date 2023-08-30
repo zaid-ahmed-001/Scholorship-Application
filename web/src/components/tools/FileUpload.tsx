@@ -17,7 +17,7 @@ export default function FileUpload({
 }: CardProps & {
   icon?: React.ReactElement;
   fileName: string;
-  fileSize: string;
+  fileSize: any;
   progress: number;
 }) {
   return (

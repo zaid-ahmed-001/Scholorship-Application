@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+input::file-selector-button {
+  background-color: transparent;
+  border: none;
+  color: #0b6bcb;
+}

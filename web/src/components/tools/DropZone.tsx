@@ -4,6 +4,7 @@ import Box from '@mui/joy/Box';
 import Card, { CardProps } from '@mui/joy/Card';
 import Link from '@mui/joy/Link';
 import Typography from '@mui/joy/Typography';
+import FileUpload from '../tools/FileUpload';
 
 export default function DropZone({ sx, ...props }: CardProps) {
   return (
@@ -39,10 +40,10 @@ export default function DropZone({ sx, ...props }: CardProps) {
         </Box>
       </Box>
       <Typography level="body-sm" textAlign="center">
-        <Link component="button" overlay>
+        {/* <Link component="button" overlay>
           Click to upload
-        </Link>{' '}
-        or drag and drop
+        </Link>{' '} */}
+        {/* or drag and drop */}
         <br /> SVG, PNG, JPG or GIF (max. 800x400px)
       </Typography>
     </Card>
