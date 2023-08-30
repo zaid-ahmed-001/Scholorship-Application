@@ -161,9 +161,9 @@ export default function SignIn() {
                 }}
               >
                 <Checkbox size="sm" label="Remember me" name="persistent" />
-                {/* <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg">
+                <Link fontSize="sm" href="#replace-with-a-link" fontWeight="lg">
                   Forgot your password?
-                </Link> */}
+                </Link>
               </Box>
               <Button type="submit" fullWidth>
                 Sign in
