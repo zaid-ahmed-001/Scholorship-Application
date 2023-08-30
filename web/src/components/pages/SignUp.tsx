@@ -37,177 +37,96 @@ import { useNavigate } from 'react-router-dom';
 function enableTab(index:number) {
   console.log('check data for ', index)
 }
-
 interface PersonlFormElement extends HTMLFormElement {
-  readonly elements: PersonlForm;
+  readonly firstName: HTMLInputElement;
+  readonly lastName: HTMLInputElement;
+  readonly fatherName: HTMLInputElement;
+  readonly eMail: HTMLInputElement;
+  readonly contactNumber: HTMLInputElement;
+  readonly dateofBirth: HTMLInputElement;
+  readonly gender: HTMLInputElement;
+  readonly religion: HTMLInputElement;
+  readonly country: HTMLInputElement;
+  readonly MaritalStatus: HTMLInputElement;
+  readonly SpouseName: HTMLInputElement;
+  readonly Disabled: HTMLInputElement;
+  readonly Orphan: HTMLInputElement;
+  readonly PersonalAgreement: HTMLInputElement;
 }
-interface PersonlForm extends HTMLFormControlsCollection {
-  firstName: HTMLInputElement;
-  lastName: HTMLInputElement;
-  fatherName: HTMLInputElement;
-  eMail: HTMLInputElement;
-  contactNumber: HTMLInputElement;
-  dateofBirth: HTMLInputElement;
-  gender: HTMLInputElement;
-  religion: HTMLInputElement;
-  country: HTMLInputElement;
-  MaritalStatus: HTMLInputElement;
-  SpouseName: HTMLInputElement;
-  Disabled: HTMLInputElement;
-  Orphan: HTMLInputElement;
-  PersonalAgreement: HTMLInputElement;
-}
-function PersonalDetails() {
-  const [Area, setArea] = useState('');
-  const [Orphan, setOrphan] = useState('');
-  const [Disabled, setDisabled] = useState('');
-  const [firstName, setfirstName] = useState('');
-  const [lastName, setlastName] = useState('');
-  const [fatherName, setfatherName] = useState('');
-  const [eMail, seteMail] = useState('');
-  const [contactNumber, setcontactNumber] = useState('');
-  const [dateofBirth, setdateofBirth] = useState('');
-  const [SpouseName, setSpouseName] = useState('');
-  const [HouseNo, setHouseNo] = useState('');
-  const [Street, setStreet] = useState('');
-  const [Sector, setSector] = useState('');
-  const [City, setCity] = useState('');
-  const [Pincode, setPincode] = useState('');
-  const [Gender, setGender] = useState();
-  const [Religion, setReligion] = useState();
-  const [MaritalStatus, setMaritalStatus] = useState();
-  const handleChangeHouseNo = (event: React.ChangeEvent<HTMLInputElement>) => {setHouseNo(event.target.value);};
-  const handleChangeStreet = (event: React.ChangeEvent<HTMLInputElement>) => {setStreet(event.target.value);};
-  const handleChangeSector = (event: React.ChangeEvent<HTMLInputElement>) => {setSector(event.target.value);};
-  const handleChangeCity = (event: React.ChangeEvent<HTMLInputElement>) => {setCity(event.target.value);};
-  const handleChangePincode = (event: React.ChangeEvent<HTMLInputElement>) => {setPincode(event.target.value);};
-  const handleChangefirstName = (event: React.ChangeEvent<HTMLInputElement>) => {setfirstName(event.target.value);};
-  const handleChangelastName = (event: React.ChangeEvent<HTMLInputElement>) => {setlastName(event.target.value);};
-  const handleChangefatherName = (event: React.ChangeEvent<HTMLInputElement>) => {setfatherName(event.target.value);};
-  const handleChangeeMail = (event: React.ChangeEvent<HTMLInputElement>) => {seteMail(event.target.value);};
-  const handleChangecontactNumber = (event: React.ChangeEvent<HTMLInputElement>) => {setcontactNumber(event.target.value);};
-  const handleChangedateofBirth = (event: React.ChangeEvent<HTMLInputElement>) => {setdateofBirth(event.target.value);};
-  const handleChangeSpouseName = (event: React.ChangeEvent<HTMLInputElement>) => {setSpouseName(event.target.value);};
-  const handleChangeArea = (event: React.ChangeEvent<HTMLInputElement>) => {setArea(event.target.value);};
-  const handleChangeDisabled = (event: React.ChangeEvent<HTMLInputElement>) => {setOrphan(event.target.value);};
-  const handleChangeOrphan = (event: React.ChangeEvent<HTMLInputElement>) => {setDisabled(event.target.value);};
-  const handleChangeGender = (val: any) => {setGender(val);};
-  const handleChangeReligion = (val: any) => {setReligion(val);};
-  const handleChangeMaritalStatus = (val: any) => {setMaritalStatus(val);};
+function PersonalDetails(props: any) {
+  const personalQuesList = [
+    {label: 'Email', formType:'text', decor: <i data-feather="mail" />, id: 'eMail', properties: props.eMail},
+    {label: 'Contact Number', formType:'number', decor: "+91", id: 'contactNumber', properties: props.contactNumber},
+    {label: 'Date of Birth', formType:'date', decor: "", id: 'dateofBirth', properties: props.dateofBirth}
+  ];
   return (
     <form  
     name='PersonalSubmit'
     onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
-          event.preventDefault();
-          const PersonlForm = event.currentTarget.elements;
-          const data = {
-            firstName: PersonlForm.firstName.value,
-            lastName: PersonlForm.lastName.value,
-            fatherName: PersonlForm.fatherName.value,
-            eMail: PersonlForm.eMail.value,
-            contactNumber: PersonlForm.contactNumber.value,
-            dateofBirth: PersonlForm.dateofBirth.value,
-            gender: Gender,
-            country: PersonlForm.country.value,
-            religion: Religion,
-            MaritalStatus: MaritalStatus,
-            SpouseName: {SpouseName},
-            Disabled: PersonlForm.Disabled.value,
-            Orphan: PersonlForm.Orphan.value,
-            Agreement: PersonlForm.PersonalAgreement.checked,
-          };
-          alert(JSON.stringify(data, null, 2));
-        }}>
-    <TabPanel value={0}>
-      <Box
-        sx={{
-          pt: 3,
-          pb: 10,
-          display: 'grid',
-          gridTemplateColumns: {
-            xs: '100%',
-            sm: 'minmax(120px, 30%) 1fr',
-            lg: '280px 1fr minmax(120px, 208px)',
-          },
-          columnGap: { xs: 2, sm: 3, md: 4 },
-          rowGap: { xs: 2, sm: 2.5 },
-          '& > hr': {
-            gridColumn: '1/-1',
-          },
-        }}
-      >
-        <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }} >Name</FormLabel>
-        <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
-          <FormControl  sx={{ flex: 1 }} >
-            <FormLabel sx={{ display: { sm: 'none' } }}>First name</FormLabel>
-            <Input placeholder="" name="firstName" required value={firstName} onChange={handleChangefirstName} />
-          </FormControl>
-          <FormControl  sx={{ flex: 1 }}>
-            <FormLabel sx={{ display: { sm: 'none' } }}>Last name</FormLabel>
-            <Input placeholder="" name="lastName" required value={lastName} onChange={handleChangelastName} />
-          </FormControl>
-        </Box>
-        <Divider role="presentation" />
-        <FormControl  sx={{ display: { sm: 'contents' } }}>
-          <FormLabel>Father's Name</FormLabel>
-          <Input placeholder="" name="fatherName" required value={fatherName} onChange={handleChangefatherName} />
-        </FormControl>
-        <Divider role="presentation" />
-        <FormControl  sx={{ display: { sm: 'contents' } }}>
-          <FormLabel>Email</FormLabel>
-          <Input
-            type="email"
-            startDecorator={<i data-feather="mail" />}
-            placeholder=" "
-            name="eMail"
-            value={eMail}
-            onChange={handleChangeeMail}
-            required
-          />
-        </FormControl>
-        <Divider role="presentation" />
-        <FormControl sx={{ display: { sm: 'contents' } }}>
-          <FormLabel>Contact Number</FormLabel>
-          <Input
-            type="number"
-            startDecorator={'+91'}
-            placeholder=" "
-            name="contactNumber"
-            required
-            value={contactNumber}
-            onChange={handleChangecontactNumber}
-          />
-        </FormControl>
-        <Divider role="presentation" />
-        <FormControl sx={{ display: { sm: 'contents' } }}>
-          <FormLabel>Date of Birth</FormLabel>
-          <Input
-            type="date"
-            name="dateofBirth"
-            required
-            value={dateofBirth}
-            onChange={handleChangedateofBirth}
-          />
-        </FormControl>
-        <Divider role="presentation" />
-        <FormControl sx={{ display: { sm: 'contents' } }}>
-          <FormLabel>Gender</FormLabel>
-          <Select id="gender" name="gender" required value={Gender} onChange={(e, newValue) => handleChangeGender(newValue)}>
-            <Option value="female">
-              Female
-            </Option>
-            <Option value="male">
-              Male
-            </Option>
-            <Option value="transgender">
-              Transgender
-            </Option>
+    event.preventDefault();
+    const PersonlForm = event.currentTarget.elements;
+    const data = {
+      firstName: props.firstName,
+      lastName: props.lastName,
+      fatherName: props.fatherName,
+      eMail: props.eMail,
+      contactNumber: props.contactNumber,
+      dateofBirth: props.dateofBirth,
+      gender: props.Gender,
+      country: props.country,
+      religion: props.Religion,
+      MaritalStatus: props.MaritalStatus,
+      SpouseName: props.SpouseName,
+      Disabled: props.Disabled,
+      Orphan: props.Orphan,
+      Agreement: props.PersonalAgreement,
+    };
+    alert(JSON.stringify(data, null, 2));
+  }}>
+      <TabPanel value={0}>
+        <Box sx={{pt: 3,pb: 10,display: 'grid',gridTemplateColumns: {  xs: '100%',  sm: 'minmax(120px, 30%) 1fr',  lg: '280px 1fr minmax(120px, 208px)',},
+          columnGap: { xs: 2, sm: 3, md: 4 },rowGap: { xs: 2, sm: 2.5 },'& > hr': {  gridColumn: '1/-1',},}} >
+          <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }} >Name</FormLabel>
+          <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
+            <FormControl  sx={{ flex: 1 }} >
+              <FormLabel sx={{ display: { sm: 'none' } }}>First name</FormLabel>
+              <Input placeholder="" name="firstName" required value={props.firstName} onChange={(e)=>props.dispatch({type: 'firstName', payload: e.target.value})} />
+            </FormControl>
+            <FormControl  sx={{ flex: 1 }}>
+              <FormLabel sx={{ display: { sm: 'none' } }}>Last name</FormLabel>
+              <Input placeholder="" name="lastName" required value={props.lastName} onChange={(e)=>props.dispatch({type: 'lastName', payload: e.target.value})} />
+            </FormControl>
+          </Box>
+        {
+          personalQuesList.map((ques:any, index:any) => {
+              return <>
+                <Divider role="presentation" />
+                <FormControl  sx={{ display: { sm: 'contents' } }}>
+                  <FormLabel>{ques.label}</FormLabel>
+                  <Input 
+                  type={ques.formType}
+                  placeholder=''
+                  defaultValue=''
+                  startDecorator={ques.decor}
+                  name={ques.id}
+                  required
+                  value={ques.properties}
+                  onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                </FormControl>
+                <Divider role="presentation" />
+            </>
+          })
+        }
+        <FormControl sx={{ display: { sm: 'contents' } }}><FormLabel>Gender</FormLabel>
+          <Select id="gender" name="gender" required value={props.Gender} onChange={(e, newValue) => props.dispatch({type: 'Gender', payload: newValue}) }>
+            <Option value="female">Female</Option>
+            <Option value="male">Male</Option>
+            <Option value="transgender">Transgender</Option>
           </Select>
         </FormControl>
         <Divider role="presentation" />
-        <FormControl sx={{ display: { sm: 'contents' } }}>
-          <FormLabel>Religion</FormLabel>
-          <Select defaultValue="" name="religion" required value={Religion} onChange={(e, newValue) => handleChangeReligion(newValue)}>
+        <FormControl sx={{ display: { sm: 'contents' } }}><FormLabel>Religion</FormLabel>
+          <Select defaultValue="" name="religion" required value={props.Religion} onChange={(e, newValue) => props.dispatch({type: 'Religion', payload: newValue}) }>
             <Option value="hindu">Hindu</Option>
             <Option value="muslim">Islam</Option>
             <Option value="sikh">Sikh</Option>
@@ -220,31 +139,31 @@ function PersonalDetails() {
         <Divider role="presentation" />
         <CountrySelector />
         <Divider role="presentation" />
-          <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Address</FormLabel>
+        <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Address</FormLabel>
           <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
             <FormLabel sx={{ display: { sm: 'none' } }}>Address</FormLabel>
             <FormControl sx={{ flex: 1 }}>
-              <Input name="HouseNo" required placeholder="House No. / Building" value={HouseNo} onChange={(handleChangeHouseNo)} />
+              <Input name="HouseNo" required placeholder="House No. / Building" value={props.HouseNo} onChange={(e)=>props.dispatch({type: 'HouseNo', payload: e.target.value})} />
             </FormControl>
             <FormControl sx={{ flex: 1 }}>
-              <Input name="Street" required placeholder="Street / Locality"  value={Street} onChange={handleChangeStreet} />
-            </FormControl>
-          </Box>
-          <Divider />
-          <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}></FormLabel>
-          <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
-            <FormControl sx={{ flex: 1 }}>
-              <Input name="Sector" required placeholder="Area / Complex / Sector" value={Sector} onChange={handleChangeSector} />
-            </FormControl>
-            <FormControl sx={{ flex: 1 }}>
-              <Input name="City" required placeholder="Town / City / Village" value={City} onChange={handleChangeCity} />
+              <Input name="Street" required placeholder="Street / Locality"  value={props.Street} onChange={(e)=>props.dispatch({type: 'Street', payload: e.target.value})} />
             </FormControl>
           </Box>
           <Divider />
           <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}></FormLabel>
           <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
-              <Input type='number' name="Pincode" required placeholder="Pincode" value={Pincode} onChange={handleChangePincode} />
+              <Input name="Sector" required placeholder="Area / Complex / Sector" value={props.Sector} onChange={(e)=>props.dispatch({type: 'Sector', payload: e.target.value})} />
+            </FormControl>
+            <FormControl sx={{ flex: 1 }}>
+              <Input name="City" required placeholder="Town / City / Village" value={props.City} onChange={(e)=>props.dispatch({type: 'City', payload: e.target.value})} />
+            </FormControl>
+          </Box>
+          <Divider />
+          <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}></FormLabel>
+          <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
+            <FormControl sx={{ flex: 1 }}>
+              <Input type='number' name="Pincode" required placeholder="Pincode" value={props.Pincode} onChange={(e)=>props.dispatch({type: 'Pincode', payload: e.target.value})} />
             </FormControl>
           </Box>
         <Divider role="presentation" />
@@ -255,9 +174,9 @@ function PersonalDetails() {
             <RadioGroup
                 defaultValue=""
                 name="Area"
-                value={Area}
+                value={props.Area}
                 orientation="horizontal"
-                onChange={handleChangeArea}
+                onChange={(e)=>props.dispatch({type: 'Area', payload: e.target.value})}
                 sx={{ my: 1 }}
               >
               <Radio required value="rural" label="Rural" />
@@ -268,44 +187,34 @@ function PersonalDetails() {
         <Divider role="presentation" />
         <FormControl sx={{ display: { sm: 'contents' } }}>
           <FormLabel>Marital Status</FormLabel>
-          <Select defaultValue="" name="MaritalStatus" required value={MaritalStatus} onChange={(e, newValue) => handleChangeMaritalStatus(newValue)}>
-            <Option value="single">
-              Single
-            </Option>
-            <Option value="married">
-              Married
-            </Option>
-            <Option value="divorced">
-              Divorced
-            </Option>
-            <Option value="widow">
-              Widow
-            </Option>
-            <Option value="widower">
-              Widower
-            </Option>
+          <Select defaultValue="" name="MaritalStatus" required value={props.MaritalStatus} onChange={(e, newValue) => props.dispatch({type: 'MaritalStatus', payload: newValue}) }>
+            <Option value="single">Single</Option>
+            <Option value="married">Married</Option>
+            <Option value="divorced">Divorced</Option>
+            <Option value="widow">Widow</Option>
+            <Option value="widower">Widower</Option>
           </Select>
         </FormControl>
         <Divider role="presentation" />
-        <FormControl sx={{ display: (MaritalStatus == 'married') ? 'contents' : 'none'  } }>
+        <FormControl sx={{ display: (props.MaritalStatus == 'married') ? 'contents' : 'none'  } }>
           <FormLabel></FormLabel>
           <Input
             type="text"
             name="SpouseName"
             placeholder="Spouse's Name"
-            value={SpouseName}
-            onChange={handleChangeSpouseName}
+            value={props.SpouseName}
+            onChange={(e)=>props.dispatch({type: 'SpouseName', payload: e.target.value})}
           />
         </FormControl>
-        <Divider role="presentation" sx={{ display: (MaritalStatus == 'married') ? 'content' : 'none' }} />
+        <Divider role="presentation" sx={{ display: (props.MaritalStatus == 'married') ? 'content' : 'none' }} />
         <FormControl sx={{ display: { sm: 'contents' } }}>
           <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Do you identify as a person with a disability?</FormLabel>
           <Box sx={{ display: { xs: 'contents', sm: 'flex', flexDirection: 'column'  }, gap: 2 }}>
           <FormLabel sx={{ display: { sm: 'none' } }}>Do you identify as a person with a disability?</FormLabel>
             <RadioGroup
-                value={Disabled}
+                value={props.Disabled}
                 orientation="horizontal"
-                onChange={handleChangeOrphan}
+                onChange={(e)=>props.dispatch({type: 'Disabled', payload: e.target.value})}
                 sx={{ my: 1 }}
                 name="Disabled" 
               >
@@ -321,9 +230,9 @@ function PersonalDetails() {
           <Box sx={{ display: { xs: 'contents', sm: 'flex', flexDirection: 'column'  }, gap: 2 }}>
             <RadioGroup
                 name="Orphan"
-                value={Orphan}
+                value={props.Orphan}
                 orientation="horizontal"
-                onChange={handleChangeDisabled}
+                onChange={(e)=>props.dispatch({type: 'Orphan', payload: e.target.value})}
                 sx={{ my: 1 }}
               >
               <Radio required value="yes" label="Yes" />
@@ -355,35 +264,16 @@ function PersonalDetails() {
 }
 
 interface AcademicFormElement extends HTMLFormElement {
-  readonly elements: AcademicForm;
+  readonly Diploma: HTMLInputElement;
+  readonly TenthBoard: HTMLInputElement;
+  readonly TenthSchool: HTMLInputElement;
+  readonly TenthPercentage: HTMLInputElement;
+  readonly TwelfthBoard: HTMLInputElement;
+  readonly TwelfthSchool: HTMLInputElement;
+  readonly TwelfthStream: HTMLInputElement;
+  readonly TwelfthPercentage: HTMLInputElement;
 }
-interface AcademicForm extends HTMLFormControlsCollection {
-  Diploma: HTMLInputElement;
-  TenthBoard: HTMLInputElement;
-  TenthSchool: HTMLInputElement;
-  TenthPercentage: HTMLInputElement;
-  TwelfthBoard: HTMLInputElement;
-  TwelfthSchool: HTMLInputElement;
-  TwelfthStream: HTMLInputElement;
-  TwelfthPercentage: HTMLInputElement;
-}
-function AcademicDetails() {
-  const [Diploma, setDiploma] = React.useState('');
-  const [TenthBoard , setTenthBoard] = React.useState('');
-  const [TenthSchool , setTenthSchool] = React.useState('');
-  const [TenthPercentage , setTenthPercentage] = React.useState('');
-  const [TwelfthBoard , setTwelfthBoard] = React.useState('');
-  const [TwelfthSchool , setTwelfthSchool] = React.useState('');
-  const [TwelfthStream , setTwelfthStream] = React.useState('');
-  const [TwelfthPercentage , setTwelfthPercentage] = React.useState('');
-  const handleChangeTenthBoard = (event: React.ChangeEvent<HTMLInputElement>) => {setTenthBoard(event.target.value);};
-  const handleChangeTenthSchool = (event: React.ChangeEvent<HTMLInputElement>) => {setTenthSchool(event.target.value);};
-  const handleChangeTenthPercentage = (event: React.ChangeEvent<HTMLInputElement>) => {setTenthPercentage(event.target.value);};
-  const handleChangeTwelfthBoard = (event: React.ChangeEvent<HTMLInputElement>) => {setTwelfthBoard(event.target.value);};
-  const handleChangeTwelfthSchool = (event: React.ChangeEvent<HTMLInputElement>) => {setTwelfthSchool(event.target.value);};
-  const handleChangeTwelfthStream = (event: React.ChangeEvent<HTMLInputElement>) => {setTwelfthStream(event.target.value);};
-  const handleChangeTwelfthPercentage = (event: React.ChangeEvent<HTMLInputElement>) => {setTwelfthPercentage(event.target.value);};
-  const handleChangeDiploma = (event: React.ChangeEvent<HTMLInputElement>) => {setDiploma(event.target.value);};
+function AcademicDetails(props: any) {
   const [TenthMarkSheet , setTenthMarkSheet] = React.useState<File | null>(null);
   const [TenthMarkSheetuploadProgress, setTenthMarkSheetUploadProgress] = React.useState(0);
   const [TwelfthMarkSheet , setTwelfthMarkSheet] = React.useState<File | null>(null);
@@ -459,41 +349,34 @@ function AcademicDetails() {
       }
     }, 1000);
   };
+  const academicQuesList = [
+    {label: 'Exam board was in charge of your 10th-Grade Board Exams', formType:'text', decor: '', id: 'TenthBoard', properties: props.TenthBoard},
+    {label: 'Name of the school where you completed your 10th-Grade Board Education', formType:'text', decor: '', id: 'TenthSchool', properties: props.TenthSchool},
+    {label: 'Percentage you secured in your 10th-Grade Board Exams', formType:'number', decor: '', id: 'TenthPercentage', properties: props.TenthPercentage},
+    {label: 'Exam board was in charge of your 12th-Grade Board Exams', formType:'text', decor: '', id: 'TwelfthBoard', properties: props.TwelfthBoard},
+    {label: 'Name of the school where you completed your 12th-Grade Board Education', formType:'text', decor: '', id: 'TwelfthSchool', properties: props.TwelfthSchool},
+    {label: 'What stream did you choose for your 12th-Grade?', formType:'text', decor: '', id: 'TwelfthStream', properties: props.TwelfthStream},
+    {label: 'Percentage you secured in your 12th-Grade Board Exams', formType:'number', decor: '', id: 'TwelfthPercentage', properties: props.TwelfthPercentage}
+  ];
   return (
     <>
     <form  
     onSubmit={(event: React.FormEvent<AcademicFormElement>) => {
           event.preventDefault();
           const data = {
-            Diploma: {Diploma},
-            TenthBoard: {TenthBoard},
-            TenthSchool: {TenthSchool},
-            TenthPercentage: {TenthPercentage},
-            TwelfthBoard: {TwelfthBoard},
-            TwelfthSchool: {TwelfthSchool},
-            TwelfthStream: {TwelfthStream},
-            TwelfthPercentage: {TwelfthPercentage}
+            Diploma: props.Diploma,
+            TenthBoard: props.TenthBoard,
+            TenthSchool: props.TenthSchool,
+            TenthPercentage: props.enthPercentage,
+            TwelfthBoard: props.TwelfthBoard,
+            TwelfthSchool: props.TwelfthSchool,
+            TwelfthStream: props.TwelfthStream,
+            TwelfthPercentage: props.TwelfthPercentage
           };
           alert(JSON.stringify(data, null, 2));
         }}>
       <TabPanel value={1}>
-          <Box
-            sx={{
-              pt: 3,
-              pb: 10,
-              display: 'grid',
-              gridTemplateColumns: {
-                xs: '100%',
-                sm: 'minmax(120px, 30%) 1fr',
-                lg: '280px 1fr minmax(120px, 208px)',
-              },
-              columnGap: { xs: 2, sm: 3, md: 4 },
-              rowGap: { xs: 2, sm: 2.5 },
-              '& > hr': {
-                gridColumn: '1/-1',
-              },
-            }}
-          >
+        <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
               <FormControl sx={{ display: { sm: 'contents' } }}>
                 <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Have you concluded a diploma curriculum?</FormLabel>
                 <FormLabel sx={{ display: { sm: 'none' } }}>Have you concluded a diploma curriculum?</FormLabel>
@@ -505,10 +388,10 @@ function AcademicDetails() {
                   }}
                 >
                   <RadioGroup
-                      name="controlled-radio-buttons-group"
-                      value={Diploma}
+                      name="Diploma"
+                      value={props.Diploma}
                       orientation="horizontal"
-                      onChange={handleChangeDiploma}
+                      onChange={(e)=>props.dispatch({type: 'Diploma', payload: e.target.value})}
                       sx={{ my: 1 }}
                     >
                     <Radio required value="yes" label="Yes" />
@@ -517,7 +400,7 @@ function AcademicDetails() {
                 </Box>
               </FormControl>
               <Divider role="presentation" />
-              {(() => { if (Diploma==='yes')  {
+              {(() => { if (props.Diploma==='yes')  {
                 return (
                   <>
                     <FormControl sx={{ display: { sm: 'contents' } }}>
@@ -530,86 +413,28 @@ function AcademicDetails() {
                     <Divider role="presentation" />
                   </>
                 )
-              } else if (Diploma==='no') {
+              } else if (props.Diploma==='no') {
                 return (
                   <>
-                  <FormControl sx={{ display: { sm: 'contents' } }}>
-                    <FormLabel>Exam board was in charge of your <br/> 10th-Grade Board Exams</FormLabel>
-                    <Input 
-                      type='text'
-                      placeholder=""
-                      required
-                      value={TenthBoard}
-                      onChange={handleChangeTenthBoard}
-                    />
-                  </FormControl>
-                  <Divider role="presentation" />
-                  <FormControl sx={{ display: { sm: 'contents' } }}>
-                    <FormLabel>Name of the school where you completed your 10th-Grade Board Education</FormLabel>
-                    <Input 
-                      type='text'
-                      placeholder=""
-                      required
-                      value={TenthSchool}
-                      onChange={handleChangeTenthSchool}
-                    />
-                  </FormControl>
-                  <Divider role="presentation" />
-                  <FormControl sx={{ display: { sm: 'contents' } }}>
-                    <FormLabel>Percentage you secured in your <br/> 10th-Grade Board Exams</FormLabel>
-                    <Input 
-                      type='text'
-                      placeholder=""
-                      required
-                      value={TenthPercentage}
-                      onChange={handleChangeTenthPercentage}
-                    />
-                  </FormControl>
-                  <Divider role="presentation" />
-                  <FormControl sx={{ display: { sm: 'contents' } }}>
-                    <FormLabel>Exam board was in charge of your <br/> 12th-Grade Board Exams</FormLabel>
-                    <Input 
-                      type='text'
-                      placeholder=""
-                      required
-                      value={TwelfthBoard}
-                      onChange={handleChangeTwelfthBoard}
-                    />
-                  </FormControl>
-                  <Divider role="presentation" />
-                  <FormControl sx={{ display: { sm: 'contents' } }}>
-                    <FormLabel>Name of the school where you completed your 12th-Grade Board Education</FormLabel>
-                    <Input 
-                      type='text'
-                      placeholder=""
-                      required
-                      value={TwelfthSchool}
-                      onChange={handleChangeTwelfthSchool}
-                    />
-                  </FormControl>
-                  <Divider role="presentation" />
-                  <FormControl sx={{ display: { sm: 'contents' } }}>
-                    <FormLabel>What stream did you choose for your <br/> 12th-Grade?</FormLabel>
-                    <Input 
-                      type='text'
-                      placeholder=""
-                      required
-                      value={TwelfthStream}
-                      onChange={handleChangeTwelfthStream}
-                    />
-                  </FormControl>
-                  <Divider role="presentation" />
-                  <FormControl sx={{ display: { sm: 'contents' } }}>
-                    <FormLabel>Percentage you secured in your <br/> 12th-Grade Board Exams</FormLabel>
-                    <Input 
-                      type='text'
-                      placeholder=""
-                      required
-                      value={TwelfthPercentage}
-                      onChange={handleChangeTwelfthPercentage}
-                    />
-                  </FormControl>
-                  <Divider role="presentation" />
+                    {
+                      academicQuesList.map((ques:any, index:any) => {
+                          return <>
+                            <Divider role="presentation" />
+                            <FormControl  sx={{ display: { sm: 'contents' } }}>
+                              <FormLabel>{ques.label}</FormLabel>
+                              <Input 
+                              type={ques.formType}
+                              placeholder=''
+                              startDecorator={ques.decor}
+                              name={ques.id}
+                              required
+                              value={ques.properties}
+                              onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                            </FormControl>
+                            <Divider role="presentation" />
+                        </>
+                      })
+                    }
                   <FormLabel>Upload 10th Class MarkSheet</FormLabel>
                   <Card
                     variant="outlined"
@@ -683,14 +508,7 @@ function AcademicDetails() {
                 )
                 }
               })()}
-              <Box
-                sx={{
-                  gridColumn: '1/-1',
-                  justifySelf: 'flex-end',
-                  display: 'flex',
-                  gap: 1,
-                }}
-              >
+              <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
                 <Button type='submit' size="sm" onClick={ () => enableTab(2) }>Next</Button>
               </Box>
           </Box>
@@ -701,23 +519,12 @@ function AcademicDetails() {
 }
 
 interface CasteFormElement extends HTMLFormElement {
-  readonly elements: CasteForm;
+  readonly casteCertificateNumber: HTMLInputElement;
+  readonly casteCertificateIssueDate: HTMLInputElement;
+  readonly caste: HTMLInputElement;
+  readonly subCaste: HTMLInputElement;
 }
-interface CasteForm extends HTMLFormControlsCollection {
-  casteCertificateNumber: HTMLInputElement;
-  casteCertificateIssueDate: HTMLInputElement;
-  caste: HTMLInputElement;
-  subCaste: HTMLInputElement;
-}
-function CasteDetails() {
-  const [casteCertificateNumber , setcasteCertificateNumber] = React.useState('');
-  const [casteCertificateIssueDate , setcasteCertificateIssueDate] = React.useState('');
-  const [caste , setcaste] = React.useState('');
-  const [subCaste , setsubCaste] = React.useState('');
-  const handlecasteCertificateNumber = (event: React.ChangeEvent<HTMLInputElement>) => {setcasteCertificateNumber(event.target.value);};
-  const handlecasteCertificateIssueDate = (event: React.ChangeEvent<HTMLInputElement>) => {setcasteCertificateIssueDate(event.target.value);};
-  const handlecaste = (event: React.ChangeEvent<HTMLInputElement>) => {setcaste(event.target.value);};
-  const handlesubCaste = (event: React.ChangeEvent<HTMLInputElement>) => {setsubCaste(event.target.value);};
+function CasteDetails(props:any) {
   const [casteCertificate , setcasteCertificate] = React.useState<File | null>(null);
   const [casteCertificateuploadProgress, setcasteCertificateuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -751,61 +558,47 @@ function CasteDetails() {
       setcasteCertificateuploadProgress(0)
     }, 1000);
   };
+  const casteQuesList = [
+    {label: 'Caste Certificate Number', formType:'text', decor: '', id: 'casteCertificateNumber', properties: props.casteCertificateNumber},
+    {label: 'Caste Certificate Issue Date', formType:'date', decor: '', id: 'casteCertificateIssueDate', properties: props.casteCertificateIssueDate},
+    {label: 'Caste', formType:'text', decor: '', id: 'caste', properties: props.caste},
+    {label: 'Sub-Caste', formType:'text', decor: '', id: 'subCaste', properties: props.subCaste},
+  ];
   return (
     <>
       <form  
       onSubmit={(event: React.FormEvent<CasteFormElement>) => {
         event.preventDefault();
         const data = {
-          casteCertificateNumber: {casteCertificateNumber},
-          casteCertificateIssueDate: {casteCertificateIssueDate},
-          caste: {caste},
-          subCaste: {subCaste}
+          casteCertificateNumber: props.casteCertificateNumber,
+          casteCertificateIssueDate: props.casteCertificateIssueDate,
+          caste: props.caste,
+          subCaste: props.subCaste
         };
         alert(JSON.stringify(data, null, 2));
       }}>
         <TabPanel value={2}>
-            <Box
-              sx={{
-                pt: 3,
-                pb: 10,
-                display: 'grid',
-                gridTemplateColumns: {
-                  xs: '100%',
-                  sm: 'minmax(120px, 30%) 1fr',
-                  lg: '280px 1fr minmax(120px, 208px)',
-                },
-                columnGap: { xs: 2, sm: 3, md: 4 },
-                rowGap: { xs: 2, sm: 2.5 },
-                '& > hr': {
-                  gridColumn: '1/-1',
-                },
-              }}
-            >
-              <FormControl sx={{ display: { sm: 'contents' } }}>
-                <FormLabel>Caste Certificate Number</FormLabel>
-                <Input placeholder="" required name='casteCertificateNumber' value={casteCertificateNumber} onChange={handlecasteCertificateNumber} />
-              </FormControl>
-              <Divider role="presentation" />
-              <FormControl sx={{ display: { sm: 'contents' } }}>
-                <FormLabel>Caste Certificate Issue Date</FormLabel>
-                <Input
-                  type="date"
-                  required name='casteCertificateIssueDate' value={casteCertificateIssueDate} onChange={handlecasteCertificateIssueDate}
-                />
-              </FormControl>
-              <Divider role="presentation" />
-              <FormControl sx={{ display: { sm: 'contents' } }}>
-                <FormLabel>Caste</FormLabel>
-                <Input placeholder="" required name='caste' value={caste} onChange={handlecaste}/>
-              </FormControl>
-              <Divider role="presentation" />
-              <FormControl sx={{ display: { sm: 'contents' } }}>
-                <FormLabel>Sub-Caste</FormLabel>
-                <Input placeholder="" required name='subCaste' value={subCaste} onChange={handlesubCaste}/>
-              </FormControl>
-
-              <Divider role="presentation" />
+          <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
+            {
+              casteQuesList.map((ques:any, index:any) => {
+                  return <>
+                    <Divider role="presentation" />
+                    <FormControl  sx={{ display: { sm: 'contents' } }}>
+                      <FormLabel>{ques.label}</FormLabel>
+                      <Input 
+                      type={ques.formType}
+                      placeholder=''
+                      defaultValue=''
+                      startDecorator={ques.decor}
+                      name={ques.id}
+                      required
+                      value={ques.properties}
+                      onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                    </FormControl>
+                    <Divider role="presentation" />
+                </>
+              })
+            }
               <FormLabel>Upload Caste Certificate</FormLabel>
               <Card
                 variant="outlined"
@@ -838,13 +631,7 @@ function CasteDetails() {
               <FormControl sx={{ display: { sm: 'contents' } }}>
                 <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Agreement</FormLabel>
                 <FormLabel sx={{ display: { sm: 'none' } }}>Agreement</FormLabel>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', }} >
                   <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." name="casteAgreement" required />
                 </Box>
               </FormControl>
@@ -859,26 +646,13 @@ function CasteDetails() {
 }
 
 interface incomeFormElement extends HTMLFormElement {
-  readonly elements: incomeForm;
+  readonly incomeAgriculture: HTMLInputElement;
+  readonly incomeBusiness: HTMLInputElement;
+  readonly incomeProperty: HTMLInputElement;
+  readonly familyMembers: HTMLInputElement;
+  readonly incomeTotal: HTMLInputElement;
 }
-interface incomeForm extends HTMLFormControlsCollection {
-  incomeAgriculture: HTMLInputElement;
-  incomeBusiness: HTMLInputElement;
-  incomeProperty: HTMLInputElement;
-  familyMembers: HTMLInputElement;
-  incomeTotal: HTMLInputElement;
-}
-function IncomeDetails() {
-  const [incomeAgriculture , setincomeAgriculture] = React.useState('');
-  const [incomeBusiness , setincomeBusiness] = React.useState('');
-  const [incomeProperty , setincomeProperty] = React.useState('');
-  const [familyMembers , setfamilyMembers] = React.useState('');
-  const [incomeTotal , setincomeTotal] = React.useState();
-  const handleincomeAgriculture = (event: React.ChangeEvent<HTMLInputElement>) => {setincomeAgriculture(event.target.value);};
-  const handleincomeBusiness = (event: React.ChangeEvent<HTMLInputElement>) => {setincomeBusiness(event.target.value);};
-  const handleincomeProperty = (event: React.ChangeEvent<HTMLInputElement>) => {setincomeProperty(event.target.value);};
-  const handlefamilyMembers = (event: React.ChangeEvent<HTMLInputElement>) => {setfamilyMembers(event.target.value);};
-  const handleincomeTotal = (val: any) => {setincomeTotal(val);};
+function IncomeDetails(props:any) {
   const [incomeCertificate , setincomeCertificate] = React.useState<File | null>(null);
   const [incomeCertificateuploadProgress, setincomeCertificateuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -912,92 +686,51 @@ function IncomeDetails() {
       setincomeCertificateuploadProgress(0)
     }, 1000);
   };
+  const incomeQuesList = [
+    {label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?', formType:'number', decor: 'Rs', id: 'incomeAgriculture', properties: props.incomeAgriculture},
+    {label: 'What`s your yearly income from your Business?', formType:'number', decor: 'Rs', id: 'incomeBusiness', properties: props.incomeBusiness},
+    {label: 'What`s your yearly income from your House Property?', formType:'number', decor: 'Rs', id: 'incomeProperty', properties: props.incomeProperty},
+    {label: 'Members your Family Contains?', formType:'text', decor: '', id: 'familyMembers', properties: props.familyMembers},
+  ];
   return (
     <>
       <form  
-      onSubmit={(event: React.FormEvent<incomeFormElement>) => {
-        event.preventDefault();
-        const data = {
-          incomeAgriculture: {incomeAgriculture},
-          incomeBusiness: {incomeBusiness},
-          incomeProperty: {incomeProperty},
-          familyMembers: {familyMembers},
-          incomeTotal: {incomeTotal}
-        };
-        alert(JSON.stringify(data, null, 2));
-      }}>
-      <TabPanel value={3}>
-            <Box
-              sx={{
-                pt: 3,
-                pb: 10,
-                display: 'grid',
-                gridTemplateColumns: {
-                  xs: '100%',
-                  sm: 'minmax(120px, 30%) 1fr',
-                  lg: '280px 1fr minmax(120px, 208px)',
-                },
-                columnGap: { xs: 2, sm: 3, md: 4 },
-                rowGap: { xs: 2, sm: 2.5 },
-                '& > hr': {
-                  gridColumn: '1/-1',
-                },
-              }}
-            >
-              <FormControl sx={{ display: { sm: 'contents' } }}>
-                <FormLabel>What's your yearly income from the hectares / acres of agricultural land you own in the village?</FormLabel>
-                <Input 
-                  type='number'
-                  startDecorator={'Rs'}
-                  placeholder=""
-                  required
-                  name='incomeAgriculture'
-                  value={incomeAgriculture}
-                  onChange={handleincomeAgriculture}
-                />
-              </FormControl>
-              <Divider role="presentation" />
-              <FormControl sx={{ display: { sm: 'contents' } }}>
-                <FormLabel>What's your yearly income from your Business?</FormLabel>
-                <Input 
-                  type='number'
-                  startDecorator={'Rs'}
-                  placeholder=""
-                  required
-                  name='incomeBusiness'
-                  value={incomeBusiness}
-                  onChange={handleincomeBusiness}
-                />
-              </FormControl>
-              <Divider role="presentation" />
-              <FormControl sx={{ display: { sm: 'contents' } }}>
-                <FormLabel>What's your yearly income from your House Property?</FormLabel>
-                <Input 
-                  type='number'
-                  startDecorator={'Rs'}
-                  placeholder=""
-                  required
-                  name='incomeProperty'
-                  value={incomeProperty}
-                  onChange={handleincomeProperty}
-                />
-              </FormControl>
-              <Divider role="presentation" />
-              <FormControl sx={{ display: { sm: 'contents' } }}>
-                <FormLabel>Members your Family Contains?</FormLabel>
-                <Input 
-                  type='text'
-                  placeholder="Member1, Member2..."
-                  required
-                  name='familyMembers'
-                  value={familyMembers}
-                  onChange={handlefamilyMembers}
-                />
-              </FormControl>
-              <Divider role="presentation" />
+          onSubmit={(event: React.FormEvent<incomeFormElement>) => {
+            event.preventDefault();
+            const data = {
+              incomeAgriculture: props.incomeAgriculture,
+              incomeBusiness: props.incomeBusiness,
+              incomeProperty: props.incomeProperty,
+              familyMembers: props.familyMembers,
+              incomeTotal: props.incomeTotal
+            };
+            alert(JSON.stringify(data, null, 2));
+          }}>
+          <TabPanel value={3}>
+            <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
+              {
+                incomeQuesList.map((ques:any, index:any) => {
+                    return <>
+                      <Divider role="presentation" />
+                      <FormControl  sx={{ display: { sm: 'contents' } }}>
+                        <FormLabel>{ques.label}</FormLabel>
+                        <Input 
+                        type={ques.formType}
+                        placeholder=''
+                        defaultValue=''
+                        startDecorator={ques.decor}
+                        name={ques.id}
+                        required
+                        value={ques.properties}
+                        onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                      </FormControl>
+                      <Divider role="presentation" />
+                  </>
+                })
+              }
               <FormControl sx={{ display: { sm: 'contents' } }}>
                 <FormLabel>Total Income of Family</FormLabel>
-                <Select defaultValue=" " required name='incomeTotal' value={incomeTotal} onChange={(e, newValue) => handleincomeTotal(newValue)}>
+                <Select defaultValue=" " required name='incomeTotal' value={props.incomeTotal} onChange={(e, newValue) => props.dispatch({type: 'incomeTotal', payload: newValue})}>
                   <Option value="1,00,000">
                     Less Than Rs: 1,00,000
                   </Option>
@@ -1024,8 +757,8 @@ function IncomeDetails() {
                   </Option>
                 </Select>
               </FormControl>
-
               <Divider role="presentation" />
+                  
               <FormLabel>Upload Income Certificate</FormLabel>
               <Card
                 variant="outlined"
@@ -1038,9 +771,6 @@ function IncomeDetails() {
                 </Box>
                 <Typography level="body-sm" textAlign="center">
                   <input name='incomeCertificate' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
-                  {/* {selectedFile && (
-                    <button name='incomeCertificate' type='button' onClick={()=>handleUpload('incomeCertificate')}>Upload</button>
-                  )} */}
                 </Typography>
               </Card>
               {(incomeCertificateuploadProgress!=0) && (
@@ -1082,26 +812,13 @@ function IncomeDetails() {
 }
 
 interface SamagraFormElement extends HTMLFormElement {
-  readonly elements: SamagraForm;
+  readonly PersonalSamagraID: HTMLInputElement;
+  readonly FamilySamagraID: HTMLInputElement;
+  readonly HeadofFamily: HTMLInputElement;
+  readonly RelationnShipHeadofFamily: HTMLInputElement;
+  readonly GenderHeadofFamily: HTMLInputElement;
 }
-interface SamagraForm extends HTMLFormControlsCollection {
-  PersonalSamagraID: HTMLInputElement;
-  FamilySamagraID: HTMLInputElement;
-  HeadofFamily: HTMLInputElement;
-  RelationnShipHeadofFamily: HTMLInputElement;
-  GenderHeadofFamily: HTMLInputElement;
-}
-function SamagraDetails() {
-  const [PersonalSamagraID , setPersonalSamagraID] = React.useState('');
-  const [FamilySamagraID , setFamilySamagraID] = React.useState('');
-  const [HeadofFamily , setHeadofFamily] = React.useState('');
-  const [RelationnShipHeadofFamily , setRelationnShipHeadofFamily] = React.useState('');
-  const [GenderHeadofFamily , setGenderHeadofFamily] = React.useState();
-  const handlePersonalSamagraID = (event: React.ChangeEvent<HTMLInputElement>) => {setPersonalSamagraID(event.target.value);};
-  const handleFamilySamagraID = (event: React.ChangeEvent<HTMLInputElement>) => {setFamilySamagraID(event.target.value);};
-  const handleHeadofFamily = (event: React.ChangeEvent<HTMLInputElement>) => {setHeadofFamily(event.target.value);};
-  const handleRelationnShipHeadofFamily = (event: React.ChangeEvent<HTMLInputElement>) => {setRelationnShipHeadofFamily(event.target.value);};
-  const handleGenderHeadofFamily = (val: any) => {setGenderHeadofFamily(val);};
+function SamagraDetails(props:any) {
   const [samagraCertificate , setsamagraCertificate] = React.useState<File | null>(null);
   const [samagraCertificateuploadProgress, setsamagraCertificateuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -1135,101 +852,57 @@ function SamagraDetails() {
       setsamagraCertificateuploadProgress(0)
     }, 1000);
   };
+  const samagraQuesList = [
+    {label: 'Your Samagra ID', formType:'number', decor: '', id: 'PersonalSamagraID', properties: props.PersonalSamagraID},
+    {label: 'Family Samagra ID', formType:'number', decor: '', id: 'FamilySamagraID', properties: props.FamilySamagraID},
+    {label: 'Name of Head of Family', formType:'text', decor: '', id: 'HeadofFamily', properties: props.HeadofFamily},
+    {label: 'Members your Family Contains?', formType:'text', decor: '', id: 'familyMembers', properties: props.familyMembers},
+    {label: 'Relationship with Head of Family', formType:'text', decor: '', id: 'RelationnShipHeadofFamily', properties: props.RelationnShipHeadofFamily},
+  ];
   return (
     <>
       <form  
       onSubmit={(event: React.FormEvent<SamagraFormElement>) => {
         event.preventDefault();
         const data = {
-          PersonalSamagraID: {PersonalSamagraID},
-          FamilySamagraID: {FamilySamagraID},
-          HeadofFamily: {HeadofFamily},
-          RelationnShipHeadofFamily: {RelationnShipHeadofFamily},
-          GenderHeadofFamily: {GenderHeadofFamily}
+          PersonalSamagraID: props.PersonalSamagraID,
+          FamilySamagraID: props.FamilySamagraID,
+          HeadofFamily: props.HeadofFamily,
+          RelationnShipHeadofFamily: props.RelationnShipHeadofFamily,
+          GenderHeadofFamily: props.GenderHeadofFamily
         };
         alert(JSON.stringify(data, null, 2));
       }}>
       <TabPanel value={4}>
-        <Box
-          sx={{
-            pt: 3,
-            pb: 10,
-            display: 'grid',
-            gridTemplateColumns: {
-              xs: '100%',
-              sm: 'minmax(120px, 30%) 1fr',
-              lg: '280px 1fr minmax(120px, 208px)',
-            },
-            columnGap: { xs: 2, sm: 3, md: 4 },
-            rowGap: { xs: 2, sm: 2.5 },
-            '& > hr': {
-              gridColumn: '1/-1',
-            },
-          }}
-        >
-          <FormControl sx={{ display: { sm: 'contents' } }}>
-            <FormLabel>Your Samagra ID</FormLabel>
-            <Input 
-              type='number'
-              placeholder=""
-              name='PersonalSamagraID'
-              required
-              value={PersonalSamagraID}
-              onChange={handlePersonalSamagraID}
-            />
-          </FormControl>
-          <Divider role="presentation" />
-          <FormControl sx={{ display: { sm: 'contents' } }}>
-            <FormLabel>Family Samagra ID</FormLabel>
-            <Input 
-              type='number'
-              placeholder=""
-              name='FamilySamagraID'
-              required
-              value={FamilySamagraID}
-              onChange={handleFamilySamagraID}
-            />
-          </FormControl>
-          <Divider role="presentation" />
-          <FormControl sx={{ display: { sm: 'contents' } }}>
-            <FormLabel>Name of Head of Family</FormLabel>
-            <Input 
-              type='text'
-              placeholder=""
-              name='HeadofFamily'
-              required
-              value={HeadofFamily}
-              onChange={handleHeadofFamily}
-            />
-          </FormControl>
-          <Divider role="presentation" />
+        <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
+             {
+              samagraQuesList.map((ques:any, index:any) => {
+                  return <>
+                    <Divider role="presentation" />
+                    <FormControl  sx={{ display: { sm: 'contents' } }}>
+                      <FormLabel>{ques.label}</FormLabel>
+                      <Input 
+                      type={ques.formType}
+                      placeholder=''
+                      defaultValue=''
+                      startDecorator={ques.decor}
+                      name={ques.id}
+                      required
+                      value={ques.properties}
+                      onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                    </FormControl>
+                    <Divider role="presentation" />
+                </>
+                })
+              }
           <FormControl sx={{ display: { sm: 'contents' } }}>
             <FormLabel>Gender of Head of Family</FormLabel>
-              <Select defaultValue=" " required name='GenderHeadofFamily' value={GenderHeadofFamily} onChange={(e, newValue) => handleGenderHeadofFamily(newValue)}>
-              <Option value="female">
-                Female
-              </Option>
-              <Option value="male">
-                Male
-              </Option>
-              <Option value="transgender">
-                Transgender
-              </Option>
+              <Select defaultValue=" " required name='GenderHeadofFamily' value={props.GenderHeadofFamily} onChange={(e, newValue) => props.dispatch({type: 'GenderHeadofFamily', payload: newValue})} >
+              <Option value="female">Female</Option>
+              <Option value="male">Male</Option>
+              <Option value="transgender">Transgender</Option>
             </Select>
           </FormControl>
-          <Divider role="presentation" />
-          <FormControl sx={{ display: { sm: 'contents' } }}>
-            <FormLabel>Relationship with Head of Family</FormLabel>
-            <Input 
-              type='text'
-              placeholder=""
-              name='RelationnShipHeadofFamily'
-              required
-              value={RelationnShipHeadofFamily}
-              onChange={handleRelationnShipHeadofFamily}
-            />
-          </FormControl>
-
           <Divider role="presentation" />
           <FormLabel>Upload Samagra Certificate</FormLabel>
           <Card
@@ -1284,17 +957,10 @@ function SamagraDetails() {
 }
 
 interface NativeFormElement extends HTMLFormElement {
-  readonly elements: NativeForm;
+  readonly nativeBorn: HTMLInputElement;
+  readonly nativeEducation: HTMLInputElement;
 }
-interface NativeForm extends HTMLFormControlsCollection {
-  nativeBorn: HTMLInputElement;
-  nativeEducation: HTMLInputElement;
-}
-function NativeDetails() {
-  const [nativeBorn, setnativeBorn] = React.useState('');
-  const [nativeEducation, setnativeEducation] = React.useState('');
-  const handlenativeBorn = (event:  React.ChangeEvent<HTMLInputElement>) => {setnativeBorn(event?.target.value);}
-  const handlenativeEducation = (event: React.ChangeEvent<HTMLInputElement>) => {setnativeEducation(event.target.value);}
+function NativeDetails(props:any) {
   const [nativeCertificate , setnativeCertificate] = React.useState<File | null>(null);
   const [nativeCertificateuploadProgress, setnativeCertificateuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -1334,8 +1000,8 @@ function NativeDetails() {
       onSubmit={(event: React.FormEvent<NativeFormElement>) => {
         event.preventDefault();
         const data = {
-          nativeBorn: {nativeBorn},
-          nativeEducation: {nativeEducation}
+          nativeBorn: props.nativeBorn,
+          nativeEducation: props.nativeEducation
         };
         alert(JSON.stringify(data, null, 2));
       }}>
@@ -1364,9 +1030,8 @@ function NativeDetails() {
                     name="nativeBorn"
                     orientation="horizontal"
                     sx={{ my: 1 }}
-                    value={nativeBorn}
-                    onChange={handlenativeBorn}
-                  >
+                    value={props.nativeBorn}
+                    onChange={(e)=>props.dispatch({type: 'nativeBorn', payload: e.target.value})}>
                   <Radio required value="yes" label="Yes" />
                   <Radio required value="no" label="No" />
                 </RadioGroup>
@@ -1380,9 +1045,8 @@ function NativeDetails() {
                     name="nativeEducation"
                     orientation="horizontal"
                     sx={{ my: 1 }}
-                    value={nativeEducation}
-                    onChange={handlenativeEducation}
-                  >
+                    value={props.nativeEducation}
+                    onChange={(e)=>props.dispatch({type: 'nativeEducation', payload: e.target.value})}>
                   <Radio required value="yes" label="Yes" />
                   <Radio required value="no" label="No" />
                 </RadioGroup>
@@ -1443,8 +1107,141 @@ function NativeDetails() {
     </>
   )
 }
+
+const Personalinitstate = {
+  firstName: '',
+  lastName: '',
+  fatherName: '',
+  eMail: '',
+  contactNumber: '',
+  dateofBirth: '',
+  Gender: '',
+  Religion: '',
+  HouseNo: '',
+  Street: '',
+  Sector: '',
+  City: '',
+  Pincode: '',
+  Area: '',
+  MaritalStatus: '',
+  SpouseName: '',
+  Disabled: '',
+  Orphan: ''
+}
+function Personalreducer(state:any, action:any) {
+  switch (action.type) {
+    case 'firstName': return {...state, firstName: action.payload}
+    case 'lastName': return {...state, lastName: action.payload}
+    case 'fatherName': return {...state, fatherName: action.payload}
+    case 'eMail': return {...state, eMail: action.payload}
+    case 'contactNumber': return {...state, contactNumber: action.payload}
+    case 'dateofBirth': return {...state, dateofBirth: action.payload}
+    case 'Gender': return {...state, Gender: action.payload}
+    case 'Religion': return {...state, Religion: action.payload}
+    case 'HouseNo': return {...state, HouseNo: action.payload}
+    case 'Street': return {...state, Street: action.payload}
+    case 'Sector': return {...state, Sector: action.payload}
+    case 'City': return {...state, City: action.payload}
+    case 'Pincode': return {...state, Pincode: action.payload}
+    case 'Area': return {...state, Area: action.payload}
+    case 'MaritalStatus': return {...state, MaritalStatus: action.payload}
+    case 'SpouseName': return {...state, SpouseName: action.payload}
+    case 'Disabled': return {...state, Disabled: action.payload}
+    case 'Orphan': return {...state, Orphan: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+const Academicinitstate = {
+  Diploma: '',
+  TenthBoard: '',
+  TenthSchool: '',
+  TenthPercentage: '',
+  TwelfthBoard: '',
+  TwelfthSchool: '',
+  TwelfthStream: '',
+  TwelfthPercentage: ''
+}
+function Academicreducer(state:any, action:any) {
+  switch (action.type) {
+    case 'Diploma': return {...state, Diploma: action.payload}
+    case 'TenthBoard': return {...state, TenthBoard: action.payload}
+    case 'TenthSchool': return {...state, TenthSchool: action.payload}
+    case 'TenthPercentage': return {...state, TenthPercentage: action.payload}
+    case 'TwelfthBoard': return {...state, TwelfthBoard: action.payload}
+    case 'TwelfthSchool': return {...state, TwelfthSchool: action.payload}
+    case 'TwelfthStream': return {...state, TwelfthStream: action.payload}
+    case 'TwelfthPercentage': return {...state, TwelfthPercentage: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+const Casteinitstate = {
+  casteCertificateNumber: '',
+  casteCertificateIssueDate: '',
+  caste: '',
+  subCaste: ''
+}
+function Castereducer(state:any, action:any) {
+  switch (action.type) {
+    case 'casteCertificateNumber': return {...state, casteCertificateNumber: action.payload}
+    case 'casteCertificateIssueDate': return {...state, casteCertificateIssueDate: action.payload}
+    case 'caste': return {...state, caste: action.payload}
+    case 'subCaste': return {...state, subCaste: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+const Incomeinitstate = {
+  incomeAgriculture: '',
+  incomeBusiness: '',
+  incomeProperty: '',
+  familyMembers: '',
+  incomeTotal: ''
+}
+function Incomereducer(state:any, action:any) {
+  switch (action.type) {
+    case 'incomeAgriculture': return {...state, incomeAgriculture: action.payload}
+    case 'incomeBusiness': return {...state, incomeBusiness: action.payload}
+    case 'incomeProperty': return {...state, incomeProperty: action.payload}
+    case 'familyMembers': return {...state, familyMembers: action.payload}
+    case 'incomeTotal': return {...state, incomeTotal: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+const Samagrainitstate = {
+  PersonalSamagraID: '',
+  FamilySamagraID: '',
+  HeadofFamily: '',
+  RelationnShipHeadofFamily: '',
+  GenderHeadofFamily: ''
+}
+function Samagrareducer(state:any, action:any) {
+  switch (action.type) {
+    case 'PersonalSamagraID': return {...state, PersonalSamagraID: action.payload}
+    case 'FamilySamagraID': return {...state, FamilySamagraID: action.payload}
+    case 'HeadofFamily': return {...state, HeadofFamily: action.payload}
+    case 'RelationnShipHeadofFamily': return {...state, RelationnShipHeadofFamily: action.payload}
+    case 'GenderHeadofFamily': return {...state, GenderHeadofFamily: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+const Nativeinitstate = {
+  nativeBorn: '',
+  nativeEducation: ''
+}
+function Nativereducer(state:any, action:any) {
+  switch (action.type) {
+    case 'nativeBorn': return {...state, nativeBorn: action.payload}
+    case 'nativeEducation': return {...state, nativeEducation: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
 export default function SignUp() {
   const navigate = useNavigate();
+  const [Personalstate, Personaldispatch] = React.useReducer(Personalreducer, Personalinitstate);
+  const [Academicstate, Academicdispatch] = React.useReducer(Academicreducer, Academicinitstate);
+  const [Castestate, Castedispatch] = React.useReducer(Castereducer, Casteinitstate);
+  const [Incomestate, Incomedispatch] = React.useReducer(Incomereducer, Incomeinitstate);
+  const [Samagrastate, Samagradispatch] = React.useReducer(Samagrareducer, Samagrainitstate);
+  const [Nativestate, Nativedispatch] = React.useReducer(Nativereducer, Nativeinitstate);
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <GlobalStyles
@@ -1577,37 +1374,32 @@ export default function SignUp() {
             Profile Review
           </Tab>
         </TabList>
-        <PersonalDetails />
-        <AcademicDetails />
-        <CasteDetails />
-        <IncomeDetails />
-        <SamagraDetails />
-        <NativeDetails />  
+        <PersonalDetails dispatch={Personaldispatch} firstName={Personalstate.firstName} lastName={Personalstate.lastName} fatherName={Personalstate.fatherName} eMail={Personalstate.eMail}
+         contactNumber={Personalstate.contactNumber} dateofBirth={Personalstate.dateofBirth} Gender={Personalstate.Gender} Religion={Personalstate.Religion} HouseNo={Personalstate.HouseNo}
+         Street={Personalstate.Street} Sector={Personalstate.Sector} City={Personalstate.City} Pincode={Personalstate.Pincode} Area={Personalstate.Area} MaritalStatus={Personalstate.MaritalStatus}
+         SpouseName={Personalstate.SpouseName} Disabled={Personalstate.Disabled} Orphan={Personalstate.Orphan}
+        />
+        <AcademicDetails dispatch={Academicdispatch} Diploma={Academicstate.Diploma} TenthBoard={Academicstate.TenthBoard} TenthSchool={Academicstate.TenthSchool} TenthPercentage={Academicstate.TenthPercentage}
+          TwelfthBoard={Academicstate.TwelfthBoard} TwelfthSchool={Academicstate.TwelfthSchool} TwelfthStream={Academicstate.TwelfthStream} TwelfthPercentage={Academicstate.TwelfthPercentage}
+        />
+        <CasteDetails dispatch={Castedispatch} casteCertificateNumber={Castestate.casteCertificateNumber} casteCertificateIssueDate={Castestate.casteCertificateIssueDate} caste={Castestate.caste} 
+          subCaste={Castestate.subCaste} 
+        />
+        <IncomeDetails dispatch={Incomedispatch} incomeAgriculture={Incomestate.incomeAgriculture} incomeBusiness={Incomestate.incomeBusiness} incomeProperty={Incomestate.incomeProperty}
+          familyMembers={Incomestate.familyMembers} incomeTotal={Incomestate.incomeTotal} 
+        />
+        <SamagraDetails dispatch={Samagradispatch} PersonalSamagraID={Samagrastate.PersonalSamagraID} FamilySamagraID={Samagrastate.FamilySamagraID} HeadofFamily={Samagrastate.HeadofFamily} 
+          RelationnShipHeadofFamily={Samagrastate.RelationnShipHeadofFamily} GenderHeadofFamily={Samagrastate.GenderHeadofFamily} 
+        />
+        <NativeDetails dispatch={Nativedispatch} nativeBorn={Nativestate.nativeBorn} nativeEducation={Nativestate.nativeEducation}
+        />  
 
-        {/* <TabPanel value={6}>
-          <Box
-            sx={{
-              pt: 3,
-              pb: 10,
-              display: 'grid',
-              gridTemplateColumns: {
-                xs: '100%',
-                sm: 'minmax(120px, 30%) 1fr',
-                lg: '280px 1fr minmax(120px, 208px)',
-              },
-              columnGap: { xs: 2, sm: 3, md: 4 },
-              rowGap: { xs: 2, sm: 2.5 },
-              '& > hr': {
-                gridColumn: '1/-1',
-              },
-            }}
-          >
-            <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }} >Name</FormLabel>
-            <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
-             
+        <TabPanel value={6}>
+          <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
+
             <Divider role="presentation" />
           </Box>
-        </TabPanel> */}
+        </TabPanel>
 
       </Tabs>
     </Box>
