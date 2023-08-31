@@ -54,6 +54,39 @@ interface PersonlFormElement extends HTMLFormElement {
   readonly PersonalAgreement: HTMLInputElement;
 }
 function PersonalDetails(props: any) {
+  const [PassportSize , setPassportSize] = React.useState<File | null>(null);
+  const [PassportSizeuploadProgress, setPassportSizeuploadProgress] = React.useState(0);
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setPassportSize(event.target.files[0]);
+      setPassportSizeuploadProgress(0);
+      setSelectedFile(event.target.files[0]);
+      var name:string = event?.target.name;
+    }
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const fileData = event.target?.result as ArrayBuffer;
+        uploadFile(fileData, name);
+      };
+      reader.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const progress = Math.round((event.loaded / event.total) * 100);
+          setPassportSizeuploadProgress(progress);
+        }
+      };
+      reader.readAsArrayBuffer(selectedFile);
+    }
+  };
+  const uploadFile = async (fileData: ArrayBuffer, name: string) => {
+    await new Promise<void>((resolve) => setTimeout(resolve, 1000));
+    setPassportSizeuploadProgress(100)
+    setTimeout(() => {
+      setSelectedFile(null);
+      setPassportSizeuploadProgress(0)
+    }, 1000);
+  };
   const personalQuesList = [
     {label: 'Father`s Name', formType:'text', decor: '', id: 'fatherName', properties: props.fatherName},
     {label: 'Email', formType:'text', decor: <i data-feather="mail" />, id: 'eMail', properties: props.eMail},
@@ -65,6 +98,7 @@ function PersonalDetails(props: any) {
     name='PersonalSubmit'
     onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
     event.preventDefault();
+    props.dispatch({type: 'Next', payload: false})
     const PersonlForm = event.currentTarget.elements;
     const data = {
       firstName: props.firstName,
@@ -123,7 +157,7 @@ function PersonalDetails(props: any) {
           <Select id="gender" name="gender" required value={props.Gender} onChange={(e, newValue) => props.dispatch({type: 'Gender', payload: newValue}) }>
             <Option value="Female">Female</Option>
             <Option value="Male">Male</Option>
-            <Option value="Transgender">Transgender</Option>
+            <Option value="Others">Others</Option>
           </Select>
         </FormControl>
         <Divider role="presentation" />
@@ -198,7 +232,7 @@ function PersonalDetails(props: any) {
           </Select>
         </FormControl>
         <Divider role="presentation" />
-        <FormControl sx={{ display: (props.MaritalStatus == 'married') ? 'contents' : 'none'  } }>
+        <FormControl sx={{ display: (props.MaritalStatus == 'Married') ? 'contents' : 'none'  } }>
           <FormLabel></FormLabel>
           <Input
             type="text"
@@ -208,7 +242,7 @@ function PersonalDetails(props: any) {
             onChange={(e)=>props.dispatch({type: 'SpouseName', payload: e.target.value})}
           />
         </FormControl>
-        <Divider role="presentation" sx={{ display: (props.MaritalStatus == 'married') ? 'content' : 'none' }} />
+        <Divider role="presentation" sx={{ display: (props.MaritalStatus == 'Married') ? 'content' : 'none' }} />
         <FormControl sx={{ display: { sm: 'contents' } }}>
           <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Do you identify as a person with a disability?</FormLabel>
           <Box sx={{ display: { xs: 'contents', sm: 'flex', flexDirection: 'column'  }, gap: 2 }}>
@@ -243,6 +277,34 @@ function PersonalDetails(props: any) {
           </Box>
         </FormControl>
         <Divider role="presentation" />
+        <FormLabel>Upload Passport Size Photo</FormLabel>
+        <Card
+          variant="outlined"
+          sx={[{borderRadius: 'sm', display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'center', px: 3, flexGrow: 1}]}>
+          <Box sx={{ p: 1, bgcolor: 'background.level1', borderRadius: '50%' }}>
+            <Box
+              sx={{width: 32, height: 32, borderRadius: '50%', bgcolor: 'background.level2', display: 'flex', alignItems: 'center', justifyContent: 'center',}}>
+              <i data-feather="upload-cloud" />
+            </Box>
+          </Box>
+          <Typography level="body-sm" textAlign="center">
+            <input name='PassportSize' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
+          </Typography>
+        </Card>
+        {(PassportSizeuploadProgress!=0) && (
+        <>
+          <Divider role="presentation" />
+          <FormControl sx={{ display: { sm: 'contents' } }}>
+          <FormLabel></FormLabel>
+              <FileUpload
+                fileName={PassportSize?.name as string}
+                fileSize={PassportSize?.size}
+                progress={PassportSizeuploadProgress}
+              />
+          </FormControl>
+        </>
+        )}
+        <Divider role="presentation" />
         <FormControl sx={{ display: { sm: 'contents' } }}>
           <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Agreement</FormLabel>
           <FormLabel sx={{ display: { sm: 'none' } }}>Agreement</FormLabel>
@@ -257,7 +319,7 @@ function PersonalDetails(props: any) {
           </Box>
         </FormControl>
         <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
-          <Button name='PersonalSubmit' type='submit' size="sm" onClick={ () => enableTab(1) }>Next</Button>
+          <Button name='PersonalSubmit' type='submit' size="sm">Next</Button>
         </Box>
       </Box>
     </TabPanel>
@@ -365,6 +427,7 @@ function AcademicDetails(props: any) {
     <form  
     onSubmit={(event: React.FormEvent<AcademicFormElement>) => {
           event.preventDefault();
+          props.dispatch({type: 'Next', payload: false})
           const data = {
             Diploma: props.Diploma,
             TenthBoard: props.TenthBoard,
@@ -570,6 +633,7 @@ function CasteDetails(props:any) {
       <form  
       onSubmit={(event: React.FormEvent<CasteFormElement>) => {
         event.preventDefault();
+        props.dispatch({type: 'Next', payload: false})
         const data = {
           casteCertificateNumber: props.casteCertificateNumber,
           casteCertificateIssueDate: props.casteCertificateIssueDate,
@@ -697,6 +761,7 @@ function IncomeDetails(props:any) {
       <form  
           onSubmit={(event: React.FormEvent<incomeFormElement>) => {
             event.preventDefault();
+            props.dispatch({type: 'Next', payload: false})
             const data = {
               incomeAgriculture: props.incomeAgriculture,
               incomeBusiness: props.incomeBusiness,
@@ -862,6 +927,7 @@ function SamagraDetails(props:any) {
       <form  
       onSubmit={(event: React.FormEvent<SamagraFormElement>) => {
         event.preventDefault();
+        props.dispatch({type: 'Next', payload: false})
         const data = {
           PersonalSamagraID: props.PersonalSamagraID,
           FamilySamagraID: props.FamilySamagraID,
@@ -897,7 +963,7 @@ function SamagraDetails(props:any) {
               <Select defaultValue=" " required name='GenderHeadofFamily' value={props.GenderHeadofFamily} onChange={(e, newValue) => props.dispatch({type: 'GenderHeadofFamily', payload: newValue})} >
               <Option value="Female">Female</Option>
               <Option value="Male">Male</Option>
-              <Option value="Transgender">Transgender</Option>
+              <Option value="Others">Others</Option>
             </Select>
           </FormControl>
           <Divider role="presentation" />
@@ -996,6 +1062,7 @@ function NativeDetails(props:any) {
       <form  
       onSubmit={(event: React.FormEvent<NativeFormElement>) => {
         event.preventDefault();
+        props.dispatch({type: 'Next', payload: false})
         const data = {
           nativeBorn: props.nativeBorn,
           nativeEducation: props.nativeEducation
@@ -1123,7 +1190,8 @@ const Personalinitstate = {
   MaritalStatus: '',
   SpouseName: '',
   Disabled: '',
-  Orphan: ''
+  Orphan: '',
+  Next: true
 }
 function Personalreducer(state:any, action:any) {
   switch (action.type) {
@@ -1145,6 +1213,7 @@ function Personalreducer(state:any, action:any) {
     case 'SpouseName': return {...state, SpouseName: action.payload}
     case 'Disabled': return {...state, Disabled: action.payload}
     case 'Orphan': return {...state, Orphan: action.payload}
+    case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
 }
@@ -1156,7 +1225,8 @@ const Academicinitstate = {
   TwelfthBoard: '',
   TwelfthSchool: '',
   TwelfthStream: '',
-  TwelfthPercentage: ''
+  TwelfthPercentage: '',
+  Next: true
 }
 function Academicreducer(state:any, action:any) {
   switch (action.type) {
@@ -1175,7 +1245,8 @@ const Casteinitstate = {
   casteCertificateNumber: '',
   casteCertificateIssueDate: '',
   caste: '',
-  subCaste: ''
+  subCaste: '',
+  Next: true
 }
 function Castereducer(state:any, action:any) {
   switch (action.type) {
@@ -1191,7 +1262,8 @@ const Incomeinitstate = {
   incomeBusiness: '',
   incomeProperty: '',
   familyMembers: '',
-  incomeTotal: ''
+  incomeTotal: '',
+  Next: true
 }
 function Incomereducer(state:any, action:any) {
   switch (action.type) {
@@ -1208,7 +1280,8 @@ const Samagrainitstate = {
   FamilySamagraID: '',
   HeadofFamily: '',
   RelationnShipHeadofFamily: '',
-  GenderHeadofFamily: ''
+  GenderHeadofFamily: '',
+  Next: true
 }
 function Samagrareducer(state:any, action:any) {
   switch (action.type) {
@@ -1222,7 +1295,8 @@ function Samagrareducer(state:any, action:any) {
 }
 const Nativeinitstate = {
   nativeBorn: '',
-  nativeEducation: ''
+  nativeEducation: '',
+  Next: true
 }
 function Nativereducer(state:any, action:any) {
   switch (action.type) {
@@ -1239,7 +1313,6 @@ export default function SignUp() {
   const [Incomestate, Incomedispatch] = React.useReducer(Incomereducer, Incomeinitstate);
   const [Samagrastate, Samagradispatch] = React.useReducer(Samagrareducer, Samagrainitstate);
   const [Nativestate, Nativedispatch] = React.useReducer(Nativereducer, Nativeinitstate);
-
   const ProfileReview = [
     {data: Personalstate.firstName+' '+Personalstate.lastName, decor: '', label: 'Name'},
     {data: Personalstate.fatherName, decor: '', label: 'Father Name'},
@@ -1388,46 +1461,47 @@ export default function SignUp() {
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'row-reverse',justifySelf: 'flex-end', position: 'absolute', bottom: 8, right: 15}}>
             <Button  variant="soft" color="neutral" name='PersonalSubmit' type='submit' size="sm" onClick={ () => navigate('/') }>Home</Button>
           </Box>
-          <Tab indicatorInset value={0}>
+          <Tab indicatorInset value={0} >
             Personal Details
           </Tab>
-          <Tab indicatorInset value={1}>
+          <Tab indicatorInset value={1} disabled={Personalstate.Next}>
             Academic Details
           </Tab>
-          <Tab indicatorInset value={2}>
+          <Tab indicatorInset value={2} disabled={Academicstate.Next} >
             Caste & Composite
           </Tab>
-          <Tab indicatorInset value={3}>
+          <Tab indicatorInset value={3} disabled={Castestate.Next} >
             Income Details
           </Tab>
-          <Tab indicatorInset value={4}>
+          <Tab indicatorInset value={4} disabled={Incomestate.Next} >
             Samagra Details
           </Tab>
-          <Tab indicatorInset value={5}>
+          <Tab indicatorInset value={5} disabled={Samagrastate.Next} >
             Native Declaration
           </Tab>
-          <Tab indicatorInset value={6}>
+          <Tab indicatorInset value={6} disabled={Nativestate.Next} >
             Profile Review
           </Tab>
         </TabList>
         <PersonalDetails dispatch={Personaldispatch} firstName={Personalstate.firstName} lastName={Personalstate.lastName} fatherName={Personalstate.fatherName} eMail={Personalstate.eMail}
          contactNumber={Personalstate.contactNumber} dateofBirth={Personalstate.dateofBirth} Gender={Personalstate.Gender} Religion={Personalstate.Religion} HouseNo={Personalstate.HouseNo}
          Street={Personalstate.Street} Sector={Personalstate.Sector} City={Personalstate.City} Pincode={Personalstate.Pincode} Area={Personalstate.Area} MaritalStatus={Personalstate.MaritalStatus}
-         SpouseName={Personalstate.SpouseName} Disabled={Personalstate.Disabled} Orphan={Personalstate.Orphan}
+         SpouseName={Personalstate.SpouseName} Disabled={Personalstate.Disabled} Orphan={Personalstate.Orphan} Next={Personalstate.Next}
         />
         <AcademicDetails dispatch={Academicdispatch} Diploma={Academicstate.Diploma} TenthBoard={Academicstate.TenthBoard} TenthSchool={Academicstate.TenthSchool} TenthPercentage={Academicstate.TenthPercentage}
           TwelfthBoard={Academicstate.TwelfthBoard} TwelfthSchool={Academicstate.TwelfthSchool} TwelfthStream={Academicstate.TwelfthStream} TwelfthPercentage={Academicstate.TwelfthPercentage}
+          Next={Academicstate.Next}
         />
         <CasteDetails dispatch={Castedispatch} casteCertificateNumber={Castestate.casteCertificateNumber} casteCertificateIssueDate={Castestate.casteCertificateIssueDate} caste={Castestate.caste} 
-          subCaste={Castestate.subCaste} 
+          subCaste={Castestate.subCaste} Next={Castestate.Next}
         />
         <IncomeDetails dispatch={Incomedispatch} incomeAgriculture={Incomestate.incomeAgriculture} incomeBusiness={Incomestate.incomeBusiness} incomeProperty={Incomestate.incomeProperty}
-          familyMembers={Incomestate.familyMembers} incomeTotal={Incomestate.incomeTotal} 
+          familyMembers={Incomestate.familyMembers} incomeTotal={Incomestate.incomeTotal} Next={Incomestate.Next}
         />
         <SamagraDetails dispatch={Samagradispatch} PersonalSamagraID={Samagrastate.PersonalSamagraID} FamilySamagraID={Samagrastate.FamilySamagraID} HeadofFamily={Samagrastate.HeadofFamily} 
-          RelationnShipHeadofFamily={Samagrastate.RelationnShipHeadofFamily} GenderHeadofFamily={Samagrastate.GenderHeadofFamily} 
+          RelationnShipHeadofFamily={Samagrastate.RelationnShipHeadofFamily} GenderHeadofFamily={Samagrastate.GenderHeadofFamily} Next={Samagrastate.Next}
         />
-        <NativeDetails dispatch={Nativedispatch} nativeBorn={Nativestate.nativeBorn} nativeEducation={Nativestate.nativeEducation}
+        <NativeDetails dispatch={Nativedispatch} nativeBorn={Nativestate.nativeBorn} nativeEducation={Nativestate.nativeEducation} Next={Nativestate.Next}
         />  
 
         <TabPanel value={6}>
