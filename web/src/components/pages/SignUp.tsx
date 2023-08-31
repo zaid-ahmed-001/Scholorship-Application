@@ -33,6 +33,8 @@ import Card, { CardProps } from '@mui/joy/Card';
 import Link from '@mui/joy/Link';
 import '../../App.css';
 import { useNavigate } from 'react-router-dom';
+import Alert from '@mui/joy/Alert';
+import { Label } from '@mui/icons-material';
 
 
 interface PersonlFormElement extends HTMLFormElement {
@@ -1356,6 +1358,41 @@ export default function SignUp() {
     {data: Nativestate.nativeBorn, decor: '', label: 'Were you born in Madhya Pradesh?'},
     {data: Nativestate.nativeEducation, decor: '', label: 'Have you received continuous education for atleast three years in any educational institute located in Madhya Pradesh? (Provision of education will not apply to disable candidates)'},
   ];
+  const alertInitial = {
+    color: "warning",
+    label: '',
+    icon: ''
+  };
+  const [alertSubmit, setalertSubmit] = React.useState(alertInitial);
+  function onFinalSubmit() {
+    for (let index = 0; index < ProfileReview.length; index++) {
+      const element = ProfileReview[index];
+      if (element.data == '') {
+        setalertSubmit({color:'warning', label:'Fill the following Details of '+ element.label,  icon: ''})
+        break
+      }
+    }
+    setalertSubmit({color:'success', label:'Form filled successfully',  icon: ''})
+    return (
+      <>
+        <Box sx={{ display: 'flex', gap: 2, width: '100%', flexDirection: 'column' }}>
+          <Alert
+              key={alertSubmit.label}
+              sx={{ alignItems: 'center' , justifyContent: 'center'}}
+              variant="soft"
+              color="warning"
+            >
+              <div>
+                <div>{alertSubmit.label}</div>
+                <Typography level="body-sm" color="warning">
+                {alertSubmit.label}
+                </Typography>
+              </div>
+            </Alert>
+        </Box>        
+      </>
+    )
+  }
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <GlobalStyles
@@ -1522,7 +1559,6 @@ export default function SignUp() {
                         defaultValue={ques.data}
                         disabled
                         startDecorator={ques.decor}
-                        variant="soft"
                         required />
                       </FormControl>
                       <Divider role="presentation" />
@@ -1543,7 +1579,7 @@ export default function SignUp() {
                 </Box>
               </FormControl>
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
-                <Button name='FinalSubmit' type='submit' size="sm">Submit</Button>
+                <Button name='FinalSubmit' type='submit' size="sm" onClick={()=>onFinalSubmit()}>Submit</Button>
               </Box>
           </Box>
         </TabPanel>
