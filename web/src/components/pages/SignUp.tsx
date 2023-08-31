@@ -55,6 +55,7 @@ interface PersonlFormElement extends HTMLFormElement {
 }
 function PersonalDetails(props: any) {
   const personalQuesList = [
+    {label: 'Father`s Name', formType:'text', decor: '', id: 'fatherName', properties: props.fatherName},
     {label: 'Email', formType:'text', decor: <i data-feather="mail" />, id: 'eMail', properties: props.eMail},
     {label: 'Contact Number', formType:'number', decor: "+91", id: 'contactNumber', properties: props.contactNumber},
     {label: 'Date of Birth', formType:'date', decor: "", id: 'dateofBirth', properties: props.dateofBirth}
@@ -97,10 +98,11 @@ function PersonalDetails(props: any) {
               <Input placeholder="" name="lastName" required value={props.lastName} onChange={(e)=>props.dispatch({type: 'lastName', payload: e.target.value})} />
             </FormControl>
           </Box>
+          <Divider role="presentation" />
         {
           personalQuesList.map((ques:any, index:any) => {
               return <>
-                <Divider role="presentation" />
+
                 <FormControl  sx={{ display: { sm: 'contents' } }}>
                   <FormLabel>{ques.label}</FormLabel>
                   <Input 
@@ -119,21 +121,21 @@ function PersonalDetails(props: any) {
         }
         <FormControl sx={{ display: { sm: 'contents' } }}><FormLabel>Gender</FormLabel>
           <Select id="gender" name="gender" required value={props.Gender} onChange={(e, newValue) => props.dispatch({type: 'Gender', payload: newValue}) }>
-            <Option value="female">Female</Option>
-            <Option value="male">Male</Option>
-            <Option value="transgender">Transgender</Option>
+            <Option value="Female">Female</Option>
+            <Option value="Male">Male</Option>
+            <Option value="Transgender">Transgender</Option>
           </Select>
         </FormControl>
         <Divider role="presentation" />
         <FormControl sx={{ display: { sm: 'contents' } }}><FormLabel>Religion</FormLabel>
           <Select defaultValue="" name="religion" required value={props.Religion} onChange={(e, newValue) => props.dispatch({type: 'Religion', payload: newValue}) }>
-            <Option value="hindu">Hindu</Option>
-            <Option value="muslim">Islam</Option>
-            <Option value="sikh">Sikh</Option>
-            <Option value="christian">Christian</Option>
-            <Option value="jain">Jain</Option>
-            <Option value="buddhism">Buddhism</Option>
-            <Option value="other">Other</Option>
+            <Option value="Hindu">Hindu</Option>
+            <Option value="Islam">Islam</Option>
+            <Option value="Sikh">Sikh</Option>
+            <Option value="Christian">Christian</Option>
+            <Option value="Jain">Jain</Option>
+            <Option value="Buddhism">Buddhism</Option>
+            <Option value="Other">Other</Option>
           </Select>
         </FormControl>
         <Divider role="presentation" />
@@ -179,8 +181,8 @@ function PersonalDetails(props: any) {
                 onChange={(e)=>props.dispatch({type: 'Area', payload: e.target.value})}
                 sx={{ my: 1 }}
               >
-              <Radio required value="rural" label="Rural" />
-              <Radio required value="urban" label="Urban" />
+              <Radio required value="Rural" label="Rural" />
+              <Radio required value="Urban" label="Urban" />
             </RadioGroup>
           </Box>
         </FormControl>
@@ -188,11 +190,11 @@ function PersonalDetails(props: any) {
         <FormControl sx={{ display: { sm: 'contents' } }}>
           <FormLabel>Marital Status</FormLabel>
           <Select defaultValue="" name="MaritalStatus" required value={props.MaritalStatus} onChange={(e, newValue) => props.dispatch({type: 'MaritalStatus', payload: newValue}) }>
-            <Option value="single">Single</Option>
-            <Option value="married">Married</Option>
-            <Option value="divorced">Divorced</Option>
-            <Option value="widow">Widow</Option>
-            <Option value="widower">Widower</Option>
+            <Option value="Single">Single</Option>
+            <Option value="Married">Married</Option>
+            <Option value="Divorced">Divorced</Option>
+            <Option value="Widow">Widow</Option>
+            <Option value="Widower">Widower</Option>
           </Select>
         </FormControl>
         <Divider role="presentation" />
@@ -218,8 +220,8 @@ function PersonalDetails(props: any) {
                 sx={{ my: 1 }}
                 name="Disabled" 
               >
-              <Radio required value="yes" label="Yes" />
-              <Radio required value="no" label="No" />
+              <Radio required value="Yes" label="Yes" />
+              <Radio required value="No" label="No" />
             </RadioGroup>
           </Box>
         </FormControl>
@@ -235,8 +237,8 @@ function PersonalDetails(props: any) {
                 onChange={(e)=>props.dispatch({type: 'Orphan', payload: e.target.value})}
                 sx={{ my: 1 }}
               >
-              <Radio required value="yes" label="Yes" />
-              <Radio required value="no" label="No" />
+              <Radio required value="Yes" label="Yes" />
+              <Radio required value="No" label="No" />
             </RadioGroup>
           </Box>
         </FormControl>
@@ -394,13 +396,13 @@ function AcademicDetails(props: any) {
                       onChange={(e)=>props.dispatch({type: 'Diploma', payload: e.target.value})}
                       sx={{ my: 1 }}
                     >
-                    <Radio required value="yes" label="Yes" />
-                    <Radio required value="no" label="No" />
+                    <Radio required value="Yes" label="Yes" />
+                    <Radio required value="No" label="No" />
                   </RadioGroup>
                 </Box>
               </FormControl>
               <Divider role="presentation" />
-              {(() => { if (props.Diploma==='yes')  {
+              {(() => { if (props.Diploma==='Yes')  {
                 return (
                   <>
                     <FormControl sx={{ display: { sm: 'contents' } }}>
@@ -413,13 +415,12 @@ function AcademicDetails(props: any) {
                     <Divider role="presentation" />
                   </>
                 )
-              } else if (props.Diploma==='no') {
+              } else if (props.Diploma==='No') {
                 return (
                   <>
                     {
                       academicQuesList.map((ques:any, index:any) => {
                           return <>
-                            <Divider role="presentation" />
                             <FormControl  sx={{ display: { sm: 'contents' } }}>
                               <FormLabel>{ques.label}</FormLabel>
                               <Input 
@@ -582,7 +583,6 @@ function CasteDetails(props:any) {
             {
               casteQuesList.map((ques:any, index:any) => {
                   return <>
-                    <Divider role="presentation" />
                     <FormControl  sx={{ display: { sm: 'contents' } }}>
                       <FormLabel>{ques.label}</FormLabel>
                       <Input 
@@ -711,7 +711,6 @@ function IncomeDetails(props:any) {
               {
                 incomeQuesList.map((ques:any, index:any) => {
                     return <>
-                      <Divider role="presentation" />
                       <FormControl  sx={{ display: { sm: 'contents' } }}>
                         <FormLabel>{ques.label}</FormLabel>
                         <Input 
@@ -731,28 +730,28 @@ function IncomeDetails(props:any) {
               <FormControl sx={{ display: { sm: 'contents' } }}>
                 <FormLabel>Total Income of Family</FormLabel>
                 <Select defaultValue=" " required name='incomeTotal' value={props.incomeTotal} onChange={(e, newValue) => props.dispatch({type: 'incomeTotal', payload: newValue})}>
-                  <Option value="1,00,000">
+                  <Option value="Less Than 1,00,000">
                     Less Than Rs: 1,00,000
                   </Option>
-                  <Option value="1,50,000">
+                  <Option value="Rs: 1,00,000 to Rs: 2,00,000">
                     Rs: 1,00,000 to Rs: 2,00,000
                   </Option>
-                  <Option value="2,50,000">
+                  <Option value="Rs: 2,00,000 to Rs: 3,00,000">
                     Rs: 2,00,000 to Rs: 3,00,000
                   </Option>
-                  <Option value="3,50,000">
+                  <Option value="Rs: 3,00,000 to Rs: 4,00,000">
                     Rs: 3,00,000 to Rs: 4,00,000
                   </Option>
-                  <Option value="4,50,000">
+                  <Option value="Rs: 4,00,000 to Rs: 5,00,000">
                     Rs: 4,00,000 to Rs: 5,00,000
                   </Option>
-                  <Option value="5,50,000">
+                  <Option value="Rs: 5,00,000 to Rs: 6,00,000">
                     Rs: 5,00,000 to Rs: 6,00,000
                   </Option>
-                  <Option value="6,50,000">
+                  <Option value="Rs: 6,00,000 to Rs: 7,00,000">
                     Rs: 6,00,000 to Rs: 7,00,000
                   </Option>
-                  <Option value="7,00,000">
+                  <Option value="More Than Rs: 7,00,000">
                     More Than Rs: 7,00,000
                   </Option>
                 </Select>
@@ -856,7 +855,6 @@ function SamagraDetails(props:any) {
     {label: 'Your Samagra ID', formType:'number', decor: '', id: 'PersonalSamagraID', properties: props.PersonalSamagraID},
     {label: 'Family Samagra ID', formType:'number', decor: '', id: 'FamilySamagraID', properties: props.FamilySamagraID},
     {label: 'Name of Head of Family', formType:'text', decor: '', id: 'HeadofFamily', properties: props.HeadofFamily},
-    {label: 'Members your Family Contains?', formType:'text', decor: '', id: 'familyMembers', properties: props.familyMembers},
     {label: 'Relationship with Head of Family', formType:'text', decor: '', id: 'RelationnShipHeadofFamily', properties: props.RelationnShipHeadofFamily},
   ];
   return (
@@ -878,7 +876,6 @@ function SamagraDetails(props:any) {
              {
               samagraQuesList.map((ques:any, index:any) => {
                   return <>
-                    <Divider role="presentation" />
                     <FormControl  sx={{ display: { sm: 'contents' } }}>
                       <FormLabel>{ques.label}</FormLabel>
                       <Input 
@@ -898,9 +895,9 @@ function SamagraDetails(props:any) {
           <FormControl sx={{ display: { sm: 'contents' } }}>
             <FormLabel>Gender of Head of Family</FormLabel>
               <Select defaultValue=" " required name='GenderHeadofFamily' value={props.GenderHeadofFamily} onChange={(e, newValue) => props.dispatch({type: 'GenderHeadofFamily', payload: newValue})} >
-              <Option value="female">Female</Option>
-              <Option value="male">Male</Option>
-              <Option value="transgender">Transgender</Option>
+              <Option value="Female">Female</Option>
+              <Option value="Male">Male</Option>
+              <Option value="Transgender">Transgender</Option>
             </Select>
           </FormControl>
           <Divider role="presentation" />
@@ -1032,8 +1029,8 @@ function NativeDetails(props:any) {
                     sx={{ my: 1 }}
                     value={props.nativeBorn}
                     onChange={(e)=>props.dispatch({type: 'nativeBorn', payload: e.target.value})}>
-                  <Radio required value="yes" label="Yes" />
-                  <Radio required value="no" label="No" />
+                  <Radio required value="Yes" label="Yes" />
+                  <Radio required value="No" label="No" />
                 </RadioGroup>
               </Box>
             </FormControl>
@@ -1047,8 +1044,8 @@ function NativeDetails(props:any) {
                     sx={{ my: 1 }}
                     value={props.nativeEducation}
                     onChange={(e)=>props.dispatch({type: 'nativeEducation', payload: e.target.value})}>
-                  <Radio required value="yes" label="Yes" />
-                  <Radio required value="no" label="No" />
+                  <Radio required value="Yes" label="Yes" />
+                  <Radio required value="No" label="No" />
                 </RadioGroup>
               </Box>
             </FormControl>
@@ -1242,6 +1239,45 @@ export default function SignUp() {
   const [Incomestate, Incomedispatch] = React.useReducer(Incomereducer, Incomeinitstate);
   const [Samagrastate, Samagradispatch] = React.useReducer(Samagrareducer, Samagrainitstate);
   const [Nativestate, Nativedispatch] = React.useReducer(Nativereducer, Nativeinitstate);
+
+  const ProfileReview = [
+    {data: Personalstate.firstName+' '+Personalstate.lastName, decor: '', label: 'Name'},
+    {data: Personalstate.fatherName, decor: '', label: 'Father Name'},
+    {data: Personalstate.eMail, decor: '', label: 'Email'},
+    {data: Personalstate.contactNumber, decor: '', label: 'Contact Number'},
+    {data: Personalstate.dateofBirth, decor: '', label: 'Date of Birth'},
+    {data: Personalstate.Gender, decor: '', label: 'Gender'},
+    {data: Personalstate.Religion, decor: '', label: 'Religion'},
+    {data: Personalstate.HouseNo+' '+Personalstate.Street+' Sector '+Personalstate.Sector+' , '+Personalstate.City+' Pincode '+Personalstate.Pincode+' , '+Personalstate.Area, decor: '', label: 'Address'},
+    {data: Personalstate.MaritalStatus+' '+Personalstate.SpouseName, decor: '', label: 'Marital Status'},
+    {data: Personalstate.Disabled, decor: '', label: 'Disabled'},
+    {data: Personalstate.Orphan, decor: '', label: 'Orphan'},
+    {data: Academicstate.Diploma, decor: '', label: 'Have you concluded a diploma curriculum?'},
+    {data: Academicstate.TenthBoard, decor: '', label: 'Exam board was in charge of your 10th-Grade Board Exams'},
+    {data: Academicstate.TenthSchool, decor: '', label: 'Name of the school where you completed your 10th-Grade Board Education'},
+    {data: Academicstate.TenthPercentage, decor: '', label: 'Percentage you secured in your 10th-Grade Board Exams'},
+    {data: Academicstate.TwelfthBoard, decor: '', label: 'Exam board was in charge of your 12th-Grade Board Exams'},
+    {data: Academicstate.TwelfthSchool, decor: '', label: 'Name of the school where you completed your 12th-Grade Board Education'},
+    {data: Academicstate.TwelfthStream, decor: '', label: 'What stream did you choose for your 12th-Grade?'},
+    {data: Academicstate.TwelfthPercentage, decor: '', label: 'Percentage you secured in your 12th-Grade Board Exams'},
+    {data: Castestate.casteCertificateNumber, decor: '', label: 'Caste Certificate Number'},
+    {data: Castestate.casteCertificateIssueDate, decor: '', label: 'Caste Certificate Issue Date'},
+    {data: Castestate.caste, decor: '', label: 'Caste'},
+    {data: Castestate.subCaste, decor: '', label: 'Sub-Caste'},
+    {data: Incomestate.incomeAgriculture, decor: '', label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?'},
+    {data: Incomestate.incomeBusiness, decor: 'Rs', label: 'What`s your yearly income from your Business?'},
+    {data: Incomestate.incomeProperty, decor: 'Rs', label: 'What`s your yearly income from your House Property?'},
+    {data: Incomestate.familyMembers, decor: 'Rs', label: 'Members your Family Contains?'},
+    {data: Incomestate.incomeTotal, decor: '', label: 'Total Income of Family'},
+    {data: Samagrastate.PersonalSamagraID, decor: '', label: 'Your Samagra ID'},
+    {data: Samagrastate.FamilySamagraID, decor: '', label: 'Family Samagra ID'},
+    {data: Samagrastate.HeadofFamily, decor: '', label: 'Name of Head of Family'},
+    {data: Samagrastate.RelationnShipHeadofFamily, decor: '', label: 'Relationship with Head of Family'},
+    {data: Samagrastate.GenderHeadofFamily, decor: '', label: 'Gender of Head of Family'},
+    {data: Nativestate.nativeBorn, decor: '', label: 'Were you born in Madhya Pradesh?'},
+    {data: Nativestate.nativeEducation, decor: '', label: 'Have you received continuous education for atleast three years in any educational institute located in Madhya Pradesh? (Provision of education will not apply to disable candidates)'},
+  ];
+
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <GlobalStyles
@@ -1349,7 +1385,7 @@ export default function SignUp() {
             },
           })}
         > 
-          <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'row-reverse',justifySelf: 'flex-end', position: 'absolute', top: 4, right: 15}}>
+          <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'row-reverse',justifySelf: 'flex-end', position: 'absolute', bottom: 8, right: 15}}>
             <Button  variant="soft" color="neutral" name='PersonalSubmit' type='submit' size="sm" onClick={ () => navigate('/') }>Home</Button>
           </Box>
           <Tab indicatorInset value={0}>
@@ -1396,11 +1432,42 @@ export default function SignUp() {
 
         <TabPanel value={6}>
           <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
-
-            <Divider role="presentation" />
+              {
+                ProfileReview.map((ques:any, index:any) => {
+                    return <>
+                      <FormControl  sx={{ display: { sm: 'contents' } }}>
+                        <FormLabel>{ques.label}</FormLabel>
+                        <Input 
+                        type='text'
+                        placeholder=''
+                        defaultValue={ques.data}
+                        disabled
+                        startDecorator={ques.decor}
+                        variant="soft"
+                        required />
+                      </FormControl>
+                      <Divider role="presentation" />
+                  </>
+                })
+              }
+              <FormControl sx={{ display: { sm: 'contents' } }}>
+                <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Agreement</FormLabel>
+                <FormLabel sx={{ display: { sm: 'none' } }}>Agreement</FormLabel>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." checked name="ReviewAgreement" />
+                </Box>
+              </FormControl>
+              <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
+                <Button name='FinalSubmit' type='submit' size="sm">Submit</Button>
+              </Box>
           </Box>
         </TabPanel>
-
       </Tabs>
     </Box>
     </CssVarsProvider>
