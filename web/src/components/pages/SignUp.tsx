@@ -34,9 +34,7 @@ import Link from '@mui/joy/Link';
 import '../../App.css';
 import { useNavigate } from 'react-router-dom';
 
-function enableTab(index:number) {
-  console.log('check data for ', index)
-}
+
 interface PersonlFormElement extends HTMLFormElement {
   readonly firstName: HTMLInputElement;
   readonly lastName: HTMLInputElement;
@@ -343,6 +341,7 @@ function AcademicDetails(props: any) {
   const [TwelfthMarkSheet , setTwelfthMarkSheet] = React.useState<File | null>(null);
   const [TwelfthMarkSheetuploadProgress, setTwelfthMarkSheetuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     var name:string = event.target.name;
     if (event.target.files && event.target.files.length > 0) {
@@ -573,7 +572,7 @@ function AcademicDetails(props: any) {
                 }
               })()}
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
-                <Button type='submit' size="sm" onClick={ () => enableTab(2) }>Next</Button>
+                <Button type='submit' size="sm">Next</Button>
               </Box>
           </Box>
         </TabPanel>
@@ -700,7 +699,7 @@ function CasteDetails(props:any) {
                 </Box>
               </FormControl>
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }}>
-                <Button type='submit' size="sm" onClick={ () => enableTab(2) }>Next</Button>
+                <Button type='submit' size="sm" >Next</Button>
               </Box>
             </Box>
         </TabPanel>
@@ -866,7 +865,7 @@ function IncomeDetails(props:any) {
                 </Box>
               </FormControl>
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }}>
-                <Button type='submit' size="sm" onClick={ () => enableTab(2) }>Next</Button>
+                <Button type='submit' size="sm" >Next</Button>
               </Box>
             </Box>
         </TabPanel>
@@ -1010,7 +1009,7 @@ function SamagraDetails(props:any) {
             </Box>
           </FormControl>
           <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
-            <Button name='PersonalSubmit' type='submit' size="sm" onClick={ () => enableTab(4) }>Next</Button>
+            <Button name='PersonalSubmit' type='submit' size="sm" >Next</Button>
           </Box>
         </Box>
       </TabPanel>
@@ -1163,7 +1162,7 @@ function NativeDetails(props:any) {
                 </Box>
               </FormControl>
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
-                <Button name='PersonalSubmit' type='submit' size="sm" onClick={ () => enableTab(5) }>Next</Button>
+                <Button name='PersonalSubmit' type='submit' size="sm" >Next</Button>
               </Box>
           </Box>
         </TabPanel>
@@ -1238,6 +1237,7 @@ function Academicreducer(state:any, action:any) {
     case 'TwelfthSchool': return {...state, TwelfthSchool: action.payload}
     case 'TwelfthStream': return {...state, TwelfthStream: action.payload}
     case 'TwelfthPercentage': return {...state, TwelfthPercentage: action.payload}
+    case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
 }
@@ -1254,6 +1254,7 @@ function Castereducer(state:any, action:any) {
     case 'casteCertificateIssueDate': return {...state, casteCertificateIssueDate: action.payload}
     case 'caste': return {...state, caste: action.payload}
     case 'subCaste': return {...state, subCaste: action.payload}
+    case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
 }
@@ -1272,6 +1273,7 @@ function Incomereducer(state:any, action:any) {
     case 'incomeProperty': return {...state, incomeProperty: action.payload}
     case 'familyMembers': return {...state, familyMembers: action.payload}
     case 'incomeTotal': return {...state, incomeTotal: action.payload}
+    case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
 }
@@ -1290,6 +1292,7 @@ function Samagrareducer(state:any, action:any) {
     case 'HeadofFamily': return {...state, HeadofFamily: action.payload}
     case 'RelationnShipHeadofFamily': return {...state, RelationnShipHeadofFamily: action.payload}
     case 'GenderHeadofFamily': return {...state, GenderHeadofFamily: action.payload}
+    case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
 }
@@ -1302,9 +1305,12 @@ function Nativereducer(state:any, action:any) {
   switch (action.type) {
     case 'nativeBorn': return {...state, nativeBorn: action.payload}
     case 'nativeEducation': return {...state, nativeEducation: action.payload}
+    case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
 }
+
+
 export default function SignUp() {
   const navigate = useNavigate();
   const [Personalstate, Personaldispatch] = React.useReducer(Personalreducer, Personalinitstate);
@@ -1350,7 +1356,6 @@ export default function SignUp() {
     {data: Nativestate.nativeBorn, decor: '', label: 'Were you born in Madhya Pradesh?'},
     {data: Nativestate.nativeEducation, decor: '', label: 'Have you received continuous education for atleast three years in any educational institute located in Madhya Pradesh? (Provision of education will not apply to disable candidates)'},
   ];
-
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <GlobalStyles
