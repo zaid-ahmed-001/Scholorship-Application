@@ -325,7 +325,6 @@ function PersonalDetails(props: any) {
           >
             <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
              checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
-             {/*  */}
           </Box>
         </FormControl>
         <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
@@ -352,6 +351,8 @@ function AcademicDetails(props: any) {
   const [TenthMarkSheetuploadProgress, setTenthMarkSheetUploadProgress] = React.useState(0);
   const [TwelfthMarkSheet , setTwelfthMarkSheet] = React.useState<File | null>(null);
   const [TwelfthMarkSheetuploadProgress, setTwelfthMarkSheetuploadProgress] = React.useState(0);
+  const [previousSemMarkesheet , setpreviousSemMarkesheet] = React.useState<File | null>(null);
+  const [previousSemMarkesheetuploadProgress, setpreviousSemMarkesheetuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
 
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -365,6 +366,10 @@ function AcademicDetails(props: any) {
         case 'TwelfthMarkSheet':
           setTwelfthMarkSheet(event.target.files[0]);
           setTwelfthMarkSheetuploadProgress(0);
+          break;
+        case 'previousSemMarkesheet':
+          setpreviousSemMarkesheet(event.target.files[0]);
+          setpreviousSemMarkesheetuploadProgress(0);
           break;
         default:
           break;
@@ -390,6 +395,9 @@ function AcademicDetails(props: any) {
             case 'TwelfthMarkSheet':
               setTwelfthMarkSheetuploadProgress(progress);
               break;
+            case 'previousSemMarkesheet':
+              setpreviousSemMarkesheetuploadProgress(progress);
+              break;
             default:
               break;
           }
@@ -407,6 +415,9 @@ function AcademicDetails(props: any) {
       case 'TwelfthMarkSheet':
         setTwelfthMarkSheetuploadProgress(100);
         break;
+      case 'previousSemMarkesheet':
+        setpreviousSemMarkesheetuploadProgress(100);
+        break;
       default:
         break;
     }
@@ -418,6 +429,9 @@ function AcademicDetails(props: any) {
           break;
         case 'TwelfthMarkSheet':
           setTwelfthMarkSheetuploadProgress(0);
+          break;
+        case 'previousSemMarkesheet':
+          setpreviousSemMarkesheetuploadProgress(0);
           break;
         default:
           break;
@@ -439,7 +453,7 @@ function AcademicDetails(props: any) {
     onSubmit={(event: React.FormEvent<AcademicFormElement>) => {
           event.preventDefault();
           props.dispatch({type: 'Next', payload: false})
-props.settabIndex(props.tabIndex+1)
+          props.settabIndex(props.tabIndex+1)
           const data = {
             Diploma: props.Diploma,
             TenthBoard: props.TenthBoard,
@@ -454,6 +468,55 @@ props.settabIndex(props.tabIndex+1)
         }}>
       <TabPanel value={1}>
         <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
+        <FormControl sx={{ display: { sm: 'contents' } }}>
+                <FormLabel>Enter Current Semester</FormLabel>
+                <Select defaultValue=" " required name='currentSemester' value={props.currentSemester} onChange={(e, newValue) => props.dispatch({type: 'currentSemester', payload: newValue})}>
+                  <Option value={1}>First</Option>
+                  <Option value={2}>Second</Option>
+                  <Option value={3}>Third</Option>
+                  <Option value={4}>Fourth</Option>
+                  <Option value={5}>Fifth</Option>
+                  <Option value={6}>Sixth</Option>
+                  <Option value={7}>Seventh</Option>
+                  <Option value={8}>Eighth</Option>
+                </Select>
+              </FormControl>
+              {(() => { if (props.currentSemester!=1)  {
+                return (
+                  <>
+                  <Divider role="presentation" />
+                  <FormLabel>Upload Previous Semester MarkSheet</FormLabel>
+                  <Card
+                    variant="outlined"
+                    sx={[{borderRadius: 'sm', display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'center', px: 3, flexGrow: 1}]}>
+                    <Box sx={{ p: 1, bgcolor: 'background.level1', borderRadius: '50%' }}>
+                      <Box
+                        sx={{width: 32, height: 32, borderRadius: '50%', bgcolor: 'background.level2', display: 'flex', alignItems: 'center', justifyContent: 'center',}}>
+                        <i data-feather="upload-cloud" />
+                      </Box>
+                    </Box>
+                    <Typography level="body-sm" textAlign="center">
+                      <input name='previousSemMarkesheet' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
+                    </Typography>
+                  </Card>
+                  {(previousSemMarkesheetuploadProgress!=0) && (
+                  <>
+                    <Divider role="presentation" />
+                    <FormControl sx={{ display: { sm: 'contents' } }}>
+                    <FormLabel></FormLabel>
+                        <FileUpload
+                          fileName={previousSemMarkesheet?.name as string}
+                          fileSize={previousSemMarkesheet?.size}
+                          progress={previousSemMarkesheetuploadProgress}
+                        />
+                    </FormControl>
+                  </>
+                  )}
+                  </>
+                )
+              }
+            })()}
+            <Divider role="presentation" />  
               <FormControl sx={{ display: { sm: 'contents' } }}>
                 <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Have you concluded a diploma curriculum?</FormLabel>
                 <FormLabel sx={{ display: { sm: 'none' } }}>Have you concluded a diploma curriculum?</FormLabel>
@@ -577,9 +640,11 @@ props.settabIndex(props.tabIndex+1)
                         alignItems: 'center',
                       }}
                     >
-                      <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." name="AcademicAgreement" required/>
+                      <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
+                        checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
                     </Box>
                   </FormControl>
+                  <Divider role="presentation" />
                 </>
                 )
                 }
@@ -646,7 +711,7 @@ function CasteDetails(props:any) {
       onSubmit={(event: React.FormEvent<CasteFormElement>) => {
         event.preventDefault();
         props.dispatch({type: 'Next', payload: false})
-props.settabIndex(props.tabIndex+1)
+        props.settabIndex(props.tabIndex+1)
         const data = {
           casteCertificateNumber: props.casteCertificateNumber,
           casteCertificateIssueDate: props.casteCertificateIssueDate,
@@ -709,7 +774,8 @@ props.settabIndex(props.tabIndex+1)
                 <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Agreement</FormLabel>
                 <FormLabel sx={{ display: { sm: 'none' } }}>Agreement</FormLabel>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', }} >
-                  <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." name="casteAgreement" required />
+                <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
+                  checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
                 </Box>
               </FormControl>
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }}>
@@ -775,7 +841,7 @@ function IncomeDetails(props:any) {
           onSubmit={(event: React.FormEvent<incomeFormElement>) => {
             event.preventDefault();
             props.dispatch({type: 'Next', payload: false})
-props.settabIndex(props.tabIndex+1)
+            props.settabIndex(props.tabIndex+1)
             const data = {
               incomeAgriculture: props.incomeAgriculture,
               incomeBusiness: props.incomeBusiness,
@@ -876,7 +942,8 @@ props.settabIndex(props.tabIndex+1)
                     alignItems: 'center',
                   }}
                 >
-                  <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." name="incomeAgreement" required />
+                  <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
+                   checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
                 </Box>
               </FormControl>
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }}>
@@ -1021,7 +1088,8 @@ props.settabIndex(props.tabIndex+1)
                 alignItems: 'center',
               }}
             >
-              <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." name="samagraAgreement"  required />
+            <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
+             checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
             </Box>
           </FormControl>
           <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
@@ -1175,7 +1243,8 @@ props.settabIndex(props.tabIndex+1)
                     alignItems: 'center',
                   }}
                 >
-                  <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." name="nativeAgreement" required />
+                <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
+                  checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
                 </Box>
               </FormControl>
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
@@ -1244,7 +1313,9 @@ const Academicinitstate = {
   TwelfthSchool: '',
   TwelfthStream: '',
   TwelfthPercentage: '',
-  Next: true
+  currentSemester: 1,
+  Next: true,
+  Agreement: false
 }
 function Academicreducer(state:any, action:any) {
   switch (action.type) {
@@ -1256,6 +1327,8 @@ function Academicreducer(state:any, action:any) {
     case 'TwelfthSchool': return {...state, TwelfthSchool: action.payload}
     case 'TwelfthStream': return {...state, TwelfthStream: action.payload}
     case 'TwelfthPercentage': return {...state, TwelfthPercentage: action.payload}
+    case 'currentSemester': return {...state, currentSemester: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
     case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
@@ -1265,7 +1338,8 @@ const Casteinitstate = {
   casteCertificateIssueDate: '',
   caste: '',
   subCaste: '',
-  Next: true
+  Next: true,
+  Agreement: false
 }
 function Castereducer(state:any, action:any) {
   switch (action.type) {
@@ -1273,6 +1347,7 @@ function Castereducer(state:any, action:any) {
     case 'casteCertificateIssueDate': return {...state, casteCertificateIssueDate: action.payload}
     case 'caste': return {...state, caste: action.payload}
     case 'subCaste': return {...state, subCaste: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
     case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
@@ -1283,7 +1358,8 @@ const Incomeinitstate = {
   incomeProperty: '',
   familyMembers: '',
   incomeTotal: '',
-  Next: true
+  Next: true,
+  Agreement: false
 }
 function Incomereducer(state:any, action:any) {
   switch (action.type) {
@@ -1292,6 +1368,7 @@ function Incomereducer(state:any, action:any) {
     case 'incomeProperty': return {...state, incomeProperty: action.payload}
     case 'familyMembers': return {...state, familyMembers: action.payload}
     case 'incomeTotal': return {...state, incomeTotal: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
     case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
@@ -1302,7 +1379,8 @@ const Samagrainitstate = {
   HeadofFamily: '',
   RelationnShipHeadofFamily: '',
   GenderHeadofFamily: '',
-  Next: true
+  Next: true,
+  Agreement: false
 }
 function Samagrareducer(state:any, action:any) {
   switch (action.type) {
@@ -1311,6 +1389,7 @@ function Samagrareducer(state:any, action:any) {
     case 'HeadofFamily': return {...state, HeadofFamily: action.payload}
     case 'RelationnShipHeadofFamily': return {...state, RelationnShipHeadofFamily: action.payload}
     case 'GenderHeadofFamily': return {...state, GenderHeadofFamily: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
     case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
@@ -1318,12 +1397,14 @@ function Samagrareducer(state:any, action:any) {
 const Nativeinitstate = {
   nativeBorn: '',
   nativeEducation: '',
-  Next: true
+  Next: true,
+  Agreement: false
 }
 function Nativereducer(state:any, action:any) {
   switch (action.type) {
     case 'nativeBorn': return {...state, nativeBorn: action.payload}
     case 'nativeEducation': return {...state, nativeEducation: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
     case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
@@ -1531,7 +1612,7 @@ export default function SignUp() {
           <Tab indicatorInset value={5} disabled={Samagrastate.Next} >
             Native Declaration
           </Tab>
-          <Tab indicatorInset value={6} disabled={false} >
+          <Tab indicatorInset value={6} disabled={Nativestate.Next} >
             Profile Review
           </Tab>
         </TabList>
@@ -1569,18 +1650,21 @@ export default function SignUp() {
         />
         <AcademicDetails dispatch={Academicdispatch} Diploma={Academicstate.Diploma} TenthBoard={Academicstate.TenthBoard} TenthSchool={Academicstate.TenthSchool} TenthPercentage={Academicstate.TenthPercentage}
           TwelfthBoard={Academicstate.TwelfthBoard} TwelfthSchool={Academicstate.TwelfthSchool} TwelfthStream={Academicstate.TwelfthStream} TwelfthPercentage={Academicstate.TwelfthPercentage}
-          Next={Academicstate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
+          Next={Academicstate.Next} tabIndex={tabIndex} settabIndex={settabIndex} Agreement={Academicstate.Agreement} currentSemester={Academicstate.currentSemester}
         />
         <CasteDetails dispatch={Castedispatch} casteCertificateNumber={Castestate.casteCertificateNumber} casteCertificateIssueDate={Castestate.casteCertificateIssueDate} caste={Castestate.caste} 
-          subCaste={Castestate.subCaste} Next={Castestate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
+          subCaste={Castestate.subCaste} Next={Castestate.Next} tabIndex={tabIndex} settabIndex={settabIndex} Agreement={Castestate.Agreement}
         />
         <IncomeDetails dispatch={Incomedispatch} incomeAgriculture={Incomestate.incomeAgriculture} incomeBusiness={Incomestate.incomeBusiness} incomeProperty={Incomestate.incomeProperty}
           familyMembers={Incomestate.familyMembers} incomeTotal={Incomestate.incomeTotal} Next={Incomestate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
+          Agreement={Incomestate.Agreement}
         />
         <SamagraDetails dispatch={Samagradispatch} PersonalSamagraID={Samagrastate.PersonalSamagraID} FamilySamagraID={Samagrastate.FamilySamagraID} HeadofFamily={Samagrastate.HeadofFamily} 
           RelationnShipHeadofFamily={Samagrastate.RelationnShipHeadofFamily} GenderHeadofFamily={Samagrastate.GenderHeadofFamily} Next={Samagrastate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
+          Agreement={Samagrastate.Agreement}
         />
         <NativeDetails dispatch={Nativedispatch} nativeBorn={Nativestate.nativeBorn} nativeEducation={Nativestate.nativeEducation} Next={Nativestate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
+          Agreement={Nativestate.Agreement}
         />  
 
         <TabPanel value={6}>
