@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from "react";
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import { CssVarsProvider, useColorScheme, ColorPaletteProp } from '@mui/joy/styles';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Avatar from '@mui/joy/Avatar';
@@ -35,7 +35,13 @@ import '../../App.css';
 import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/joy/Alert';
 import { Label } from '@mui/icons-material';
-
+import InfoIcon from '@mui/icons-material/Info';
+import WarningIcon from '@mui/icons-material/Warning';
+import ReportIcon from '@mui/icons-material/Report';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { title } from 'process';
+import { type } from 'os';
 
 interface PersonlFormElement extends HTMLFormElement {
   readonly firstName: HTMLInputElement;
@@ -51,7 +57,7 @@ interface PersonlFormElement extends HTMLFormElement {
   readonly SpouseName: HTMLInputElement;
   readonly Disabled: HTMLInputElement;
   readonly Orphan: HTMLInputElement;
-  readonly PersonalAgreement: HTMLInputElement;
+  readonly Agreement: HTMLInputElement;
 }
 function PersonalDetails(props: any) {
   const [PassportSize , setPassportSize] = React.useState<File | null>(null);
@@ -99,7 +105,7 @@ function PersonalDetails(props: any) {
     onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
     event.preventDefault();
     props.dispatch({type: 'Next', payload: false})
-    const PersonlForm = event.currentTarget.elements;
+    props.settabIndex(props.tabIndex+1)
     const data = {
       firstName: props.firstName,
       lastName: props.lastName,
@@ -114,7 +120,7 @@ function PersonalDetails(props: any) {
       SpouseName: props.SpouseName,
       Disabled: props.Disabled,
       Orphan: props.Orphan,
-      Agreement: props.PersonalAgreement,
+      Agreement: props.Agreement,
     };
     alert(JSON.stringify(data, null, 2));
   }}>
@@ -133,26 +139,28 @@ function PersonalDetails(props: any) {
             </FormControl>
           </Box>
           <Divider role="presentation" />
-        {
-          personalQuesList.map((ques:any, index:any) => {
-              return <>
-
-                <FormControl  sx={{ display: { sm: 'contents' } }}>
+          {
+            personalQuesList.map((ques: any, id: any) => (
+              <React.Fragment key={id}>
+                <FormControl sx={{ display: { sm: 'contents' } }}>
                   <FormLabel>{ques.label}</FormLabel>
-                  <Input 
-                  type={ques.formType}
-                  placeholder=''
-                  defaultValue=''
-                  startDecorator={ques.decor}
-                  name={ques.id}
-                  required
-                  value={ques.properties}
-                  onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                  <Input
+                    type={ques.formType}
+                    placeholder=''
+                    defaultValue=''
+                    startDecorator={ques.decor}
+                    name={ques.id}
+                    required
+                    value={ques.properties}
+                    onChange={(e) =>
+                      props.dispatch({ type: ques.id, payload: e.target.value })
+                    }
+                  />
                 </FormControl>
                 <Divider role="presentation" />
-            </>
-          })
-        }
+              </React.Fragment>
+            ))
+          }
         <FormControl sx={{ display: { sm: 'contents' } }}><FormLabel>Gender</FormLabel>
           <Select id="gender" name="gender" required value={props.Gender} onChange={(e, newValue) => props.dispatch({type: 'Gender', payload: newValue}) }>
             <Option value="Female">Female</Option>
@@ -315,7 +323,9 @@ function PersonalDetails(props: any) {
               alignItems: 'center',
             }}
           >
-            <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="PersonalAgreement" />
+            <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
+             checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
+             {/*  */}
           </Box>
         </FormControl>
         <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
@@ -429,6 +439,7 @@ function AcademicDetails(props: any) {
     onSubmit={(event: React.FormEvent<AcademicFormElement>) => {
           event.preventDefault();
           props.dispatch({type: 'Next', payload: false})
+props.settabIndex(props.tabIndex+1)
           const data = {
             Diploma: props.Diploma,
             TenthBoard: props.TenthBoard,
@@ -635,6 +646,7 @@ function CasteDetails(props:any) {
       onSubmit={(event: React.FormEvent<CasteFormElement>) => {
         event.preventDefault();
         props.dispatch({type: 'Next', payload: false})
+props.settabIndex(props.tabIndex+1)
         const data = {
           casteCertificateNumber: props.casteCertificateNumber,
           casteCertificateIssueDate: props.casteCertificateIssueDate,
@@ -763,6 +775,7 @@ function IncomeDetails(props:any) {
           onSubmit={(event: React.FormEvent<incomeFormElement>) => {
             event.preventDefault();
             props.dispatch({type: 'Next', payload: false})
+props.settabIndex(props.tabIndex+1)
             const data = {
               incomeAgriculture: props.incomeAgriculture,
               incomeBusiness: props.incomeBusiness,
@@ -929,6 +942,7 @@ function SamagraDetails(props:any) {
       onSubmit={(event: React.FormEvent<SamagraFormElement>) => {
         event.preventDefault();
         props.dispatch({type: 'Next', payload: false})
+props.settabIndex(props.tabIndex+1)
         const data = {
           PersonalSamagraID: props.PersonalSamagraID,
           FamilySamagraID: props.FamilySamagraID,
@@ -961,7 +975,7 @@ function SamagraDetails(props:any) {
               }
           <FormControl sx={{ display: { sm: 'contents' } }}>
             <FormLabel>Gender of Head of Family</FormLabel>
-              <Select defaultValue=" " required name='GenderHeadofFamily' value={props.GenderHeadofFamily} onChange={(e, newValue) => props.dispatch({type: 'GenderHeadofFamily', payload: newValue})} >
+              <Select required name='GenderHeadofFamily' value={props.GenderHeadofFamily} onChange={(e, newValue) => props.dispatch({type: 'GenderHeadofFamily', payload: newValue})} >
               <Option value="Female">Female</Option>
               <Option value="Male">Male</Option>
               <Option value="Others">Others</Option>
@@ -1064,6 +1078,7 @@ function NativeDetails(props:any) {
       onSubmit={(event: React.FormEvent<NativeFormElement>) => {
         event.preventDefault();
         props.dispatch({type: 'Next', payload: false})
+props.settabIndex(props.tabIndex+1)
         const data = {
           nativeBorn: props.nativeBorn,
           nativeEducation: props.nativeEducation
@@ -1192,7 +1207,8 @@ const Personalinitstate = {
   SpouseName: '',
   Disabled: '',
   Orphan: '',
-  Next: true
+  Next: true,
+  Agreement: false
 }
 function Personalreducer(state:any, action:any) {
   switch (action.type) {
@@ -1214,6 +1230,7 @@ function Personalreducer(state:any, action:any) {
     case 'SpouseName': return {...state, SpouseName: action.payload}
     case 'Disabled': return {...state, Disabled: action.payload}
     case 'Orphan': return {...state, Orphan: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
     case 'Next': return {...state, Next: action.payload}
     default: throw new Error("Action not Found");
   }
@@ -1321,13 +1338,15 @@ export default function SignUp() {
   const [Incomestate, Incomedispatch] = React.useReducer(Incomereducer, Incomeinitstate);
   const [Samagrastate, Samagradispatch] = React.useReducer(Samagrareducer, Samagrainitstate);
   const [Nativestate, Nativedispatch] = React.useReducer(Nativereducer, Nativeinitstate);
+  const [tabIndex, settabIndex] = React.useState(0);
+
   const ProfileReview = [
     {data: Personalstate.firstName+' '+Personalstate.lastName, decor: '', label: 'Name'},
     {data: Personalstate.fatherName, decor: '', label: 'Father Name'},
     {data: Personalstate.eMail, decor: '', label: 'Email'},
     {data: Personalstate.contactNumber, decor: '', label: 'Contact Number'},
     {data: Personalstate.dateofBirth, decor: '', label: 'Date of Birth'},
-    {data: Personalstate.Gender, decor: '', label: 'Gender'},
+    {data: Personalstate.Gender, decor: '', label: 'Gender'}, 
     {data: Personalstate.Religion, decor: '', label: 'Religion'},
     {data: Personalstate.HouseNo+' '+Personalstate.Street+' Sector '+Personalstate.Sector+' , '+Personalstate.City+' Pincode '+Personalstate.Pincode+' , '+Personalstate.Area, decor: '', label: 'Address'},
     {data: Personalstate.MaritalStatus+' '+Personalstate.SpouseName, decor: '', label: 'Marital Status'},
@@ -1359,39 +1378,30 @@ export default function SignUp() {
     {data: Nativestate.nativeEducation, decor: '', label: 'Have you received continuous education for atleast three years in any educational institute located in Madhya Pradesh? (Provision of education will not apply to disable candidates)'},
   ];
   const alertInitial = {
-    color: "warning",
-    label: '',
-    icon: ''
+    title: '',
+    color: '', 
+    icon: '',
+    display: ''
   };
   const [alertSubmit, setalertSubmit] = React.useState(alertInitial);
   function onFinalSubmit() {
     for (let index = 0; index < ProfileReview.length; index++) {
       const element = ProfileReview[index];
-      if (element.data == '') {
-        setalertSubmit({color:'warning', label:'Fill the following Details of '+ element.label,  icon: ''})
+      console.log(element.label, element.data)
+      if (element.data == ' ' || element.data == '' || element.data == '  Sector  ,  Pincode  , ' || element.data == null || element.data == "null " ) {
+        setalertSubmit({title:'The '+ element.label+' field is missing. Please fill it out before submitting.', color:'warning',  icon: '', display: 'flex'})
+        setTimeout(() => {
+          setalertSubmit({ ...alertSubmit, display: 'none'})
+        }, 4000);
         break
       }
+      if (index == ProfileReview.length-1) {
+        setalertSubmit({title:'Your form has been submitted successfully!', color:'success',  icon: '', display: 'flex'})
+        setTimeout(() => {
+          setalertSubmit({ ...alertSubmit, display: 'none'})
+        }, 4000);
+      }
     }
-    setalertSubmit({color:'success', label:'Form filled successfully',  icon: ''})
-    return (
-      <>
-        <Box sx={{ display: 'flex', gap: 2, width: '100%', flexDirection: 'column' }}>
-          <Alert
-              key={alertSubmit.label}
-              sx={{ alignItems: 'center' , justifyContent: 'center'}}
-              variant="soft"
-              color="warning"
-            >
-              <div>
-                <div>{alertSubmit.label}</div>
-                <Typography level="body-sm" color="warning">
-                {alertSubmit.label}
-                </Typography>
-              </div>
-            </Alert>
-        </Box>        
-      </>
-    )
   }
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
@@ -1406,7 +1416,7 @@ export default function SignUp() {
           },
         })}
       />
-      <CssBaseline />
+      <CssBaseline />     
     <Box
       sx={{
         flex: 1,
@@ -1425,12 +1435,12 @@ export default function SignUp() {
       }}
     />
       <Typography level="h1" fontSize="xl2" sx={{ mb: 1, paddingLeft: 2}}>
-        My profile
+        My Profile
         <Box sx={{ display: { xs: 'flex', sm: 'none' }, flexDirection: 'row-reverse',justifySelf: 'flex-end', position: 'absolute', top: 4, right: 15}}>
             <Button  variant="soft" color="neutral" name='PersonalSubmit' type='submit' size="sm" onClick={ () => navigate('/') }>Home</Button>
         </Box>
       </Typography>
-      <Tabs defaultValue={0} sx={{ bgcolor: 'transparent' }}>
+      <Tabs defaultValue={0} value={tabIndex} onChange={(event, value) => settabIndex(value as number)} sx={{ bgcolor: 'transparent' }}>
         <Box
           sx={{
             '--_shadow-height': '16px',
@@ -1501,12 +1511,12 @@ export default function SignUp() {
           })}
         > 
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, flexDirection: 'row-reverse',justifySelf: 'flex-end', position: 'absolute', bottom: 8, right: 15}}>
-            <Button  variant="soft" color="neutral" name='PersonalSubmit' type='submit' size="sm" onClick={ () => navigate('/') }>Home</Button>
+            <Button variant="soft" color="neutral" name='PersonalSubmit' type='submit' size="sm" onClick={ () => navigate('/') }>Home</Button>
           </Box>
-          <Tab indicatorInset value={0} >
+          <Tab indicatorInset value={0} onClick={()=>settabIndex(0)} >
             Personal Details
           </Tab>
-          <Tab indicatorInset value={1} disabled={Personalstate.Next}>
+          <Tab indicatorInset value={1} disabled={Personalstate.Next} >
             Academic Details
           </Tab>
           <Tab indicatorInset value={2} disabled={Academicstate.Next} >
@@ -1521,29 +1531,56 @@ export default function SignUp() {
           <Tab indicatorInset value={5} disabled={Samagrastate.Next} >
             Native Declaration
           </Tab>
-          <Tab indicatorInset value={6} disabled={Nativestate.Next} >
+          <Tab indicatorInset value={6} disabled={false} >
             Profile Review
           </Tab>
         </TabList>
+        
+        {(() => { if (alertSubmit.color==='warning')  {
+          return (
+            <Box sx={{ display: alertSubmit.display, gap: 2, width: '100%', flexDirection: 'column' }}>
+              <Alert key={alertSubmit.title} sx={{  position: 'fixed', zIndex: 99,  top: {xs: 50, sm:770}, right: {xs: 50,sm: '36%'}}} variant="soft" color="warning" >
+                <div>
+                  {/* <div>{alertSubmit.title}</div> */}
+                  <Typography level="body-sm" color="warning">{alertSubmit.title}</Typography>
+                </div>
+              </Alert>
+            </Box>   
+          )
+        } else if (alertSubmit.color==='success') {
+          return (
+          <Box sx={{ display: alertSubmit.display, gap: 2, width: '100%', flexDirection: 'column' }}>
+            <Alert key={alertSubmit.title} sx={{  position: 'fixed', zIndex: 99,  top: {xs: 50, sm:770}, right: {xs: 50, sm: '36%'}}} variant="soft" color="success" >
+              <div>
+                {/* <div>{alertSubmit.title}</div> */}
+                <Typography level="body-sm" color="success">{alertSubmit.title}</Typography>
+              </div>
+            </Alert>
+          </Box>  
+          )
+        }
+        })()}
+
         <PersonalDetails dispatch={Personaldispatch} firstName={Personalstate.firstName} lastName={Personalstate.lastName} fatherName={Personalstate.fatherName} eMail={Personalstate.eMail}
          contactNumber={Personalstate.contactNumber} dateofBirth={Personalstate.dateofBirth} Gender={Personalstate.Gender} Religion={Personalstate.Religion} HouseNo={Personalstate.HouseNo}
          Street={Personalstate.Street} Sector={Personalstate.Sector} City={Personalstate.City} Pincode={Personalstate.Pincode} Area={Personalstate.Area} MaritalStatus={Personalstate.MaritalStatus}
-         SpouseName={Personalstate.SpouseName} Disabled={Personalstate.Disabled} Orphan={Personalstate.Orphan} Next={Personalstate.Next}
+         SpouseName={Personalstate.SpouseName} Disabled={Personalstate.Disabled} Orphan={Personalstate.Orphan} Next={Personalstate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
+         Agreement={Personalstate.Agreement}
         />
         <AcademicDetails dispatch={Academicdispatch} Diploma={Academicstate.Diploma} TenthBoard={Academicstate.TenthBoard} TenthSchool={Academicstate.TenthSchool} TenthPercentage={Academicstate.TenthPercentage}
           TwelfthBoard={Academicstate.TwelfthBoard} TwelfthSchool={Academicstate.TwelfthSchool} TwelfthStream={Academicstate.TwelfthStream} TwelfthPercentage={Academicstate.TwelfthPercentage}
-          Next={Academicstate.Next}
+          Next={Academicstate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
         />
         <CasteDetails dispatch={Castedispatch} casteCertificateNumber={Castestate.casteCertificateNumber} casteCertificateIssueDate={Castestate.casteCertificateIssueDate} caste={Castestate.caste} 
-          subCaste={Castestate.subCaste} Next={Castestate.Next}
+          subCaste={Castestate.subCaste} Next={Castestate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
         />
         <IncomeDetails dispatch={Incomedispatch} incomeAgriculture={Incomestate.incomeAgriculture} incomeBusiness={Incomestate.incomeBusiness} incomeProperty={Incomestate.incomeProperty}
-          familyMembers={Incomestate.familyMembers} incomeTotal={Incomestate.incomeTotal} Next={Incomestate.Next}
+          familyMembers={Incomestate.familyMembers} incomeTotal={Incomestate.incomeTotal} Next={Incomestate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
         />
         <SamagraDetails dispatch={Samagradispatch} PersonalSamagraID={Samagrastate.PersonalSamagraID} FamilySamagraID={Samagrastate.FamilySamagraID} HeadofFamily={Samagrastate.HeadofFamily} 
-          RelationnShipHeadofFamily={Samagrastate.RelationnShipHeadofFamily} GenderHeadofFamily={Samagrastate.GenderHeadofFamily} Next={Samagrastate.Next}
+          RelationnShipHeadofFamily={Samagrastate.RelationnShipHeadofFamily} GenderHeadofFamily={Samagrastate.GenderHeadofFamily} Next={Samagrastate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
         />
-        <NativeDetails dispatch={Nativedispatch} nativeBorn={Nativestate.nativeBorn} nativeEducation={Nativestate.nativeEducation} Next={Nativestate.Next}
+        <NativeDetails dispatch={Nativedispatch} nativeBorn={Nativestate.nativeBorn} nativeEducation={Nativestate.nativeEducation} Next={Nativestate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
         />  
 
         <TabPanel value={6}>
