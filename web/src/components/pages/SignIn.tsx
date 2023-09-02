@@ -26,10 +26,16 @@ interface SignInFormElement extends HTMLFormElement {
  * This template uses [`Inter`](https://fonts.google.com/specimen/Inter?query=inter) font.
  */
 export default function SignIn() {
+  
   const navigate = useNavigate();
-  function handleClick() {
+  function handleClickToSignUp() {
     navigate("/SignUp");
+   
   }
+    function handleClickTogeneral() {
+      navigate("/general");
+     
+    }
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -142,6 +148,7 @@ export default function SignIn() {
                   password: formElements.password.value,
                   persistent: formElements.persistent.checked,
                 };
+                handleClickTogeneral();
                 alert(JSON.stringify(data, null, 2));
               }}
             >
@@ -165,10 +172,10 @@ export default function SignIn() {
                   Forgot your password?
                 </Link>
               </Box>
-              <Button type="submit" fullWidth>
+              <Button type="submit"  fullWidth>
                 Sign in
               </Button>
-               <Link fontSize="sm" onClick={handleClick} fontWeight="lg">
+               <Link fontSize="sm" onClick={handleClickToSignUp} fontWeight="lg">
                 Newcomer? Sign Up Now!
                 </Link>
             </form>
