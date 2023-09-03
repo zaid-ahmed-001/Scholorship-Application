@@ -107,7 +107,7 @@ function PersonalDetails(props: any) {
   ];
   return (
     <form  
-    name='PersonalSubmit'
+    name='PersonalSubmit' method = "post"
     onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
     event.preventDefault();
     props.dispatch({type: 'Next', payload: false})
