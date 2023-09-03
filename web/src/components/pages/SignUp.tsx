@@ -49,6 +49,7 @@ interface PersonlFormElement extends HTMLFormElement {
   readonly fatherName: HTMLInputElement;
   readonly eMail: HTMLInputElement;
   readonly contactNumber: HTMLInputElement;
+  readonly enrollmentNumber: HTMLInputElement;
   readonly dateofBirth: HTMLInputElement;
   readonly gender: HTMLInputElement;
   readonly religion: HTMLInputElement;
@@ -64,11 +65,15 @@ function PersonalDetails(props: any) {
   const [PassportSizeuploadProgress, setPassportSizeuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setPassportSize(event.target.files[0]);
-      setPassportSizeuploadProgress(0);
-      setSelectedFile(event.target.files[0]);
-      var name:string = event?.target.name;
+    if (event.target.files && event.target.files.length > 0 ) {
+      if (event.target.files[0].type == 'application/pdf') {
+        setPassportSize(event.target.files[0]);
+        setPassportSizeuploadProgress(0);
+        setSelectedFile(event.target.files[0]);
+        var name:string = event?.target.name;
+      } else {
+        return
+      }
     }
     if (selectedFile) {
       const reader = new FileReader();
@@ -94,10 +99,11 @@ function PersonalDetails(props: any) {
     }, 1000);
   };
   const personalQuesList = [
-    {label: 'Father`s Name', formType:'text', decor: '', id: 'fatherName', properties: props.fatherName},
-    {label: 'Email', formType:'text', decor: <i data-feather="mail" />, id: 'eMail', properties: props.eMail},
-    {label: 'Contact Number', formType:'number', decor: "+91", id: 'contactNumber', properties: props.contactNumber},
-    {label: 'Date of Birth', formType:'date', decor: "", id: 'dateofBirth', properties: props.dateofBirth}
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Father`s Name', formType:'text', decor: '', id: 'fatherName', properties: props.fatherName},
+    {slotPattern: '^[/\S+@\S+\.\S+/]*$', pattern: /\S+@\S+\.\S+/, label: 'Email', formType:'email', decor: <i data-feather="mail" />, id: 'eMail', properties: props.eMail},
+    {slotPattern: '^[0-9-\\s]*$' , pattern: /^[0-9-\s]+$/, label: 'Contact Number', formType:'number', decor: "+91", id: 'contactNumber', properties: props.contactNumber},
+    {slotPattern: '^[0-9-,/\\s]*$' , pattern: /^[0-9/,-\s]+$/, label: 'Date of Birth', formType:'date', decor: "", id: 'dateofBirth', properties: props.dateofBirth},
+    {slotPattern: '^[A-Za-z0-9-,/\\s]*$' , pattern: /^[A-Za-z0-9/,-\s]+$/, label: 'Enrollment Number', formType:'text', decor: "", id: 'enrollmentNumber', properties: props.enrollmentNumber}
   ];
   return (
     <form  
@@ -113,6 +119,7 @@ function PersonalDetails(props: any) {
       eMail: props.eMail,
       contactNumber: props.contactNumber,
       dateofBirth: props.dateofBirth,
+      enrollmentNumber: props.enrollmentNumber,
       gender: props.Gender,
       country: props.country,
       religion: props.Religion,
@@ -131,11 +138,38 @@ function PersonalDetails(props: any) {
           <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
             <FormControl  sx={{ flex: 1 }} >
               <FormLabel sx={{ display: { sm: 'none' } }}>First name</FormLabel>
-              <Input placeholder="" name="firstName" required value={props.firstName} onChange={(e)=>props.dispatch({type: 'firstName', payload: e.target.value})} />
+              <Input 
+              type='text'
+              placeholder="" 
+              slotProps={{
+                input: {
+                  pattern: '^[A-Za-z\\s]*$',
+                },
+              }}
+              onKeyPress={(e) => {
+                if (!/^[A-Za-z\s]+$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              name="firstName"
+              required 
+              value={props.firstName} 
+              onChange={(e)=>props.dispatch({type: 'firstName', payload: e.target.value})} />
             </FormControl>
             <FormControl  sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: 'none' } }}>Last name</FormLabel>
-              <Input placeholder="" name="lastName" required value={props.lastName} onChange={(e)=>props.dispatch({type: 'lastName', payload: e.target.value})} />
+              <Input placeholder=""
+                slotProps={{
+                  input: {
+                    pattern: '^[A-Za-z\\s]*$',
+                  },
+                }}
+                onKeyPress={(e) => {
+                  if (!/^[A-Za-z\s]+$/.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                name="lastName" required value={props.lastName} onChange={(e)=>props.dispatch({type: 'lastName', payload: e.target.value})} />
             </FormControl>
           </Box>
           <Divider role="presentation" />
@@ -147,10 +181,26 @@ function PersonalDetails(props: any) {
                   <Input
                     type={ques.formType}
                     placeholder=''
-                    defaultValue=''
                     startDecorator={ques.decor}
                     name={ques.id}
                     required
+                    slotProps={{
+                      input: {
+                        pattern: ques.slotPattern,
+                      },
+                    }}
+                    onKeyPress={(e) => {
+                      console.log(ques.formType)
+                      if (ques.formType === 'email') {
+                        if (ques.pattern.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      } else {
+                        if (!ques.pattern.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }
+                    }}
                     value={ques.properties}
                     onChange={(e) =>
                       props.dispatch({ type: ques.id, payload: e.target.value })
@@ -170,7 +220,7 @@ function PersonalDetails(props: any) {
         </FormControl>
         <Divider role="presentation" />
         <FormControl sx={{ display: { sm: 'contents' } }}><FormLabel>Religion</FormLabel>
-          <Select defaultValue="" name="religion" required value={props.Religion} onChange={(e, newValue) => props.dispatch({type: 'Religion', payload: newValue}) }>
+          <Select name="religion" required value={props.Religion} onChange={(e, newValue) => props.dispatch({type: 'Religion', payload: newValue}) }>
             <Option value="Hindu">Hindu</Option>
             <Option value="Islam">Islam</Option>
             <Option value="Sikh">Sikh</Option>
@@ -187,27 +237,82 @@ function PersonalDetails(props: any) {
           <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
             <FormLabel sx={{ display: { sm: 'none' } }}>Address</FormLabel>
             <FormControl sx={{ flex: 1 }}>
-              <Input name="HouseNo" required placeholder="House No. / Building" value={props.HouseNo} onChange={(e)=>props.dispatch({type: 'HouseNo', payload: e.target.value})} />
+              <Input name="HouseNo"
+              slotProps={{
+                input: {
+                  pattern: '^[0-9A-Za-z\\s]*$',
+                },
+              }}
+              onKeyPress={(e) => {
+                if (!/^[0-9A-Za-z\s]+$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              required placeholder="House No. / Building" value={props.HouseNo} onChange={(e)=>props.dispatch({type: 'HouseNo', payload: e.target.value})} />
             </FormControl>
             <FormControl sx={{ flex: 1 }}>
-              <Input name="Street" required placeholder="Street / Locality"  value={props.Street} onChange={(e)=>props.dispatch({type: 'Street', payload: e.target.value})} />
+              <Input name="Street"
+              slotProps={{
+                input: {
+                  pattern: '^[0-9A-Za-z\\s]*$',
+                },
+              }}
+              onKeyPress={(e) => {
+                if (!/^[0-9A-Za-z\s]+$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              required placeholder="Street / Locality"  value={props.Street} onChange={(e)=>props.dispatch({type: 'Street', payload: e.target.value})} />
             </FormControl>
           </Box>
           <Divider />
           <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}></FormLabel>
           <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
-              <Input name="Sector" required placeholder="Area / Complex / Sector" value={props.Sector} onChange={(e)=>props.dispatch({type: 'Sector', payload: e.target.value})} />
+              <Input name="Sector"
+              slotProps={{
+                input: {
+                  pattern: '^[0-9A-Za-z\\s]*$',
+                },
+              }}
+              onKeyPress={(e) => {
+                if (!/^[0-9A-Za-z\s]+$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              required placeholder="Area / Complex / Sector" value={props.Sector} onChange={(e)=>props.dispatch({type: 'Sector', payload: e.target.value})} />
             </FormControl>
             <FormControl sx={{ flex: 1 }}>
-              <Input name="City" required placeholder="Town / City / Village" value={props.City} onChange={(e)=>props.dispatch({type: 'City', payload: e.target.value})} />
+              <Input name="City"
+              slotProps={{
+                input: {
+                  pattern: '^[0-9A-Za-z\\s]*$',
+                },
+              }}
+              onKeyPress={(e) => {
+                if (!/^[0-9A-Za-z\s]+$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              required placeholder="Town / City / Village" value={props.City} onChange={(e)=>props.dispatch({type: 'City', payload: e.target.value})} />
             </FormControl>
           </Box>
           <Divider />
           <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}></FormLabel>
           <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
             <FormControl sx={{ flex: 1 }}>
-              <Input type='number' name="Pincode" required placeholder="Pincode" value={props.Pincode} onChange={(e)=>props.dispatch({type: 'Pincode', payload: e.target.value})} />
+              <Input type='number' name="Pincode"
+              slotProps={{
+                input: {
+                  pattern: '^[0-9A-Za-z\\s]*$',
+                },
+              }}
+              onKeyPress={(e) => {
+                if (!/^[0-9A-Za-z\s]+$/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
+              required placeholder="Pincode" value={props.Pincode} onChange={(e)=>props.dispatch({type: 'Pincode', payload: e.target.value})} />
             </FormControl>
           </Box>
         <Divider role="presentation" />
@@ -216,7 +321,6 @@ function PersonalDetails(props: any) {
           <Box sx={{ display: { xs: 'contents', sm: 'flex', flexDirection: 'column'  }, gap: 2 }}>
           <FormLabel sx={{ display: { sm: 'none' } }}>Area</FormLabel>
             <RadioGroup
-                defaultValue=""
                 name="Area"
                 value={props.Area}
                 orientation="horizontal"
@@ -231,7 +335,7 @@ function PersonalDetails(props: any) {
         <Divider role="presentation" />
         <FormControl sx={{ display: { sm: 'contents' } }}>
           <FormLabel>Marital Status</FormLabel>
-          <Select defaultValue="" name="MaritalStatus" required value={props.MaritalStatus} onChange={(e, newValue) => props.dispatch({type: 'MaritalStatus', payload: newValue}) }>
+          <Select name="MaritalStatus" required value={props.MaritalStatus} onChange={(e, newValue) => props.dispatch({type: 'MaritalStatus', payload: newValue}) }>
             <Option value="Single">Single</Option>
             <Option value="Married">Married</Option>
             <Option value="Divorced">Divorced</Option>
@@ -246,6 +350,16 @@ function PersonalDetails(props: any) {
             type="text"
             name="SpouseName"
             placeholder="Spouse's Name"
+            slotProps={{
+              input: {
+                pattern: '^[A-Za-z\\s]*$',
+              },
+            }}
+            onKeyPress={(e) => {
+              if (!/^[A-Za-z\s]+$/.test(e.key)) {
+                e.preventDefault();
+              }
+            }}
             value={props.SpouseName}
             onChange={(e)=>props.dispatch({type: 'SpouseName', payload: e.target.value})}
           />
@@ -296,7 +410,10 @@ function PersonalDetails(props: any) {
             </Box>
           </Box>
           <Typography level="body-sm" textAlign="center">
-            <input name='PassportSize' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
+            <Button component="label" variant="plain" >Choose PDF File
+              <input name='PassportSize' accept=".pdf" type="file" onChange={handleUpload} style={{opacity: '0',position: 'absolute'}} required={ (PassportSize==null) ? true : false } />
+            </Button>
+            {PassportSize && <Box>&nbsp;{PassportSize?.name}</Box>}
           </Typography>
         </Card>
         {(PassportSizeuploadProgress!=0) && (
@@ -341,6 +458,9 @@ interface AcademicFormElement extends HTMLFormElement {
   readonly TenthBoard: HTMLInputElement;
   readonly TenthSchool: HTMLInputElement;
   readonly TenthPercentage: HTMLInputElement;
+  readonly DiplomaCollege: HTMLInputElement;
+  readonly DiplomaBranch: HTMLInputElement;
+  readonly DiplomaCGPA: HTMLInputElement;
   readonly TwelfthBoard: HTMLInputElement;
   readonly TwelfthSchool: HTMLInputElement;
   readonly TwelfthStream: HTMLInputElement;
@@ -353,30 +473,38 @@ function AcademicDetails(props: any) {
   const [TwelfthMarkSheetuploadProgress, setTwelfthMarkSheetuploadProgress] = React.useState(0);
   const [previousSemMarkesheet , setpreviousSemMarkesheet] = React.useState<File | null>(null);
   const [previousSemMarkesheetuploadProgress, setpreviousSemMarkesheetuploadProgress] = React.useState(0);
+  const [diplomaDegree , setdiplomaDegree] = React.useState<File | null>(null);
+  const [diplomaDegreeuploadProgress, setdiplomaDegreeuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
-
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     var name:string = event.target.name;
     if (event.target.files && event.target.files.length > 0) {
-      switch (event.target.name) {
-        case 'TenthMarkSheet':
-          setTenthMarkSheet(event.target.files[0]);
-          setTenthMarkSheetUploadProgress(0);
-          break;
-        case 'TwelfthMarkSheet':
-          setTwelfthMarkSheet(event.target.files[0]);
-          setTwelfthMarkSheetuploadProgress(0);
-          break;
-        case 'previousSemMarkesheet':
-          setpreviousSemMarkesheet(event.target.files[0]);
-          setpreviousSemMarkesheetuploadProgress(0);
-          break;
-        default:
-          break;
+      if (event.target.files[0].type == 'application/pdf') {
+        switch (event.target.name) {
+          case 'TenthMarkSheet':
+            setTenthMarkSheet(event.target.files[0]);
+            setTenthMarkSheetUploadProgress(0);
+            break;
+          case 'TwelfthMarkSheet':
+            setTwelfthMarkSheet(event.target.files[0]);
+            setTwelfthMarkSheetuploadProgress(0);
+            break;
+          case 'previousSemMarkesheet':
+            setpreviousSemMarkesheet(event.target.files[0]);
+            setpreviousSemMarkesheetuploadProgress(0);
+            break;
+          case 'diplomaDegree':
+            setdiplomaDegree(event.target.files[0]);
+            setdiplomaDegreeuploadProgress(0);
+            break;  
+          default:
+            break;
+        }
+        setSelectedFile(event.target.files[0]);
+      } else {
+        return
       }
-      setSelectedFile(event.target.files[0]);
     }
-
     if (selectedFile) {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -398,6 +526,9 @@ function AcademicDetails(props: any) {
             case 'previousSemMarkesheet':
               setpreviousSemMarkesheetuploadProgress(progress);
               break;
+            case 'diplomaDegree':
+              setdiplomaDegreeuploadProgress(progress);
+              break;  
             default:
               break;
           }
@@ -418,6 +549,9 @@ function AcademicDetails(props: any) {
       case 'previousSemMarkesheet':
         setpreviousSemMarkesheetuploadProgress(100);
         break;
+      case 'diplomaDegree':
+        setdiplomaDegreeuploadProgress(100);
+        break;  
       default:
         break;
     }
@@ -433,19 +567,27 @@ function AcademicDetails(props: any) {
         case 'previousSemMarkesheet':
           setpreviousSemMarkesheetuploadProgress(0);
           break;
+        case 'diplomaDegree':
+          setdiplomaDegreeuploadProgress(0);
+          break;    
         default:
           break;
       }
     }, 1000);
   };
+  const diplomaQuesList = [
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Which college did you attend to complete your diploma?', formType:'text', decor: '', id: 'DiplomaCollege', properties: props.DiplomaCollege},
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'In which branch did you complete your diploma?', formType:'text', decor: '', id: 'DiplomaBranch', properties: props.DiplomaBranch},
+    {slotPattern: '^[0-9]*$' , pattern: /^[0-9]+$/, label: 'What was your CGPA when you completed your diploma?', formType:'number', decor: '', id: 'DiplomaCGPA', properties: props.DiplomaCGPA},
+  ];
   const academicQuesList = [
-    {label: 'Exam board was in charge of your 10th-Grade Board Exams', formType:'text', decor: '', id: 'TenthBoard', properties: props.TenthBoard},
-    {label: 'Name of the school where you completed your 10th-Grade Board Education', formType:'text', decor: '', id: 'TenthSchool', properties: props.TenthSchool},
-    {label: 'Percentage you secured in your 10th-Grade Board Exams', formType:'number', decor: '', id: 'TenthPercentage', properties: props.TenthPercentage},
-    {label: 'Exam board was in charge of your 12th-Grade Board Exams', formType:'text', decor: '', id: 'TwelfthBoard', properties: props.TwelfthBoard},
-    {label: 'Name of the school where you completed your 12th-Grade Board Education', formType:'text', decor: '', id: 'TwelfthSchool', properties: props.TwelfthSchool},
-    {label: 'What stream did you choose for your 12th-Grade?', formType:'text', decor: '', id: 'TwelfthStream', properties: props.TwelfthStream},
-    {label: 'Percentage you secured in your 12th-Grade Board Exams', formType:'number', decor: '', id: 'TwelfthPercentage', properties: props.TwelfthPercentage}
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Exam board was in charge of your 10th-Grade Board Exams', formType:'text', decor: '', id: 'TenthBoard', properties: props.TenthBoard},
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Name of the school where you completed your 10th-Grade Board Education', formType:'text', decor: '', id: 'TenthSchool', properties: props.TenthSchool},
+    {slotPattern: '^[0-9]*$' , pattern: /^[0-9]+$/, label: 'Percentage you secured in your 10th-Grade Board Exams', formType:'number', decor: '', id: 'TenthPercentage', properties: props.TenthPercentage},
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Exam board was in charge of your 12th-Grade Board Exams', formType:'text', decor: '', id: 'TwelfthBoard', properties: props.TwelfthBoard},
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Name of the school where you completed your 12th-Grade Board Education', formType:'text', decor: '', id: 'TwelfthSchool', properties: props.TwelfthSchool},
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'What stream did you choose for your 12th-Grade?', formType:'text', decor: '', id: 'TwelfthStream', properties: props.TwelfthStream},
+    {slotPattern: '^[0-9]*$' , pattern: /^[0-9]+$/, label: 'Percentage you secured in your 12th-Grade Board Exams', formType:'number', decor: '', id: 'TwelfthPercentage', properties: props.TwelfthPercentage}
   ];
   return (
     <>
@@ -454,11 +596,25 @@ function AcademicDetails(props: any) {
           event.preventDefault();
           props.dispatch({type: 'Next', payload: false})
           props.settabIndex(props.tabIndex+1)
+          if (props.Diploma === 'Yes') {
+            for (let index = 0; index < academicQuesList.length; index++) {
+              const element = academicQuesList[index].id;
+              props.dispatch({type: element, payload: '-NA-'})
+            }
+          } else if (props.Diploma === 'No') {
+            for (let index = 0; index < diplomaQuesList.length; index++) {
+              const element = diplomaQuesList[index].id;
+              props.dispatch({type: element, payload: '-NA-'})
+            }
+          }
           const data = {
             Diploma: props.Diploma,
+            DiplomaCollege: props.DiplomaCollege,
+            DiplomaBranch: props.DiplomaBranch,
+            DiplomaCGPA: props.DiplomaCGPA,
             TenthBoard: props.TenthBoard,
             TenthSchool: props.TenthSchool,
-            TenthPercentage: props.enthPercentage,
+            TenthPercentage: props.TenthPercentage,
             TwelfthBoard: props.TwelfthBoard,
             TwelfthSchool: props.TwelfthSchool,
             TwelfthStream: props.TwelfthStream,
@@ -470,7 +626,7 @@ function AcademicDetails(props: any) {
         <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
         <FormControl sx={{ display: { sm: 'contents' } }}>
                 <FormLabel>Enter Current Semester</FormLabel>
-                <Select defaultValue=" " required name='currentSemester' value={props.currentSemester} onChange={(e, newValue) => props.dispatch({type: 'currentSemester', payload: newValue})}>
+                <Select required name='currentSemester' value={props.currentSemester} onChange={(e, newValue) => props.dispatch({type: 'currentSemester', payload: newValue})}>
                   <Option value={1}>First</Option>
                   <Option value={2}>Second</Option>
                   <Option value={3}>Third</Option>
@@ -496,7 +652,10 @@ function AcademicDetails(props: any) {
                       </Box>
                     </Box>
                     <Typography level="body-sm" textAlign="center">
-                      <input name='previousSemMarkesheet' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
+                    <Button component="label" variant="plain" >Choose PDF File
+                      <input name='previousSemMarkesheet' accept=".pdf" type="file" onChange={handleUpload} style={{opacity: 0, position: 'absolute'}} required={ (previousSemMarkesheet==null) ? true : false }/>
+                    </Button>
+                    {previousSemMarkesheet && <Box>&nbsp;{previousSemMarkesheet?.name}</Box>}
                     </Typography>
                   </Card>
                   {(previousSemMarkesheetuploadProgress!=0) && (
@@ -543,36 +702,96 @@ function AcademicDetails(props: any) {
               {(() => { if (props.Diploma==='Yes')  {
                 return (
                   <>
-                    <FormControl sx={{ display: { sm: 'contents' } }}>
-                      <FormLabel>Diploma Karega BKL</FormLabel>
-                      <Input 
-                        type='text'
-                        placeholder=""
-                      />
-                    </FormControl>
+                    {
+                      diplomaQuesList.map((ques:any, id:any) => (
+                        <React.Fragment key={id}>
+                          <FormControl  sx={{ display: { sm: 'contents' } }}>
+                            <FormLabel>{ques.label}</FormLabel>
+                            <Input 
+                            type={ques.formType}
+                            placeholder=''
+                            startDecorator={ques.decor}
+                            name={ques.id}
+                            required
+                            slotProps={{
+                              input: {
+                                pattern: ques.slotPattern,
+                              },
+                            }}
+                            onKeyPress={(e) => {
+                              if (!ques.pattern.test(e.key)) {
+                                e.preventDefault();
+                              }
+                            }}
+                            value={ques.properties}
+                            onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                          </FormControl>
+                          <Divider role="presentation" />
+                        </React.Fragment>
+                      ))
+                    }
+                  <FormLabel>Upload Diploma Degree</FormLabel>
+                  <Card
+                    variant="outlined"
+                    sx={[{borderRadius: 'sm', display: 'flex', flexDirection: 'column', gap: 1, alignItems: 'center', px: 3, flexGrow: 1}]}>
+                    <Box sx={{ p: 1, bgcolor: 'background.level1', borderRadius: '50%' }}>
+                      <Box
+                        sx={{width: 32, height: 32, borderRadius: '50%', bgcolor: 'background.level2', display: 'flex', alignItems: 'center', justifyContent: 'center',}}>
+                        <i data-feather="upload-cloud" />
+                      </Box>
+                    </Box>
+                    <Typography level="body-sm" textAlign="center">
+                    <Button component="label" variant="plain" >Choose PDF File
+                      <input name='diplomaDegree' accept=".pdf" type="file" onChange={handleUpload} style={{opacity: '0',position: 'absolute'}} required={ (diplomaDegree==null) ? true : false }/>
+                    </Button>
+                    {diplomaDegree && <Box>&nbsp;{diplomaDegree?.name}</Box>}
+                    </Typography>
+                  </Card>
+                  {(diplomaDegreeuploadProgress!=0) && (
+                  <>
                     <Divider role="presentation" />
+                    <FormControl sx={{ display: { sm: 'contents' } }}>
+                    <FormLabel></FormLabel>
+                        <FileUpload
+                          fileName={diplomaDegree?.name as string}
+                          fileSize={diplomaDegree?.size}
+                          progress={diplomaDegreeuploadProgress}
+                        />
+                    </FormControl>
+                  </>
+                  )}
                   </>
                 )
               } else if (props.Diploma==='No') {
                 return (
                   <>
                     {
-                      academicQuesList.map((ques:any, index:any) => {
-                          return <>
-                            <FormControl  sx={{ display: { sm: 'contents' } }}>
-                              <FormLabel>{ques.label}</FormLabel>
-                              <Input 
-                              type={ques.formType}
-                              placeholder=''
-                              startDecorator={ques.decor}
-                              name={ques.id}
-                              required
-                              value={ques.properties}
-                              onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
-                            </FormControl>
-                            <Divider role="presentation" />
-                        </>
-                      })
+                      academicQuesList.map((ques:any, id:any) => (
+                        <React.Fragment key={id}>
+                          <FormControl  sx={{ display: { sm: 'contents' } }}>
+                            <FormLabel>{ques.label}</FormLabel>
+                            <Input 
+                            type={ques.formType}
+                            placeholder=''
+                            startDecorator={ques.decor}
+                            name={ques.id}
+                            required
+                            slotProps={{
+                              input: {
+                                pattern: ques.slotPattern,
+                              },
+                            }}
+                            onKeyPress={(e) => {
+                              if (!ques.pattern.test(e.key)) {
+                                e.preventDefault();
+                              }
+                            }}
+                            value={ques.properties}
+                            onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                          </FormControl>
+                          <Divider role="presentation" />
+                        </React.Fragment>
+                      ))
                     }
                   <FormLabel>Upload 10th Class MarkSheet</FormLabel>
                   <Card
@@ -585,7 +804,10 @@ function AcademicDetails(props: any) {
                       </Box>
                     </Box>
                     <Typography level="body-sm" textAlign="center" >
-                        <input name='TenthMarkSheet' type="file" onChange={handleUpload} className='fileuploadInput' required />
+                      <Button component="label" variant="plain" >Choose PDF File
+                        <input name='TenthMarkSheet' accept=".pdf" type="file" onChange={handleUpload} style={{opacity: '0',position: 'absolute'}} required={ (TenthMarkSheet==null) ? true : false }/>
+                      </Button>
+                      {TenthMarkSheet && <Box>&nbsp;{TenthMarkSheet?.name}</Box>}
                     </Typography>
                   </Card>
                   {(TenthMarkSheetuploadProgress!=0) && (
@@ -613,7 +835,10 @@ function AcademicDetails(props: any) {
                       </Box>
                     </Box>
                     <Typography level="body-sm" textAlign="center">
-                      <input name='TwelfthMarkSheet' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
+                      <Button component="label" variant="plain" >Choose PDF File
+                        <input name='TwelfthMarkSheet' accept=".pdf" type="file" onChange={handleUpload} style={{opacity: '0',position: 'absolute'}} required={ (TwelfthMarkSheet==null) ? true : false }/>
+                      </Button>
+                      {TwelfthMarkSheet && <Box>&nbsp;{TwelfthMarkSheet?.name}</Box>}
                     </Typography>
                   </Card>
                   {(TwelfthMarkSheetuploadProgress!=0) && (
@@ -671,10 +896,14 @@ function CasteDetails(props:any) {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
+      if (event.target.files[0].type == 'application/pdf') { 
       setcasteCertificate(event.target.files[0]);
       setcasteCertificateuploadProgress(0);
       setSelectedFile(event.target.files[0]);
       var name:string = event?.target.name;
+      } else {
+        return
+      }
     }
     if (selectedFile) {
       const reader = new FileReader();
@@ -700,10 +929,10 @@ function CasteDetails(props:any) {
     }, 1000);
   };
   const casteQuesList = [
-    {label: 'Caste Certificate Number', formType:'text', decor: '', id: 'casteCertificateNumber', properties: props.casteCertificateNumber},
-    {label: 'Caste Certificate Issue Date', formType:'date', decor: '', id: 'casteCertificateIssueDate', properties: props.casteCertificateIssueDate},
-    {label: 'Caste', formType:'text', decor: '', id: 'caste', properties: props.caste},
-    {label: 'Sub-Caste', formType:'text', decor: '', id: 'subCaste', properties: props.subCaste},
+    {slotPattern: '^[0-9A-Za-z-/\\s]*$' , pattern: /^[0-9A-Za-z-/\s]+$/, label: 'Caste Certificate Number', formType:'text', decor: '', id: 'casteCertificateNumber', properties: props.casteCertificateNumber},
+    {slotPattern: '^[0-9-/,\s]*$' , pattern: /^[0-9-/,\s]+$/, label: 'Caste Certificate Issue Date', formType:'date', decor: '', id: 'casteCertificateIssueDate', properties: props.casteCertificateIssueDate},
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Caste', formType:'text', decor: '', id: 'caste', properties: props.caste},
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Sub-Caste', formType:'text', decor: '', id: 'subCaste', properties: props.subCaste},
   ];
   return (
     <>
@@ -723,23 +952,32 @@ function CasteDetails(props:any) {
         <TabPanel value={2}>
           <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
             {
-              casteQuesList.map((ques:any, index:any) => {
-                  return <>
-                    <FormControl  sx={{ display: { sm: 'contents' } }}>
-                      <FormLabel>{ques.label}</FormLabel>
-                      <Input 
-                      type={ques.formType}
-                      placeholder=''
-                      defaultValue=''
-                      startDecorator={ques.decor}
-                      name={ques.id}
-                      required
-                      value={ques.properties}
-                      onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
-                    </FormControl>
-                    <Divider role="presentation" />
-                </>
-              })
+              casteQuesList.map((ques:any, id:any) => (
+                <React.Fragment key={id}>
+                  <FormControl  sx={{ display: { sm: 'contents' } }}>
+                    <FormLabel>{ques.label}</FormLabel>
+                    <Input 
+                    type={ques.formType}
+                    placeholder=''
+                    startDecorator={ques.decor}
+                    name={ques.id}
+                    required
+                    slotProps={{
+                      input: {
+                        pattern: ques.slotPattern,
+                      },
+                    }}
+                    onKeyPress={(e) => {
+                      if (!ques.pattern.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
+                    value={ques.properties}
+                    onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                  </FormControl>
+                  <Divider role="presentation" />
+                </React.Fragment>
+              ))
             }
               <FormLabel>Upload Caste Certificate</FormLabel>
               <Card
@@ -752,7 +990,10 @@ function CasteDetails(props:any) {
                   </Box>
                 </Box>
                 <Typography level="body-sm" textAlign="center">
-                  <input name='casteCertificate' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
+                  <Button component="label" variant="plain" >Choose PDF File
+                    <input name='casteCertificate' accept=".pdf" type="file" onChange={handleUpload} style={{opacity: '0',position: 'absolute'}} required={ (casteCertificate==null) ? true : false }/>
+                  </Button>
+                  {casteCertificate && <Box>&nbsp;{casteCertificate?.name}</Box>}
                 </Typography>
               </Card>
               {(casteCertificateuploadProgress!=0) && (
@@ -801,10 +1042,14 @@ function IncomeDetails(props:any) {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setincomeCertificate(event.target.files[0]);
-      setincomeCertificateuploadProgress(0);
-      setSelectedFile(event.target.files[0]);
-      var name:string = event.target.name;
+      if (event.target.files[0].type == 'application/pdf') {
+        setincomeCertificate(event.target.files[0]);
+        setincomeCertificateuploadProgress(0);
+        setSelectedFile(event.target.files[0]);
+        var name:string = event.target.name;
+      } else {
+        return
+      }
     }
     if (selectedFile) {
       const reader = new FileReader();
@@ -830,10 +1075,10 @@ function IncomeDetails(props:any) {
     }, 1000);
   };
   const incomeQuesList = [
-    {label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?', formType:'number', decor: 'Rs', id: 'incomeAgriculture', properties: props.incomeAgriculture},
-    {label: 'What`s your yearly income from your Business?', formType:'number', decor: 'Rs', id: 'incomeBusiness', properties: props.incomeBusiness},
-    {label: 'What`s your yearly income from your House Property?', formType:'number', decor: 'Rs', id: 'incomeProperty', properties: props.incomeProperty},
-    {label: 'Members your Family Contains?', formType:'text', decor: '', id: 'familyMembers', properties: props.familyMembers},
+    {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?', formType:'number', decor: 'Rs', id: 'incomeAgriculture', properties: props.incomeAgriculture},
+    {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from your Business?', formType:'number', decor: 'Rs', id: 'incomeBusiness', properties: props.incomeBusiness},
+    {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from your House Property?', formType:'number', decor: 'Rs', id: 'incomeProperty', properties: props.incomeProperty},
+    {slotPattern: '^[A-Za-z,\\s]*$' , pattern: /^[A-Za-z,\s]+$/, label: 'Members your Family Contains?', formType:'text', decor: '', id: 'familyMembers', properties: props.familyMembers},
   ];
   return (
     <>
@@ -854,27 +1099,36 @@ function IncomeDetails(props:any) {
           <TabPanel value={3}>
             <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
               {
-                incomeQuesList.map((ques:any, index:any) => {
-                    return <>
-                      <FormControl  sx={{ display: { sm: 'contents' } }}>
-                        <FormLabel>{ques.label}</FormLabel>
-                        <Input 
-                        type={ques.formType}
-                        placeholder=''
-                        defaultValue=''
-                        startDecorator={ques.decor}
-                        name={ques.id}
-                        required
-                        value={ques.properties}
-                        onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
-                      </FormControl>
-                      <Divider role="presentation" />
-                  </>
-                })
+                incomeQuesList.map((ques:any, id:any) => (
+                  <React.Fragment key={id}>
+                    <FormControl  sx={{ display: { sm: 'contents' } }}>
+                      <FormLabel>{ques.label}</FormLabel>
+                      <Input 
+                      type={ques.formType}
+                      placeholder=''
+                      startDecorator={ques.decor}
+                      name={ques.id}
+                      required
+                      slotProps={{
+                        input: {
+                          pattern: ques.slotPattern,
+                        },
+                      }}
+                      onKeyPress={(e) => {
+                        if (!ques.pattern.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      value={ques.properties}
+                      onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                    </FormControl>
+                    <Divider role="presentation" />
+                  </React.Fragment>
+                ))
               }
               <FormControl sx={{ display: { sm: 'contents' } }}>
                 <FormLabel>Total Income of Family</FormLabel>
-                <Select defaultValue=" " required name='incomeTotal' value={props.incomeTotal} onChange={(e, newValue) => props.dispatch({type: 'incomeTotal', payload: newValue})}>
+                <Select required name='incomeTotal' value={props.incomeTotal} onChange={(e, newValue) => props.dispatch({type: 'incomeTotal', payload: newValue})}>
                   <Option value="Less Than 1,00,000">
                     Less Than Rs: 1,00,000
                   </Option>
@@ -902,7 +1156,6 @@ function IncomeDetails(props:any) {
                 </Select>
               </FormControl>
               <Divider role="presentation" />
-                  
               <FormLabel>Upload Income Certificate</FormLabel>
               <Card
                 variant="outlined"
@@ -914,7 +1167,10 @@ function IncomeDetails(props:any) {
                   </Box>
                 </Box>
                 <Typography level="body-sm" textAlign="center">
-                  <input name='incomeCertificate' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
+                  <Button component="label" variant="plain" >Choose PDF File
+                    <input name='incomeCertificate' accept=".pdf" type="file" onChange={handleUpload} style={{opacity: '0',position: 'absolute'}} required={ (incomeCertificate==null) ? true : false }/>
+                  </Button>
+                  {incomeCertificate && <Box>&nbsp;{incomeCertificate?.name}</Box>}
                 </Typography>
               </Card>
               {(incomeCertificateuploadProgress!=0) && (
@@ -931,7 +1187,6 @@ function IncomeDetails(props:any) {
               </>
               )}
               <Divider role="presentation" />
-
               <FormControl sx={{ display: { sm: 'contents' } }}>
                 <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Agreement</FormLabel>
                 <FormLabel sx={{ display: { sm: 'none' } }}>Agreement</FormLabel>
@@ -969,10 +1224,14 @@ function SamagraDetails(props:any) {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setsamagraCertificate(event.target.files[0]);
-      setsamagraCertificateuploadProgress(0);
-      setSelectedFile(event.target.files[0]);
-      var name:string = event.target.name;
+      if (event.target.files[0].type == 'application/pdf') {
+        setsamagraCertificate(event.target.files[0]);
+        setsamagraCertificateuploadProgress(0);
+        setSelectedFile(event.target.files[0]);
+        var name:string = event.target.name;
+      } else {
+        return
+      }
     }
     if (selectedFile) {
       const reader = new FileReader();
@@ -998,10 +1257,10 @@ function SamagraDetails(props:any) {
     }, 1000);
   };
   const samagraQuesList = [
-    {label: 'Your Samagra ID', formType:'number', decor: '', id: 'PersonalSamagraID', properties: props.PersonalSamagraID},
-    {label: 'Family Samagra ID', formType:'number', decor: '', id: 'FamilySamagraID', properties: props.FamilySamagraID},
-    {label: 'Name of Head of Family', formType:'text', decor: '', id: 'HeadofFamily', properties: props.HeadofFamily},
-    {label: 'Relationship with Head of Family', formType:'text', decor: '', id: 'RelationnShipHeadofFamily', properties: props.RelationnShipHeadofFamily},
+    {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/,label: 'Your Samagra ID', formType:'number', decor: '', id: 'PersonalSamagraID', properties: props.PersonalSamagraID},
+    {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/,label: 'Family Samagra ID', formType:'number', decor: '', id: 'FamilySamagraID', properties: props.FamilySamagraID},
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Name of Head of Family', formType:'text', decor: '', id: 'HeadofFamily', properties: props.HeadofFamily},
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Relationship with Head of Family', formType:'text', decor: '', id: 'RelationnShipHeadofFamily', properties: props.RelationnShipHeadofFamily},
   ];
   return (
     <>
@@ -1009,7 +1268,7 @@ function SamagraDetails(props:any) {
       onSubmit={(event: React.FormEvent<SamagraFormElement>) => {
         event.preventDefault();
         props.dispatch({type: 'Next', payload: false})
-props.settabIndex(props.tabIndex+1)
+        props.settabIndex(props.tabIndex+1)
         const data = {
           PersonalSamagraID: props.PersonalSamagraID,
           FamilySamagraID: props.FamilySamagraID,
@@ -1022,23 +1281,32 @@ props.settabIndex(props.tabIndex+1)
       <TabPanel value={4}>
         <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
              {
-              samagraQuesList.map((ques:any, index:any) => {
-                  return <>
-                    <FormControl  sx={{ display: { sm: 'contents' } }}>
-                      <FormLabel>{ques.label}</FormLabel>
-                      <Input 
-                      type={ques.formType}
-                      placeholder=''
-                      defaultValue=''
-                      startDecorator={ques.decor}
-                      name={ques.id}
-                      required
-                      value={ques.properties}
-                      onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
-                    </FormControl>
-                    <Divider role="presentation" />
-                </>
-                })
+              samagraQuesList.map((ques:any, id:any) => (
+                <React.Fragment key={id}>
+                  <FormControl  sx={{ display: { sm: 'contents' } }}>
+                    <FormLabel>{ques.label}</FormLabel>
+                    <Input 
+                    type={ques.formType}
+                    placeholder=''
+                    startDecorator={ques.decor}
+                    name={ques.id}
+                    required
+                    slotProps={{
+                      input: {
+                        pattern: ques.slotPattern,
+                      },
+                    }}
+                    onKeyPress={(e) => {
+                      if (!ques.pattern.test(e.key)) {
+                        e.preventDefault();
+                      }
+                    }}
+                    value={ques.properties}
+                    onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                  </FormControl>
+                  <Divider role="presentation" />
+                </React.Fragment>
+              ))
               }
           <FormControl sx={{ display: { sm: 'contents' } }}>
             <FormLabel>Gender of Head of Family</FormLabel>
@@ -1060,7 +1328,10 @@ props.settabIndex(props.tabIndex+1)
               </Box>
             </Box>
             <Typography level="body-sm" textAlign="center">
-              <input name='samagraCertificate' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
+              <Button component="label" variant="plain" >Choose PDF File
+                <input name='samagraCertificate' accept=".pdf" type="file" onChange={handleUpload} style={{opacity: '0',position: 'absolute'}} required={ (samagraCertificate==null) ? true : false }/>
+              </Button>
+              {samagraCertificate && <Box>&nbsp;{samagraCertificate?.name}</Box>}
             </Typography>
           </Card>
           {(samagraCertificateuploadProgress!=0) && (
@@ -1112,10 +1383,15 @@ function NativeDetails(props:any) {
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      setnativeCertificate(event.target.files[0]);
-      setnativeCertificateuploadProgress(0);
-      setSelectedFile(event.target.files[0]);
-      var name:string =  event.target.name;
+      if (event.target.files[0].type == 'application/pdf') {
+        setnativeCertificate(event.target.files[0]);
+        setnativeCertificateuploadProgress(0);
+        setSelectedFile(event.target.files[0]);
+        var name:string = event.target.name;
+      }
+      else {
+        return
+      }
     }
     if (selectedFile) {
       const reader = new FileReader();
@@ -1146,7 +1422,7 @@ function NativeDetails(props:any) {
       onSubmit={(event: React.FormEvent<NativeFormElement>) => {
         event.preventDefault();
         props.dispatch({type: 'Next', payload: false})
-props.settabIndex(props.tabIndex+1)
+        props.settabIndex(props.tabIndex+1)
         const data = {
           nativeBorn: props.nativeBorn,
           nativeEducation: props.nativeEducation
@@ -1213,10 +1489,10 @@ props.settabIndex(props.tabIndex+1)
                 </Box>
               </Box>
               <Typography level="body-sm" textAlign="center">
-                <input name='nativeCertificate' type="file" onChange={handleUpload} style={{appearance: 'none'}} required/>
-                {/* {selectedFile && (
-                  <button name='nativeCertificate' type='button' onClick={()=>handleUpload('nativeCertificate')}>Upload</button>
-                )} */}
+                <Button component="label" variant="plain" >Choose PDF File
+                  <input name='nativeCertificate' accept=".pdf" type="file" onChange={handleUpload} style={{opacity: '0',position: 'absolute'}} required={ (nativeCertificate==null) ? true : false }/>
+                </Button>
+                {nativeCertificate && <Box>&nbsp;{nativeCertificate?.name}</Box>}
               </Typography>
             </Card>
             {(nativeCertificateuploadProgress!=0) && (
@@ -1263,6 +1539,7 @@ const Personalinitstate = {
   fatherName: '',
   eMail: '',
   contactNumber: '',
+  enrollmentNumber: '',
   dateofBirth: '',
   Gender: '',
   Religion: '',
@@ -1287,6 +1564,7 @@ function Personalreducer(state:any, action:any) {
     case 'eMail': return {...state, eMail: action.payload}
     case 'contactNumber': return {...state, contactNumber: action.payload}
     case 'dateofBirth': return {...state, dateofBirth: action.payload}
+    case 'enrollmentNumber': return {...state, enrollmentNumber: action.payload}
     case 'Gender': return {...state, Gender: action.payload}
     case 'Religion': return {...state, Religion: action.payload}
     case 'HouseNo': return {...state, HouseNo: action.payload}
@@ -1306,6 +1584,9 @@ function Personalreducer(state:any, action:any) {
 }
 const Academicinitstate = {
   Diploma: '',
+  DiplomaCollege: '',
+  DiplomaBranch: '',
+  DiplomaCGPA: '',
   TenthBoard: '',
   TenthSchool: '',
   TenthPercentage: '',
@@ -1320,6 +1601,9 @@ const Academicinitstate = {
 function Academicreducer(state:any, action:any) {
   switch (action.type) {
     case 'Diploma': return {...state, Diploma: action.payload}
+    case 'DiplomaCollege': return {...state, DiplomaCollege: action.payload}
+    case 'DiplomaBranch': return {...state, DiplomaBranch: action.payload}
+    case 'DiplomaCGPA': return {...state, DiplomaCGPA: action.payload}
     case 'TenthBoard': return {...state, TenthBoard: action.payload}
     case 'TenthSchool': return {...state, TenthSchool: action.payload}
     case 'TenthPercentage': return {...state, TenthPercentage: action.payload}
@@ -1410,7 +1694,6 @@ function Nativereducer(state:any, action:any) {
   }
 }
 
-
 export default function SignUp() {
   const navigate = useNavigate();
   const [Personalstate, Personaldispatch] = React.useReducer(Personalreducer, Personalinitstate);
@@ -1422,41 +1705,45 @@ export default function SignUp() {
   const [tabIndex, settabIndex] = React.useState(0);
 
   const ProfileReview = [
-    {data: Personalstate.firstName+' '+Personalstate.lastName, decor: '', label: 'Name'},
-    {data: Personalstate.fatherName, decor: '', label: 'Father Name'},
-    {data: Personalstate.eMail, decor: '', label: 'Email'},
-    {data: Personalstate.contactNumber, decor: '', label: 'Contact Number'},
-    {data: Personalstate.dateofBirth, decor: '', label: 'Date of Birth'},
-    {data: Personalstate.Gender, decor: '', label: 'Gender'}, 
-    {data: Personalstate.Religion, decor: '', label: 'Religion'},
-    {data: Personalstate.HouseNo+' '+Personalstate.Street+' Sector '+Personalstate.Sector+' , '+Personalstate.City+' Pincode '+Personalstate.Pincode+' , '+Personalstate.Area, decor: '', label: 'Address'},
-    {data: Personalstate.MaritalStatus+' '+Personalstate.SpouseName, decor: '', label: 'Marital Status'},
-    {data: Personalstate.Disabled, decor: '', label: 'Disabled'},
-    {data: Personalstate.Orphan, decor: '', label: 'Orphan'},
-    {data: Academicstate.Diploma, decor: '', label: 'Have you concluded a diploma curriculum?'},
-    {data: Academicstate.TenthBoard, decor: '', label: 'Exam board was in charge of your 10th-Grade Board Exams'},
-    {data: Academicstate.TenthSchool, decor: '', label: 'Name of the school where you completed your 10th-Grade Board Education'},
-    {data: Academicstate.TenthPercentage, decor: '', label: 'Percentage you secured in your 10th-Grade Board Exams'},
-    {data: Academicstate.TwelfthBoard, decor: '', label: 'Exam board was in charge of your 12th-Grade Board Exams'},
-    {data: Academicstate.TwelfthSchool, decor: '', label: 'Name of the school where you completed your 12th-Grade Board Education'},
-    {data: Academicstate.TwelfthStream, decor: '', label: 'What stream did you choose for your 12th-Grade?'},
-    {data: Academicstate.TwelfthPercentage, decor: '', label: 'Percentage you secured in your 12th-Grade Board Exams'},
-    {data: Castestate.casteCertificateNumber, decor: '', label: 'Caste Certificate Number'},
-    {data: Castestate.casteCertificateIssueDate, decor: '', label: 'Caste Certificate Issue Date'},
-    {data: Castestate.caste, decor: '', label: 'Caste'},
-    {data: Castestate.subCaste, decor: '', label: 'Sub-Caste'},
-    {data: Incomestate.incomeAgriculture, decor: '', label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?'},
-    {data: Incomestate.incomeBusiness, decor: 'Rs', label: 'What`s your yearly income from your Business?'},
-    {data: Incomestate.incomeProperty, decor: 'Rs', label: 'What`s your yearly income from your House Property?'},
-    {data: Incomestate.familyMembers, decor: 'Rs', label: 'Members your Family Contains?'},
-    {data: Incomestate.incomeTotal, decor: '', label: 'Total Income of Family'},
-    {data: Samagrastate.PersonalSamagraID, decor: '', label: 'Your Samagra ID'},
-    {data: Samagrastate.FamilySamagraID, decor: '', label: 'Family Samagra ID'},
-    {data: Samagrastate.HeadofFamily, decor: '', label: 'Name of Head of Family'},
-    {data: Samagrastate.RelationnShipHeadofFamily, decor: '', label: 'Relationship with Head of Family'},
-    {data: Samagrastate.GenderHeadofFamily, decor: '', label: 'Gender of Head of Family'},
-    {data: Nativestate.nativeBorn, decor: '', label: 'Were you born in Madhya Pradesh?'},
-    {data: Nativestate.nativeEducation, decor: '', label: 'Have you received continuous education for atleast three years in any educational institute located in Madhya Pradesh? (Provision of education will not apply to disable candidates)'},
+    {id: 'firstName', data: Personalstate.firstName+' '+Personalstate.lastName, decor: '', label: 'Name'},
+    {id: 'fatherName', data: Personalstate.fatherName, decor: '', label: 'Father Name'},
+    {id: 'eMail', data: Personalstate.eMail, decor: '', label: 'Email'},
+    {id: 'contactNumber', data: Personalstate.contactNumber, decor: '', label: 'Contact Number'},
+    {id: 'dateofBirth', data: Personalstate.dateofBirth, decor: '', label: 'Date of Birth'},
+    {id: 'enrollmentNumber', data: Personalstate.enrollmentNumber, decor: '', label: 'Enrollment Number'},
+    {id: 'Gender', data: Personalstate.Gender, decor: '', label: 'Gender'}, 
+    {id: 'Religion', data: Personalstate.Religion, decor: '', label: 'Religion'},
+    {id: 'HouseNo', data: Personalstate.HouseNo+' '+Personalstate.Street+' Sector '+Personalstate.Sector+' , '+Personalstate.City+' Pincode '+Personalstate.Pincode+' , '+Personalstate.Area, decor: '', label: 'Address'},
+    {id: 'MaritalStatus', data: Personalstate.MaritalStatus+' '+Personalstate.SpouseName, decor: '', label: 'Marital Status'},
+    {id: 'Disabled', data: Personalstate.Disabled, decor: '', label: 'Disabled'},
+    {id: 'Orphan', data: Personalstate.Orphan, decor: '', label: 'Orphan'},
+    {id: 'Diploma', data: Academicstate.Diploma, decor: '', label: 'Have you concluded a diploma curriculum?'},
+    {id: 'DiplomaCollege', data: Academicstate.DiplomaCollege, decor: '', label: 'Which college did you attend to complete your diploma?'},
+    {id: 'DiplomaBranch', data: Academicstate.DiplomaBranch, decor: '', label: 'In which branch did you complete your diploma?'},
+    {id: 'DiplomaCGPA', data: Academicstate.DiplomaCGPA, decor: '', label: 'What was your CGPA when you completed your diploma?'},
+    {id: 'TenthBoard', data: Academicstate.TenthBoard, decor: '', label: 'Exam board was in charge of your 10th-Grade Board Exams'},
+    {id: 'TenthSchool', data: Academicstate.TenthSchool, decor: '', label: 'Name of the school where you completed your 10th-Grade Board Education'},
+    {id: 'TenthPercentage', data: Academicstate.TenthPercentage, decor: '', label: 'Percentage you secured in your 10th-Grade Board Exams'},
+    {id: 'TwelfthBoard', data: Academicstate.TwelfthBoard, decor: '', label: 'Exam board was in charge of your 12th-Grade Board Exams'},
+    {id: 'TwelfthSchool', data: Academicstate.TwelfthSchool, decor: '', label: 'Name of the school where you completed your 12th-Grade Board Education'},
+    {id: 'TwelfthStream', data: Academicstate.TwelfthStream, decor: '', label: 'What stream did you choose for your 12th-Grade?'},
+    {id: 'TwelfthPercentage', data: Academicstate.TwelfthPercentage, decor: '', label: 'Percentage you secured in your 12th-Grade Board Exams'},
+    {id: 'casteCertificateNumber', data: Castestate.casteCertificateNumber, decor: '', label: 'Caste Certificate Number'},
+    {id: 'casteCertificateIssueDate', data: Castestate.casteCertificateIssueDate, decor: '', label: 'Caste Certificate Issue Date'},
+    {id: 'caste', data: Castestate.caste, decor: '', label: 'Caste'},
+    {id: 'subCaste', data: Castestate.subCaste, decor: '', label: 'Sub-Caste'},
+    {id: 'incomeAgriculture', data: Incomestate.incomeAgriculture, decor: '', label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?'},
+    {id: 'incomeBusiness', data: Incomestate.incomeBusiness, decor: 'Rs', label: 'What`s your yearly income from your Business?'},
+    {id: 'incomeProperty', data: Incomestate.incomeProperty, decor: 'Rs', label: 'What`s your yearly income from your House Property?'},
+    {id: 'familyMembers', data: Incomestate.familyMembers, decor: 'Rs', label: 'Members your Family Contains?'},
+    {id: 'incomeTotal', data: Incomestate.incomeTotal, decor: '', label: 'Total Income of Family'},
+    {id: 'PersonalSamagraID', data: Samagrastate.PersonalSamagraID, decor: '', label: 'Your Samagra ID'},
+    {id: 'FamilySamagraID', data: Samagrastate.FamilySamagraID, decor: '', label: 'Family Samagra ID'},
+    {id: 'HeadofFamily', data: Samagrastate.HeadofFamily, decor: '', label: 'Name of Head of Family'},
+    {id: 'RelationnShipHeadofFamily', data: Samagrastate.RelationnShipHeadofFamily, decor: '', label: 'Relationship with Head of Family'},
+    {id: 'GenderHeadofFamily', data: Samagrastate.GenderHeadofFamily, decor: '', label: 'Gender of Head of Family'},
+    {id: 'nativeBorn', data: Nativestate.nativeBorn, decor: '', label: 'Were you born in Madhya Pradesh?'},
+    {id: 'nativeEducation', data: Nativestate.nativeEducation, decor: '', label: 'Have you received continuous education for atleast three years in any educational institute located in Madhya Pradesh? (Provision of education will not apply to disable candidates)'},
   ];
   const alertInitial = {
     title: '',
@@ -1521,7 +1808,7 @@ export default function SignUp() {
             <Button  variant="soft" color="neutral" name='PersonalSubmit' type='submit' size="sm" onClick={ () => navigate('/') }>Home</Button>
         </Box>
       </Typography>
-      <Tabs defaultValue={0} value={tabIndex} onChange={(event, value) => settabIndex(value as number)} sx={{ bgcolor: 'transparent' }}>
+      <Tabs value={tabIndex} onChange={(event, value) => settabIndex(value as number)} sx={{ bgcolor: 'transparent' }}>
         <Box
           sx={{
             '--_shadow-height': '16px',
@@ -1612,38 +1899,13 @@ export default function SignUp() {
           <Tab indicatorInset value={5} disabled={Samagrastate.Next} >
             Native Declaration
           </Tab>
-          <Tab indicatorInset value={6} disabled={Nativestate.Next} >
+          <Tab indicatorInset value={6} disabled={false} >
             Profile Review
           </Tab>
         </TabList>
         
-        {(() => { if (alertSubmit.color==='warning')  {
-          return (
-            <Box sx={{ display: alertSubmit.display, gap: 2, width: '100%', flexDirection: 'column' }}>
-              <Alert key={alertSubmit.title} sx={{  position: 'fixed', zIndex: 99,  top: {xs: 50, sm:770}, right: {xs: 50,sm: '36%'}}} variant="soft" color="warning" >
-                <div>
-                  {/* <div>{alertSubmit.title}</div> */}
-                  <Typography level="body-sm" color="warning">{alertSubmit.title}</Typography>
-                </div>
-              </Alert>
-            </Box>   
-          )
-        } else if (alertSubmit.color==='success') {
-          return (
-          <Box sx={{ display: alertSubmit.display, gap: 2, width: '100%', flexDirection: 'column' }}>
-            <Alert key={alertSubmit.title} sx={{  position: 'fixed', zIndex: 99,  top: {xs: 50, sm:770}, right: {xs: 50, sm: '36%'}}} variant="soft" color="success" >
-              <div>
-                {/* <div>{alertSubmit.title}</div> */}
-                <Typography level="body-sm" color="success">{alertSubmit.title}</Typography>
-              </div>
-            </Alert>
-          </Box>  
-          )
-        }
-        })()}
-
         <PersonalDetails dispatch={Personaldispatch} firstName={Personalstate.firstName} lastName={Personalstate.lastName} fatherName={Personalstate.fatherName} eMail={Personalstate.eMail}
-         contactNumber={Personalstate.contactNumber} dateofBirth={Personalstate.dateofBirth} Gender={Personalstate.Gender} Religion={Personalstate.Religion} HouseNo={Personalstate.HouseNo}
+         contactNumber={Personalstate.contactNumber} dateofBirth={Personalstate.dateofBirth} enrollmentNumber={Personalstate.enrollmentNumber} Gender={Personalstate.Gender} Religion={Personalstate.Religion} HouseNo={Personalstate.HouseNo}
          Street={Personalstate.Street} Sector={Personalstate.Sector} City={Personalstate.City} Pincode={Personalstate.Pincode} Area={Personalstate.Area} MaritalStatus={Personalstate.MaritalStatus}
          SpouseName={Personalstate.SpouseName} Disabled={Personalstate.Disabled} Orphan={Personalstate.Orphan} Next={Personalstate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
          Agreement={Personalstate.Agreement}
@@ -1651,6 +1913,7 @@ export default function SignUp() {
         <AcademicDetails dispatch={Academicdispatch} Diploma={Academicstate.Diploma} TenthBoard={Academicstate.TenthBoard} TenthSchool={Academicstate.TenthSchool} TenthPercentage={Academicstate.TenthPercentage}
           TwelfthBoard={Academicstate.TwelfthBoard} TwelfthSchool={Academicstate.TwelfthSchool} TwelfthStream={Academicstate.TwelfthStream} TwelfthPercentage={Academicstate.TwelfthPercentage}
           Next={Academicstate.Next} tabIndex={tabIndex} settabIndex={settabIndex} Agreement={Academicstate.Agreement} currentSemester={Academicstate.currentSemester}
+          DiplomaCollege={Academicstate.DiplomaCollege} DiplomaBranch={Academicstate.DiplomaBranch} DiplomaCGPA={Academicstate.DiplomaCGPA}
         />
         <CasteDetails dispatch={Castedispatch} casteCertificateNumber={Castestate.casteCertificateNumber} casteCertificateIssueDate={Castestate.casteCertificateIssueDate} caste={Castestate.caste} 
           subCaste={Castestate.subCaste} Next={Castestate.Next} tabIndex={tabIndex} settabIndex={settabIndex} Agreement={Castestate.Agreement}
@@ -1668,23 +1931,23 @@ export default function SignUp() {
         />  
 
         <TabPanel value={6}>
-          <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
+          <Box sx={{ pt: 3, pb: 4, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
               {
-                ProfileReview.map((ques:any, index:any) => {
-                    return <>
-                      <FormControl  sx={{ display: { sm: 'contents' } }}>
-                        <FormLabel>{ques.label}</FormLabel>
-                        <Input 
-                        type='text'
-                        placeholder=''
-                        defaultValue={ques.data}
-                        disabled
-                        startDecorator={ques.decor}
-                        required />
-                      </FormControl>
+                ProfileReview.map((ques:any, id:any) => (
+                  <React.Fragment key={id}>
+                    <FormControl sx={{ display: (ques.data==='' || ques.data==='-NA-') ? 'none' : { sm: 'contents', sx: 'flex' } }}>
+                      <FormLabel>{ques.label}</FormLabel>
+                      <Input 
+                      type='text'
+                      placeholder=''
+                      defaultValue={ques.data}
+                      disabled
+                      startDecorator={ques.decor}
+                      required />
                       <Divider role="presentation" />
-                  </>
-                })
+                    </FormControl>
+                  </React.Fragment>
+                ))
               }
               <FormControl sx={{ display: { sm: 'contents' } }}>
                 <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Agreement</FormLabel>
@@ -1703,6 +1966,31 @@ export default function SignUp() {
                 <Button name='FinalSubmit' type='submit' size="sm" onClick={()=>onFinalSubmit()}>Submit</Button>
               </Box>
           </Box>
+            {(() => { if (alertSubmit.color==='warning')  {
+            return (
+              <Box sx={{pb: 10, display: 'flex', gap: 2, width: '100%', flexDirection: 'row' , justifyContent: 'flex-end', alignItems: 'flex-start'}}>
+                <Alert key={alertSubmit.title} sx={{zIndex: 999, textAlign: 'center',width: '100%', display: 'flex' ,justifyContent: 'center', borderRadius: '10px'}} variant="outlined" color="warning" >
+                  <div>
+                    {/* <div>{alertSubmit.title}</div> */}
+                    <Typography level="body-sm" color="warning">{alertSubmit.title}</Typography>
+                  </div>
+                </Alert>
+              </Box>   
+            )
+          } else if (alertSubmit.color==='success') {
+            return (
+            <Box sx={{pb: 10, display: alertSubmit.display, gap: 2, width: '100%', flexDirection: 'column' , justifyContent: 'center', alignItems: 'flex-end'}}>
+              <Alert key={alertSubmit.title} sx={{zIndex: 999, textAlign: 'center',width: '100%', display: 'flex' ,justifyContent: 'center', borderRadius: '10px'}} variant="outlined" color="success" >
+                <div>
+                  {/* <div>{alertSubmit.title}</div> */}
+                  <Typography level="body-sm" color="success">{alertSubmit.title}</Typography>
+                </div>
+              </Alert>
+            </Box>  
+            )
+          }
+          })()}
+          <Box sx={{pb: 18, width: '100%'}}></Box>
         </TabPanel>
       </Tabs>
     </Box>
