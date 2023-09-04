@@ -1767,6 +1767,9 @@ export default function SignUp() {
         setalertSubmit({title:'Your form has been submitted successfully!', color:'success',  icon: '', display: 'flex'})
         setTimeout(() => {
           setalertSubmit({ ...alertSubmit, display: 'none'})
+          setTimeout(() => {
+            navigate('/')
+          }, 1000);
         }, 4000);
       }
     }
@@ -1899,7 +1902,7 @@ export default function SignUp() {
           <Tab indicatorInset value={5} disabled={Samagrastate.Next} >
             Native Declaration
           </Tab>
-          <Tab indicatorInset value={6} disabled={false} >
+          <Tab indicatorInset value={6} disabled={Nativestate.Next} >
             Profile Review
           </Tab>
         </TabList>
