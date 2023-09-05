@@ -5,6 +5,7 @@ import GlobalStyles from '@mui/joy/GlobalStyles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import SignIn from "./components/pages/SignIn";
 import SignUp from "./components/pages/SignUp";
+import MainPage from "./components/pages/MainPage";
 import General from "./components/pages/general";
 import useScript from './components/tools/useScript';
 
@@ -39,6 +40,7 @@ function App() {
           <Routes>
             <Route path="/" element={<SignIn />} />
             <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/MainPage" element={<MainPage />} />
             <Route path="/general" element={<General />} />
           </Routes>
        </CssVarsProvider>
