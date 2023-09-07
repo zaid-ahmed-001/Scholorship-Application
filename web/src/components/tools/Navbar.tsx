@@ -11,7 +11,7 @@ export default function Navbar() {
   return (
     <Sheet
       sx={{
-        display: { xs: 'flex', md: 'none' },
+        display: { xs: 'flex', md: 'flex', lg: 'none' },
         alignItems: 'center',
         position: 'fixed',
         top: 0,
@@ -29,6 +29,9 @@ export default function Navbar() {
           ':root': {
             '--Header-height': '52px',
             [theme.breakpoints.up('md')]: {
+              '--Header-height': '52px',
+            },
+            [theme.breakpoints.up('lg')]: {
               '--Header-height': '0px',
             },
           },
@@ -42,7 +45,8 @@ export default function Navbar() {
       >
         <MenuRoundedIcon />
       </IconButton>
-      <ColorSchemeToggle id={undefined} />
+      PIEMR
+      {/* <ColorSchemeToggle id={undefined} /> */}
     </Sheet>
   );
 }

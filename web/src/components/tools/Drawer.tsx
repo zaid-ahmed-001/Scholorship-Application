@@ -5,7 +5,7 @@ import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import Divider from '@mui/joy/Divider';
 import IconButton from '@mui/joy/IconButton';
-import Link from '@mui/joy/Link';
+// import Link from '@mui/joy/Link';
 import LinearProgress from '@mui/joy/LinearProgress';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
@@ -17,12 +17,14 @@ import Sheet from '@mui/joy/Sheet';
 // import MuiLogo from './MuiLogo';
 import ColorSchemeToggle from './ColorSchemeToggle';
 import { fontSize } from '@mui/system';
-
 import PersonIcon from '@mui/icons-material/Person';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
 import ExitToAppOutlinedIcon from '@mui/icons-material/ExitToAppOutlined';
+import { useNavigate ,  Outlet} from 'react-router-dom';
+
+
 export const closeSidebar = () => {
   if (typeof document !== 'undefined') {
     document.documentElement.style.removeProperty('--SideNavigation-slideIn');
@@ -53,7 +55,9 @@ export const toggleSidebar = () => {
 export default function Drawer() {
   const [Open, setOpen] = React.useState(false);
   const [Open2, setOpen2] = React.useState(false);
+  const navigate = useNavigate();
   return (
+  <Box sx={{ display: 'flex', minHeight: '100dvh' }}>
     <Sheet
       className="Sidebar"
       sx={{
@@ -138,17 +142,17 @@ export default function Drawer() {
             </ListItemButton>
             { Open && (
               <List>
-                <ListItem><ListItemButton color='primary' > <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Personal Details</ListItemButton></ListItem>
-                <ListItem><ListItemButton color='primary' > <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Academic Details</ListItemButton></ListItem>
-                <ListItem><ListItemButton color='primary' > <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Caste Details</ListItemButton></ListItem>
-                <ListItem><ListItemButton color='primary' > <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Income Details</ListItemButton></ListItem>
-                <ListItem><ListItemButton color='primary' > <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Samagra Details</ListItemButton></ListItem>
-                <ListItem><ListItemButton color='primary' > <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Native Declaration</ListItemButton></ListItem>
+                <ListItem><ListItemButton color='primary'  onClick={()=> navigate('./MP_Home')}> <CircleOutlinedIcon style={{fontSize: '12px'}}/>&nbsp; Personal Details </ListItemButton></ListItem>
+                <ListItem><ListItemButton color='primary'  onClick={()=> navigate('./MP_Sec')}> <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Academic Details</ListItemButton></ListItem>
+                <ListItem><ListItemButton color='primary'  onClick={()=> navigate('../SignUp')}> <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Caste Details</ListItemButton></ListItem>
+                <ListItem><ListItemButton color='primary'  onClick={()=> navigate('../SignUp')}> <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Income Details</ListItemButton></ListItem>
+                <ListItem><ListItemButton color='primary'  onClick={()=> navigate('../SignUp')}> <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Samagra Details</ListItemButton></ListItem>
+                <ListItem><ListItemButton color='primary'  onClick={()=> navigate('../SignUp')}> <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Native Declaration</ListItemButton></ListItem>
               </List>
             )}
           </ListItem>
         </List>
-
+        
         <List
           sx={{
             '--ListItem-radius': '8px',
@@ -166,19 +170,16 @@ export default function Drawer() {
             </ListItemButton>
             { Open2 && (
               <List>
-                <ListItem><ListItemButton color='primary' > <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Eligible Scholarship</ListItemButton></ListItem>
+                <ListItem><ListItemButton color='primary'  onClick={()=> navigate('../SignUp')}> <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Eligible Scholarship</ListItemButton></ListItem>
                 <ListItem><ListItemButton color='primary' > <CircleOutlinedIcon style={{fontSize: '12px'}}/> &nbsp; Applied Scholarship</ListItemButton></ListItem>
               </List>
             )}
           </ListItem>
         </List>
 
-
-      
       </Box>
-      
       <Divider />
-      <Box sx={(theme) => ({display: 'flex', gap: 1, alignItems: 'end', position: 'fixed', bottom: 10, background: `background.level1` })}>
+      <Box sx={(theme) => ({display: 'flex', gap: 1, alignItems: 'end', position: 'fixed', bottom: 10})}>
         <Box sx={{ minWidth: 0, flex: 1 }}>
           <Typography fontSize="sm" fontWeight="lg">
           &nbsp;  Zaid Ahmed
@@ -186,7 +187,9 @@ export default function Drawer() {
           <Typography level="body-xs"> &nbsp;  @_zaidahmed__</Typography>
         </Box>
       </Box>
-      <ExitToAppOutlinedIcon sx={{ ml: 'auto', mt: 'auto' }} />
+      <IconButton sx={{ ml: 'auto', mt: 'auto' }} onClick={()=>navigate('/')}> <ExitToAppOutlinedIcon  /> </IconButton>
     </Sheet>
+    <Outlet />
+    </Box>
   );
 }

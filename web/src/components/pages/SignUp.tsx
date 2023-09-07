@@ -60,7 +60,7 @@ interface PersonlFormElement extends HTMLFormElement {
   readonly Orphan: HTMLInputElement;
   readonly Agreement: HTMLInputElement;
 }
-function PersonalDetails(props: any) {
+export function PersonalDetails(props: any) {
   const [PassportSize , setPassportSize] = React.useState<File | null>(null);
   const [PassportSizeuploadProgress, setPassportSizeuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -466,7 +466,7 @@ interface AcademicFormElement extends HTMLFormElement {
   readonly TwelfthStream: HTMLInputElement;
   readonly TwelfthPercentage: HTMLInputElement;
 }
-function AcademicDetails(props: any) {
+export function AcademicDetails(props: any) {
   const [TenthMarkSheet , setTenthMarkSheet] = React.useState<File | null>(null);
   const [TenthMarkSheetuploadProgress, setTenthMarkSheetUploadProgress] = React.useState(0);
   const [TwelfthMarkSheet , setTwelfthMarkSheet] = React.useState<File | null>(null);
@@ -890,7 +890,7 @@ interface CasteFormElement extends HTMLFormElement {
   readonly caste: HTMLInputElement;
   readonly subCaste: HTMLInputElement;
 }
-function CasteDetails(props:any) {
+export function CasteDetails(props:any) {
   const [casteCertificate , setcasteCertificate] = React.useState<File | null>(null);
   const [casteCertificateuploadProgress, setcasteCertificateuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -1036,7 +1036,7 @@ interface incomeFormElement extends HTMLFormElement {
   readonly familyMembers: HTMLInputElement;
   readonly incomeTotal: HTMLInputElement;
 }
-function IncomeDetails(props:any) {
+export function IncomeDetails(props:any) {
   const [incomeCertificate , setincomeCertificate] = React.useState<File | null>(null);
   const [incomeCertificateuploadProgress, setincomeCertificateuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -1218,7 +1218,7 @@ interface SamagraFormElement extends HTMLFormElement {
   readonly RelationnShipHeadofFamily: HTMLInputElement;
   readonly GenderHeadofFamily: HTMLInputElement;
 }
-function SamagraDetails(props:any) {
+export function SamagraDetails(props:any) {
   const [samagraCertificate , setsamagraCertificate] = React.useState<File | null>(null);
   const [samagraCertificateuploadProgress, setsamagraCertificateuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -1377,7 +1377,7 @@ interface NativeFormElement extends HTMLFormElement {
   readonly nativeBorn: HTMLInputElement;
   readonly nativeEducation: HTMLInputElement;
 }
-function NativeDetails(props:any) {
+export function NativeDetails(props:any) {
   const [nativeCertificate , setnativeCertificate] = React.useState<File | null>(null);
   const [nativeCertificateuploadProgress, setnativeCertificateuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
