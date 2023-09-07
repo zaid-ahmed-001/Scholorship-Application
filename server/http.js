@@ -2,9 +2,9 @@
 require('dotenv').config()
 
 const express = require('express');
- const mongoose = require('mongoose');
- const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
+// const mongoose = require('mongoose');
+//const bodyParser = require('body-parser');
+//const bcrypt = require('bcrypt');
 
 // Create an Express application
 const app = express();
@@ -17,7 +17,7 @@ app.use((req, res, next) => {
 
 //routes
 app.get('/', (req, res) => {
-  res.json({username: 'welcome hehe'})
+  res.json({username: 'New user'})
 })
 
 //listening for requests
