@@ -2,6 +2,7 @@
 require('dotenv').config()
 
 const express = require('express');
+const userRoutes = require('./routes/users')
 // const mongoose = require('mongoose');
 //const bodyParser = require('body-parser');
 //const bcrypt = require('bcrypt');
