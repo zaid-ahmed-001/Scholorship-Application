@@ -2,9 +2,9 @@
 require('dotenv').config()
 
 const express = require('express');
-// const mongoose = require('mongoose');
-// const bodyParser = require('body-parser');
-// const bcrypt = require('bcrypt');
+ const mongoose = require('mongoose');
+ const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 
 // Create an Express application
 const app = express();
