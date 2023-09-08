@@ -11,8 +11,13 @@ const userRoutes = require('./routes/users')
 const app = express();
 
 //middleware
-app.use(express.json())
-
+app.use((error, req, res, next) => {
+  if (error instanceof SyntaxError) {
+    // Handle JSON parsing error
+    return res.status(400).json({ error: 'Invalid JSON' });
+  }
+  next();
+});
 
 app.use((req, res, next) => {
   console.log(req.path, req.method)
