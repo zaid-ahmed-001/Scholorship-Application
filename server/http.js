@@ -11,15 +11,16 @@ const userRoutes = require('./routes/users')
 const app = express();
 
 //middleware
+app.use(express.json())
+
+
 app.use((req, res, next) => {
   console.log(req.path, req.method)
   next()
 })
 
 //routes
-app.get('/', (req, res) => {
-  res.json({username: 'New user'})
-})
+app.use('/api/users', userRoutes)
 
 //listening for requests
 app.listen(process.env.PORT , () => {
