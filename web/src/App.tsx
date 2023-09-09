@@ -3,13 +3,27 @@ import { Routes, Route } from "react-router-dom";
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import CssBaseline from '@mui/joy/CssBaseline';
-import SignIn from "./components/pages/SignIn";
-import SignUp from "./components/pages/SignUp";
-import MP_Home from "./components/pages/MP_Home";
-import MP_Sec from "./components/pages/MP_Sec";
-import General from "./components/pages/general";
-import useScript from './components/tools/useScript';
-import Drawer from './components/tools/Drawer';
+import useScript from './components/utils/useScript'
+
+import HomePage from './components/pages/HomePage/HomePage'
+import SignIn from './components/pages/SignIn/SignIn';
+import SignUp from './components/pages/SignUp/SignUp';
+import UserSideBar from './components/pages/UserPage/userSideBar';
+import UserNavbar from './components/pages/UserPage/userNavbar';
+import EditPersonalDetails from './components/pages/UserPage/PersonalizeProfile/EditPersonalDetails';
+import EditAcademicDetails from './components/pages/UserPage/PersonalizeProfile/EditAcademicDetails';
+import EditIncomeDetails from './components/pages/UserPage/PersonalizeProfile/EditIncomeDetails';
+import EditSamagraDetails from './components/pages/UserPage/PersonalizeProfile/EditSamagraDetails';
+import EditNativeDetails from './components/pages/UserPage/PersonalizeProfile/EditNativeDetails';
+import EditCasteDetails from './components/pages/UserPage/PersonalizeProfile/EditCasteDetails';
+import EligibleScholarship from './components/pages/UserPage/ScholarshipProfile/EligibleScholarship';
+import AppliedScholarship from './components/pages/UserPage/ScholarshipProfile/AppliedScholarship';
+import AdminSideBar from './components/pages/AdminPage/adminSideBar';
+import AdminNavbar from './components/pages/AdminPage/adminNavbar';
+import CreateScholarship from './components/pages/AdminPage/AdminDashboard/CreateScholarship';
+import ViewApplications from './components/pages/AdminPage/AdminDashboard/ViewApplications';
+import EditScholarship from './components/pages/AdminPage/AdminDashboard/EditScholarship';
+import ForgotPassword from './components/pages/ForgotPasswordPage/ForgotPassword';
 
 const useEnhancedEffect =
   typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
@@ -40,13 +54,28 @@ function App() {
         />
         <CssBaseline />
           <Routes>
-            <Route path="/" element={<SignIn />} />
-            <Route path="/SignUp" element={<SignUp />} />
-            <Route path='/MainPage' element={<Drawer/>}>
-              <Route path="MP_Home" element={<MP_Home />} />
-              <Route path="MP_Sec" element={<MP_Sec />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/SignIn" element={<SignIn />} />
+              <Route path="/ForgotPassword" element={<ForgotPassword />} />
+              <Route path="/SignUp" element={<SignUp />} />
+              <Route path='/UserPage' element={<><UserSideBar/><UserNavbar/></>}>
+              {/* Profile Part */}
+              <Route path="EditPersonalDetails" element={<EditPersonalDetails />} />
+              <Route path="EditAcademicDetails" element={<EditAcademicDetails />} />
+              <Route path="EditCasteDetails" element={<EditCasteDetails />} />
+              <Route path="EditIncomeDetails" element={<EditIncomeDetails />} />
+              <Route path="EditSamagraDetails" element={<EditSamagraDetails />} />
+              <Route path="EditNativeDetails" element={<EditNativeDetails />} />
+              {/* Scholarship Part */}
+              <Route path="EligibleScholarship" element={<EligibleScholarship />} />
+              <Route path="AppliedScholarship" element={<AppliedScholarship />} />
             </Route>
-            <Route path="/general" element={<General />} />
+            <Route path='/AdminPage' element={<><AdminSideBar/><AdminNavbar/></>}>
+              {/* Admin Dashboard */}
+              <Route path="CreateScholarship" element={<CreateScholarship />} />
+              <Route path="EditScholarship" element={<EditScholarship />} />
+              <Route path="ViewApplications" element={<ViewApplications />} />
+            </Route>
           </Routes>
        </CssVarsProvider>
     </>
