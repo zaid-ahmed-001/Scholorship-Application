@@ -27,5 +27,14 @@ router.post('/', async (req, res)  => {
     }
 })
 
+//delete a user
+router.delete('/:id',(req, res)  => {
+    res.json({mssg:'DELETE a user details'})
+})
+
+//update a user detail
+router.patch('/:id',(req, res)  => {
+    res.json({mssg:'UPDATE a user details'})
+})
 
 module.exports = router
