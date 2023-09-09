@@ -1,7 +1,7 @@
-::-webkit-scrollbar {width: 0px;}
-::-webkit-scrollbar-track {background: #a00b0b00}
-::-webkit-scrollbar-thumb {background: rgba(136, 136, 136, 0);}
-::-webkit-scrollbar-thumb:hover {background: rgba(85, 85, 85, 0); }
+::-webkit-scrollbar {width: 2px; height: 4px;}
+::-webkit-scrollbar-track {background: #ef181800}
+::-webkit-scrollbar-thumb {background: rgba(94, 94, 94, 0.868); border-radius: 20px; }
+::-webkit-scrollbar-thumb:hover {background: rgba(44, 44, 44, 0.868); }
 
 input::file-selector-button {
   background-color: transparent;
