@@ -24,6 +24,7 @@ import CreateScholarship from './components/pages/AdminPage/AdminDashboard/Creat
 import ViewApplications from './components/pages/AdminPage/AdminDashboard/ViewApplications';
 import EditScholarship from './components/pages/AdminPage/AdminDashboard/EditScholarship';
 import ForgotPassword from './components/pages/ForgotPasswordPage/ForgotPassword';
+import CreatePassword from './components/pages/ForgotPasswordPage/CreatePassword';
 
 const useEnhancedEffect =
   typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
@@ -56,7 +57,10 @@ function App() {
           <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/SignIn" element={<SignIn />} />
+               {/* Sign In */}
               <Route path="/ForgotPassword" element={<ForgotPassword />} />
+              <Route path="/CreatePassword" element={<CreatePassword />} />
+               {/* Sign Up */}
               <Route path="/SignUp" element={<SignUp />} />
               <Route path='/UserPage' element={<><UserSideBar/><UserNavbar/></>}>
               {/* Profile Part */}
