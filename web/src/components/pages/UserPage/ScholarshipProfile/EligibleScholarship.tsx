@@ -52,6 +52,7 @@ const EligibleScholarship = () => {
                 arr = {['Only for Girls Students  (General Category)', 'Minimum CGPA: 8.5 Above', 'Family Annual: Less than 3 Lac']}
                 arrSec = {['Anandam Scholarship Form', 'Copy of Last semester Marksheet', 'Income Certificate', 'Copy of Aadhar -Student', 'Copy of Aadhar -Father'
                 , 'Copy of Fees Deposit Slip', 'Student Photo - 1']}
+                docReq = {['Anandam Scholarship Form', 'Copy of Last semester Marksheet', 'Copy of Aadhar -Student', 'Copy of Aadhar -Father', 'Copy of Fees Deposit Slip']}
             />
             <ScholarshipElements
                 title="Chavi Jain Scholarship"
@@ -61,6 +62,7 @@ const EligibleScholarship = () => {
                 arr = {['Minimum CGPA: 8.0 Above']}
                 arrSec = {['Copy of Last semester Marksheet', 'Copy of Aadhar -Student', 'Copy of Aadhar -Father'
                 , 'Copy of Fees Deposit Slip', 'Student Photo - 1']}
+                docReq = {['Copy of Last semester Marksheet', 'Copy of Aadhar -Student', 'Copy of Aadhar -Father', 'Copy of Fees Deposit Slip']}
             />
             <Divider />
         </Stack>
