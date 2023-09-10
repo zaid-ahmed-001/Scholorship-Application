@@ -14,10 +14,11 @@ router.get('/:id',(req, res) => {
     res.json({mssg: 'GET a single user'})
 } )
 
-//post a user
+//post a user which gives fully functional json as an output
 router.post('/', async (req, res)  => {
     const { name, mobile, genid } = req.body
 
+    // helps in catching errors
     try{
         const yuser = await user.create({name, mobile, genid})
         res.status(200).json({yuser})
@@ -36,4 +37,4 @@ router.patch('/:id',(req, res)  => {
     res.json({mssg:'UPDATE a user details'})
 })
 
-module.exports= router
+module.exports = router

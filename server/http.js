@@ -1,43 +1,61 @@
-// Import required modules
-require('dotenv').config()
+require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
-const userRoutes = require('./routes/users')
+const bodyParser = require('body-parser');
 
-//const bodyParser = require('body-parser');
-//const bcrypt = require('bcrypt');
-
-// Create an Express application
 const app = express();
+const port = process.env.PORT || 4000;
 
-//middleware
-app.use((error, req, res, next) => {
-  if (error instanceof SyntaxError) {
-    // Handle JSON parsing error
-    return res.status(400).json({ error: 'Invalid JSON' });
-  }
-  next();
-});
+// Middleware to parse JSON request bodies
+app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-  console.log(req.path, req.method)
-  next()
+// Connect to MongoDB Atlas using the provided URI
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 })
-
-//routes
-app.use('/api/users', userRoutes)
-
-//connect to db
-mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    //listening for requests
-app.listen(process.env.PORT , () => {
-  console.log('connected to the DB & listening to port', process.env.PORT )
-})
+    console.log('Connected to MongoDB');
+    
+    // Define the user schema and model
+    const userSchema = new mongoose.Schema({
+      name: String,
+      mobile: String,
+      genid: String,
+    });
+    
+    const User = mongoose.model('User', userSchema);
+    
+    // POST route to create a new user
+    app.post('/api/users', async (req, res) => {
+      try {
+        // Destructure properties from req.body
+        const { name, mobile, genid } = req.body;
+        
+        // Create a new user
+        const newUser = new User({ name, mobile, genid });
+        
+        // Save the user to the database
+        await newUser.save();
+        
+        res.status(201).json({ message: 'User created successfully', user: newUser });
+      } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+    
+    // Start the server once the database connection is established
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
   })
   .catch((error) => {
-    console.log(error)
-  })
+    console.error('Error connecting to MongoDB:', error);
+  });
 
-
+// Handle unhandled promise rejections (for MongoDB connection)
+process.on('unhandledRejection', (error) => {
+  console.error('Unhandled Promise Rejection:', error);
+});
