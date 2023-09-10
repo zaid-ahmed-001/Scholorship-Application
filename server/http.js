@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGO_URI, {
     const userSchema = new mongoose.Schema({
       name: String,
       mobile: String,
-      genid: String,
+      Email: String,
     });
     
     const User = mongoose.model('User', userSchema);
@@ -31,18 +31,18 @@ mongoose.connect(process.env.MONGO_URI, {
     app.post('/api/users', async (req, res) => {
       try {
         // Destructure properties from req.body
-        const { name, mobile, genid } = req.body;
+        const { name, mobile, Email } = req.body;
         
         // Create a new user
-        const newUser = new User({ name, mobile, genid });
+        const newUser = new User({ name, mobile, Email });
         
         // Save the user to the database
         await newUser.save();
         
-        res.status(201).json({ message: 'User created successfully', user: newUser });
+        res.status(200).json({ message: 'User created successfully', user: newUser });
       } catch (error) {
         console.error('Error creating user:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(400).json({ error: 'Internal server error' });
       }
     });
     
