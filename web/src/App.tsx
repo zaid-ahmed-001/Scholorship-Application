@@ -25,6 +25,8 @@ import ViewApplications from './components/pages/AdminPage/AdminDashboard/ViewAp
 import EditScholarship from './components/pages/AdminPage/AdminDashboard/EditScholarship';
 import ForgotPassword from './components/pages/ForgotPasswordPage/ForgotPassword';
 import CreatePassword from './components/pages/ForgotPasswordPage/CreatePassword';
+import ScholarshipElements from './components/pages/UserPage/ScholarshipProfile/elements/ScholarshipElements';
+import ScholarshipForm from './components/pages/UserPage/ScholarshipProfile/elements/ScholarshipForm';
 
 const useEnhancedEffect =
   typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
@@ -62,7 +64,7 @@ function App() {
               <Route path="/CreatePassword" element={<CreatePassword />} />
                {/* Sign Up */}
               <Route path="/SignUp" element={<SignUp />} />
-              <Route path='/UserPage' element={<><UserSideBar/><UserNavbar/></>}>
+            <Route path='/UserPage' element={<><UserSideBar/><UserNavbar/></>}>
               {/* Profile Part */}
               <Route path="EditPersonalDetails" element={<EditPersonalDetails />} />
               <Route path="EditAcademicDetails" element={<EditAcademicDetails />} />
@@ -73,6 +75,7 @@ function App() {
               {/* Scholarship Part */}
               <Route path="EligibleScholarship" element={<EligibleScholarship />} />
               <Route path="AppliedScholarship" element={<AppliedScholarship />} />
+              <Route path="ScholarshipForm" element={<ScholarshipForm />} />
             </Route>
             <Route path='/AdminPage' element={<><AdminSideBar/><AdminNavbar/></>}>
               {/* Admin Dashboard */}
