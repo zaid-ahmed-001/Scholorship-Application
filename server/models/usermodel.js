@@ -11,8 +11,8 @@ const UserSchema = new Schema({
         type : Number,
         required : true
     },
-    genid :{
-        type : Number,
+    Email :{
+        type : String,
         required : true
     }
 }, { timestamps: true})
