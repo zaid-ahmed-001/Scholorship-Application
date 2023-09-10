@@ -17,6 +17,8 @@ import ListSubheader from '@mui/joy/ListSubheader';
 import ListItemButton from '@mui/joy/ListItemButton';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Grid } from '@mui/joy';
+import ScholarshipForm from './ScholarshipForm';
+import { useNavigate } from 'react-router-dom';
 
 type ScholarshipElementsProps = {
   category: React.ReactNode;
@@ -24,6 +26,7 @@ type ScholarshipElementsProps = {
   image: string;
   title: React.ReactNode;
   arr: Array<string>;
+  docReq: Array<string>;
   arrSec: Array<string>;
 };
 
@@ -33,9 +36,15 @@ export default function ScholarshipElements({
   description,
   image,
   arr,
+  docReq,
   arrSec,
 }: ScholarshipElementsProps) {
+  const navigate = useNavigate();
+  function HandleClick() {
+    navigate('../ScholarshipForm', {state: {arrData: docReq, title: title }})
+  }
   return (
+  <>
     <Card
       variant="outlined"
       orientation="horizontal"
@@ -123,7 +132,7 @@ export default function ScholarshipElements({
                   <AccordionSummary indicator={''} >View More</AccordionSummary>
                 </Grid>
                 <Grid sx={{display: 'flex', justifyContent: 'end'}} >
-                <Button size="sm" >Apply</Button>
+                <Button size="sm" onClick={()=>HandleClick()} >Apply</Button>
                 </Grid>
               </Grid>
                 <AccordionDetails > 
@@ -158,5 +167,6 @@ export default function ScholarshipElements({
         </Stack>
       </Stack>
     </Card>
+  </>
   );
 }
