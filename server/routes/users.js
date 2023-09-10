@@ -1,6 +1,8 @@
 const express = require('express')
+const {
+    CreateUser
+} = require('../controllers/userconroller')
 
-const user = require('../models/usermodel')
 
 const router = express.Router()
 
@@ -15,17 +17,7 @@ router.get('/:id',(req, res) => {
 } )
 
 //post a user which gives fully functional json as an output
-router.post('/', async (req, res)  => {
-    const { name, mobile, genid } = req.body
-
-    // helps in catching errors
-    try{
-        const yuser = await user.create({name, mobile, genid})
-        res.status(200).json({yuser})
-    } catch (error){
-        res.status(400).json({error : error.message})
-    }
-})
+router.post('/', CreateUser)
 
 //delete a user
 router.delete('/:id',(req, res)  => {
