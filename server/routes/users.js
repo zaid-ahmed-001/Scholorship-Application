@@ -1,20 +1,18 @@
 const express = require('express')
 const {
-    CreateUser
+    CreateUser,
+    getuser,
+    getusers
 } = require('../controllers/userconroller')
 
 
 const router = express.Router()
 
 //get all users 
-router.get('/',(req, res) => {
-    res.json({mssg: 'GET all user'})
-} )
+router.get('/', getusers )
 
 //get a single user
-router.get('/:id',(req, res) => {
-    res.json({mssg: 'GET a single user'})
-} )
+router.get('/:id',getuser)
 
 //post a user which gives fully functional json as an output
 router.post('/', CreateUser)
