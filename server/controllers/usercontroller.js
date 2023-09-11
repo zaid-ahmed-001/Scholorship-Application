@@ -1,10 +1,22 @@
 const user = require('../models/usermodel')
 
 // GET all users
-
+const getusers = async (req, res) => {
+    const people = await user.find({}).sort({createdAt : -1})
+    res.status(200).json(people)
+}
 
 //GET a single user
+const getuser = async (req, res) => {
+    const { id } = req.params
+    const person = await user.findById(id)
 
+    if(!person) {
+        return res.status(404).json({error :'No such user!!!'})
+    }
+res.status(200).json(person)
+    
+}
 
 // Create a new user
 const CreateUser = async (req, res) => {
@@ -25,5 +37,7 @@ const CreateUser = async (req, res) => {
 //update a user
 
 module.exports = {
-    CreateUser
+    CreateUser,
+    getuser,
+    getusers
 }
