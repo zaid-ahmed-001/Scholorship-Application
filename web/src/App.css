@@ -1,10 +1,32 @@
 ::-webkit-scrollbar {width: 2px; height: 4px;}
 ::-webkit-scrollbar-track {background: #ef181800}
-::-webkit-scrollbar-thumb {background: rgba(94, 94, 94, 0.868); border-radius: 20px; }
-::-webkit-scrollbar-thumb:hover {background: rgba(44, 44, 44, 0.868); }
+::-webkit-scrollbar-thumb {background: rgba(94, 94, 94, 0); border-radius: 20px; }
+::-webkit-scrollbar-thumb:hover {background: rgba(44, 44, 44, 0); }
 
 input::file-selector-button {
   background-color: transparent;
   border: none;
   color: #0b6bcb;
 }
+
+.HomeButton {
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  border: 0;
+  color: 'white';
+  border: '1px solid white';
+  border-radius: 5px;
+  font-weight: 700;
+  letter-spacing: 0.2ch;
+  transition: 0.5s;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.HomeButton:hover {
+  background-color: white;
+  color: black;
+}
+
