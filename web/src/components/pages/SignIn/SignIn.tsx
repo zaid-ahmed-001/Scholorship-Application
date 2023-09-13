@@ -31,10 +31,6 @@ export default function SignIn() {
     navigate("/SignUp");
    
   }
-    function handleClickTogeneral() {
-      navigate("/general");
-     
-    }
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -147,7 +143,7 @@ export default function SignIn() {
                   password: formElements.password.value,
                   persistent: formElements.persistent.checked,
                 };
-                handleClickTogeneral();
+                navigate('../UserPage');
                 alert(JSON.stringify(data, null, 2));
               }}
             >
