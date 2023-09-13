@@ -22,7 +22,7 @@ mongoose.connect(process.env.MONGO_URI, {
     const userSchema = new mongoose.Schema({
       name: String,
       mobile: String,
-      genid: String,
+      Email: String,
     });
     
     const User = mongoose.model('User', userSchema);
@@ -31,10 +31,10 @@ mongoose.connect(process.env.MONGO_URI, {
     app.post('/api/users', async (req, res) => {
       try {
         // Destructure properties from req.body
-        const { name, mobile, genid } = req.body;
+        const { name, mobile, Email } = req.body;
         
         // Create a new user
-        const newUser = new User({ name, mobile, genid });
+        const newUser = new User({ name, mobile, Email });
         
         // Save the user to the database
         await newUser.save();
@@ -45,7 +45,38 @@ mongoose.connect(process.env.MONGO_URI, {
         res.status(500).json({ error: 'Internal server error' });
       }
     });
-    
+
+    // GET route to retrieve a single user by ID
+    app.get('/api/users/:userId', async (req, res) => {
+      try {
+        const userId = req.params.userId;
+
+        // Find the user by their ID in the database
+        const user = await User.findById(userId);
+
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json(user);
+      } catch (error) {
+        console.error('Error retrieving user:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+
+    // GET route to retrieve all users (unchanged)
+    app.get('/api/users', async (req, res) => {
+      try {
+        // Retrieve all users from the database
+        const users = await User.find();
+        res.status(200).json(users);
+      } catch (error) {
+        console.error('Error retrieving users:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+
     // Start the server once the database connection is established
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
