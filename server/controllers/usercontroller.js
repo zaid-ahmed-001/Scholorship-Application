@@ -1,4 +1,5 @@
 const user = require('../models/usermodel')
+const mongoose = require('mongoose')
 
 // GET all users
 const getusers = async (req, res) => {
@@ -9,6 +10,10 @@ const getusers = async (req, res) => {
 //GET a single user
 const getuser = async (req, res) => {
     const { id } = req.params
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error : 'NO SUCH DATA'})
+    }
     const person = await user.findById(id)
 
     if(!person) {
@@ -33,11 +38,42 @@ const CreateUser = async (req, res) => {
 
 //delete a user
 
+const deleteuser = async (req, res) => {
+    const { id } = req.params
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error : 'NO SUCH DATA'})
+    }
+const deluser = await user.findOneAndDelete({_id: id})
+
+if(!deluser) {
+    return res.status(400).json({error :'No such user!!!'})
+}
+res.status(200).json(deluser)
+}
+
 
 //update a user
+
+const updatuser = async (req, res) => {
+    const { id } = req.params
+
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error : 'NO SUCH DATA'})
+    }
+    const upuser = await user.findOneAndUpdate({_id: id}, {
+        ...req.body
+    })
+    if(!deluser) {
+        return res.status(400).json({error :'No such user!!!'})
+    }
+    req.status(200).json(upuser)
+}
 
 module.exports = {
     CreateUser,
     getuser,
-    getusers
+    getusers,
+    deleteuser,
+    updatuser
 }
