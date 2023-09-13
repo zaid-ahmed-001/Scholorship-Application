@@ -39,13 +39,44 @@ mongoose.connect(process.env.MONGO_URI, {
         // Save the user to the database
         await newUser.save();
         
-        res.status(200).json({ message: 'User created successfully', user: newUser });
+        res.status(201).json({ message: 'User created successfully', user: newUser });
       } catch (error) {
         console.error('Error creating user:', error);
-        res.status(400).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error' });
       }
     });
-    
+
+    // GET route to retrieve a single user by ID
+    app.get('/api/users/:userId', async (req, res) => {
+      try {
+        const userId = req.params.userId;
+
+        // Find the user by their ID in the database
+        const user = await User.findById(userId);
+
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json(user);
+      } catch (error) {
+        console.error('Error retrieving user:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+
+    // GET route to retrieve all users (unchanged)
+    app.get('/api/users', async (req, res) => {
+      try {
+        // Retrieve all users from the database
+        const users = await User.find();
+        res.status(200).json(users);
+      } catch (error) {
+        console.error('Error retrieving users:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+
     // Start the server once the database connection is established
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
