@@ -176,9 +176,9 @@ function Body() {
            alignItems: 'center',
            backgroundSize: 'cover',
            backgroundImage:
-           'url("https://cdn.discordapp.com/attachments/1144894054505664612/1151228548749725767/bg_4.png")',
+           'url("https://cdn.discordapp.com/attachments/1144894054505664612/1151938554944028712/bg_3_1.png")',
            [theme.getColorSchemeSelector('dark')]: {
-               backgroundImage: 'url("https://cdn.discordapp.com/attachments/1144894054505664612/1151227403331452978/bg_3.png")',
+               backgroundImage: 'url("https://cdn.discordapp.com/attachments/1144894054505664612/1151228548749725767/bg_4.png")',
            },
            p: 8,
        })} >

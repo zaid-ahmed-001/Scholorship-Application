@@ -1,9 +1,29 @@
-import { Box, Breadcrumbs, Button, Divider, FormControl, FormLabel, Input, Link, Typography } from '@mui/joy';
+import * as React from 'react';
+import {useState, ChangeEvent} from 'react';
+import AspectRatio from '@mui/joy/AspectRatio';
+import Box from '@mui/joy/Box';
+import Card from '@mui/joy/Card';
+import Chip from '@mui/joy/Chip';
+import IconButton from '@mui/joy/IconButton';
+import Link from '@mui/joy/Link';
+import Stack from '@mui/joy/Stack';
+import Typography from '@mui/joy/Typography';
+import Button from '@mui/joy/Button';
+import Accordion from '@mui/joy/Accordion';
+import AccordionDetails from '@mui/joy/AccordionDetails';
+import AccordionSummary from '@mui/joy/AccordionSummary';
+import List from '@mui/joy/List';
+import ListItem from '@mui/joy/ListItem';
+import ListSubheader from '@mui/joy/ListSubheader';
+import ListItemButton from '@mui/joy/ListItemButton';
+import { Breadcrumbs, Checkbox, Divider, FormControl, FormLabel, Grid, Input } from '@mui/joy';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import React from 'react';
+import ShowAlert from '../../../../utils/ShowAlert';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import { useLocation } from 'react-router-dom';
 
-interface CreateScholarship extends HTMLFormElement {
+interface EditScholarship extends HTMLFormElement {
     readonly PersonalSamagraID: HTMLInputElement;
     readonly FamilySamagraID: HTMLInputElement;
     readonly HeadofFamily: HTMLInputElement;
@@ -11,35 +31,45 @@ interface CreateScholarship extends HTMLFormElement {
     readonly GenderHeadofFamily: HTMLInputElement;
 }
 
-const CreateScholarshipinitstate = {
-    CreateName: '',
-    CreateDeadline: '',
-    CreateDescription: '',
-    CreateEligiblity: '',
-    CreateDocuments: '',
+const EditScholarshipinitstate = {
+    EditName: '',
+    EditDeadline: '',
+    EditDescription: '',
+    EditEligiblity: '',
+    EditDocuments: '',
 }
-function CreateScholarshipreducer(state:any, action:any) {
+function EditScholarshipreducer(state:any, action:any) {
     switch (action.type) {
-        case 'CreateName': return {...state, CreateName: action.payload}
-        case 'CreateDeadline': return {...state, CreateDeadline: action.payload}
-        case 'CreateDescription': return {...state, CreateDescription: action.payload}
-        case 'CreateEligiblity': return {...state, CreateEligiblity: action.payload}
-        case 'CreateDocuments': return {...state, CreateDocuments: action.payload}
+        case 'EditName': return {...state, EditName: action.payload}
+        case 'EditDeadline': return {...state, EditDeadline: action.payload}
+        case 'EditDescription': return {...state, EditDescription: action.payload}
+        case 'EditEligiblity': return {...state, EditEligiblity: action.payload}
+        case 'EditDocuments': return {...state, EditDocuments: action.payload}
         default: throw new Error("Action not Found");
     }
 }
-const CreateScholarship = () => {
-    const [CreateScholarshipstate, CreateScholarshipdispatch] = React.useReducer(CreateScholarshipreducer, CreateScholarshipinitstate);
-    const createschlarshipQuesList = [
-        {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Name', formType:'text', decor: '', id: 'CreateName', properties: CreateScholarshipstate.CreateName},
-        {slotPattern: '^[0-9/-\\s]$' , pattern: /^[0-9]+$/,label: 'Deadline', formType:'date', decor: '', id: 'CreateDeadline', properties: CreateScholarshipstate.CreateDeadline},
-        {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Description', formType:'text', decor: '', id: 'CreateDescription', properties: CreateScholarshipstate.CreateDescription},
-        {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Eligiblity', formType:'text', decor: '', id: 'CreateEligiblity', properties: CreateScholarshipstate.CreateEligiblity},
-        {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Documents Required', formType:'text', decor: '', id: 'CreateDocuments', properties: CreateScholarshipstate.CreateDocuments}
-    ];
 
-    return (
-    <>
+export default function ScholarshipEditForm() {
+  React.useEffect(() => {
+    document.title = "Scholarship Application - EduFundr";
+    return () => {};
+  }, []);
+  const location = useLocation();
+  //const arr = location.state.arrData;
+
+  const [EditScholarshipstate, EditScholarshipdispatch] = React.useReducer(EditScholarshipreducer, EditScholarshipinitstate);
+  const EditschlarshipQuesList = [
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Name', formType:'text', decor: '', id: 'EditName', properties: EditScholarshipstate.EditName},
+      {slotPattern: '^[0-9/-\\s]$' , pattern: /^[0-9]+$/,label: 'Deadline', formType:'date', decor: '', id: 'EditDeadline', properties: EditScholarshipstate.EditDeadline},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Description', formType:'text', decor: '', id: 'EditDescription', properties: EditScholarshipstate.EditDescription},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Eligiblity', formType:'text', decor: '', id: 'EditEligiblity', properties: EditScholarshipstate.EditEligiblity},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Documents Required', formType:'text', decor: '', id: 'EditDocuments', properties: EditScholarshipstate.EditDocuments}
+  ];
+  return (
+    <Stack spacing={2} sx={{
+      mt: {xs: 1, lg: 1},
+      width: {xs: '90%', lg: '80%'}
+    }}>
         <Box
             component="main"
             className="MainContent"
@@ -52,7 +82,7 @@ const CreateScholarship = () => {
                 xs: 2,
                 md: 4,
             },
-           mt: {xs: 1, lg: 1},
+            mt: {xs: 1, lg: 1},
             pt: 'var(--main-paddingTop)',
             pb: {
                 xs: 2,
@@ -90,29 +120,29 @@ const CreateScholarship = () => {
                     Admin Dashboard
                 </Link>
                 <Typography color="primary" fontWeight={500} fontSize={12}>
-                    Create Scholarship
+                {location.state.title} Application 
                 </Typography>
                 </Breadcrumbs>
             </Box>
             <Box sx={{ml: 1}}>
                 <Typography level="h1" fontSize="xl3">
-                    Create Scholarship
+                    Edit Scholarship
                 </Typography>
                 <form  
-                    onSubmit={(event: React.FormEvent<CreateScholarship>) => {
+                    onSubmit={(event: React.FormEvent<EditScholarship>) => {
                     event.preventDefault();
                     const data = {
-                        CreateName: CreateScholarshipstate.CreateName,
-                        CreateDeadline: CreateScholarshipstate.CreateDeadline,
-                        CreateDescription: CreateScholarshipstate.CreateDescription,
-                        CreateEligiblity: CreateScholarshipstate.CreateEligiblity,
-                        CreateDocuments: CreateScholarshipstate.CreateDocuments
+                        EditName: EditScholarshipstate.EditName,
+                        EditDeadline: EditScholarshipstate.EditDeadline,
+                        EditDescription: EditScholarshipstate.EditDescription,
+                        EditEligiblity: EditScholarshipstate.EditEligiblity,
+                        EditDocuments: EditScholarshipstate.EditDocuments
                     };
                     alert(JSON.stringify(data, null, 2));
                     }}>
                     <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
                         {
-                            createschlarshipQuesList.map((ques:any, id:any) => (
+                            EditschlarshipQuesList.map((ques:any, id:any) => (
                             <React.Fragment key={id}>
                                 <FormControl  sx={{ display: { sm: 'contents' } }}>
                                 <FormLabel>{ques.label}</FormLabel>
@@ -133,21 +163,19 @@ const CreateScholarship = () => {
                                     }
                                 }}
                                 value={ques.properties}
-                                onChange={(e)=>CreateScholarshipdispatch({type: ques.id, payload: e.target.value})} />
+                                onChange={(e)=>EditScholarshipdispatch({type: ques.id, payload: e.target.value})} />
                                 </FormControl>
                                 <Divider role="presentation" />
                             </React.Fragment>
                             ))
                         }
                         <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }}>
-                            <Button type='submit' size="sm" >Create</Button>
+                            <Button type='submit' size="sm" >Edit</Button>
                         </Box>
                     </Box>
                 </form>
             </Box>
         </Box>
-    </>
-    );
-};
-
-export default CreateScholarship;
+    </Stack>
+  );
+}

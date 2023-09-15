@@ -27,6 +27,7 @@ import ForgotPassword from './components/pages/ForgotPasswordPage/ForgotPassword
 import CreatePassword from './components/pages/ForgotPasswordPage/CreatePassword';
 import ScholarshipElements from './components/pages/UserPage/ScholarshipProfile/elements/ScholarshipElements';
 import ScholarshipForm from './components/pages/UserPage/ScholarshipProfile/elements/ScholarshipForm';
+import ScholarshipEditForm from './components/pages/AdminPage/AdminDashboard/elements/ScholarshipEditForm';
 
 const useEnhancedEffect =
   typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
@@ -82,6 +83,7 @@ function App() {
               <Route path="CreateScholarship" element={<CreateScholarship />} />
               <Route path="EditScholarship" element={<EditScholarship />} />
               <Route path="ViewApplications" element={<ViewApplications />} />
+              <Route path="ScholarshipEditForm" element={<ScholarshipEditForm />} />
             </Route>
           </Routes>
        </CssVarsProvider>
