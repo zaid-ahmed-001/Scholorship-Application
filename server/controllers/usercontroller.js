@@ -1,79 +1,95 @@
-const user = require('../models/usermodel')
-const mongoose = require('mongoose')
+const userModel = require('../models/usermodel');
+const mongoose = require('mongoose');
 
-// GET all users
 const getusers = async (req, res) => {
-    const people = await user.find({}).sort({createdAt : -1})
-    res.status(200).json(people)
-}
+  try {
+    const users = await userModel.find({}).sort({ createdAt: -1 });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
-//GET a single user
+
+
+
+
 const getuser = async (req, res) => {
-    const { id } = req.params
+  try {
+    const { id } = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error : 'NO SUCH DATA'})
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: 'Invalid ID' });
     }
-    const person = await user.findById(id)
 
-    if(!person) {
-        return res.status(404).json({error :'No such user!!!'})
+    const foundUser = await userModel.findById(id);
+
+    if (!foundUser) {
+      return res.status(404).json({ error: 'User not found' });
     }
-res.status(200).json(person)
-    
-}
 
-// Create a new user
-const CreateUser = async (req, res) => {
-    const { name, mobile, Email } = req.body
+    res.status(200).json(foundUser);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
-    // add doc to db
-    try{
-        const yuser = await user.create({name, mobile, Email})
-        res.status(200).json({yuser})
-    } catch (error){
-        res.status(400).json({error : error.message})
+const createUser = async (req, res) => {
+  try {
+    const { name, mobile, Email } = req.body;
+    const newUser = await userModel.create({ name, mobile, Email });
+    res.status(201).json({ user: newUser });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: 'Invalid ID' });
     }
-}
 
-//delete a user
+    const deletedUser = await userModel.findOneAndDelete({ _id: id });
 
-const deleteuser = async (req, res) => {
-    const { id } = req.params
-
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error : 'NO SUCH DATA'})
+    if (!deletedUser) {
+      return res.status(404).json({ error: 'User not found' });
     }
-const deluser = await user.findOneAndDelete({_id: id})
 
-if(!deluser) {
-    return res.status(400).json({error :'No such user!!!'})
-}
-res.status(200).json(deluser)
-}
+    res.status(200).json({ user: deletedUser });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-//update a user
-
-const updatuser = async (req, res) => {
-    const { id } = req.params
-
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error : 'NO SUCH DATA'})
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: 'Invalid ID' });
     }
-    const upuser = await user.findOneAndUpdate({_id: id}, {
-        ...req.body
-    })
-    if(!deluser) {
-        return res.status(400).json({error :'No such user!!!'})
+
+    const updatedUser = await userModel.findOneAndUpdate({ _id: id }, req.body, {
+      new: true,
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
     }
-    req.status(200).json(upuser)
-}
+
+    res.status(200).json({ user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 module.exports = {
-    CreateUser,
-    getuser,
-    getusers,
-    deleteuser,
-    updatuser
-}
+  createUser,
+  getuser,
+  getusers,
+  deleteUser,
+  updateUser,
+};
