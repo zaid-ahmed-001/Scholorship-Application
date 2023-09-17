@@ -40,10 +40,15 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { title } from 'process';
 import { type } from 'os';
+import { IconButton } from '@mui/joy';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
 interface PersonlFormElement extends HTMLFormElement {
   readonly firstName: HTMLInputElement;
   readonly lastName: HTMLInputElement;
+  readonly passWord: HTMLInputElement;
+  readonly ConfirmpassWord: HTMLInputElement;
   readonly fatherName: HTMLInputElement;
   readonly eMail: HTMLInputElement;
   readonly contactNumber: HTMLInputElement;
@@ -102,36 +107,42 @@ export function PersonalDetails(props: any) {
   };
   const personalQuesList = [
     {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Father`s Name', formType:'text', decor: '', id: 'fatherName', properties: props.fatherName},
-    {slotPattern: '^[/\S+@\S+\.\S+/]*$', pattern: /\S+@\S+\.\S+/, label: 'Email', formType:'email', decor: <i data-feather="mail" />, id: 'eMail', properties: props.eMail},
+    {slotPattern: '^[/\S+@\S+\.\S+/]*$', pattern: /\S+@\S+\.\S+/, label: 'Email', formType:'email', decor: <MailOutlineIcon />, id: 'eMail', properties: props.eMail},
     {slotPattern: '^[0-9-\\s]*$' , pattern: /^[0-9-\s]+$/, label: 'Contact Number', formType:'number', decor: "+91", id: 'contactNumber', properties: props.contactNumber},
     {slotPattern: '^[0-9-,/\\s]*$' , pattern: /^[0-9/,-\s]+$/, label: 'Date of Birth', formType:'date', decor: "", id: 'dateofBirth', properties: props.dateofBirth},
     {slotPattern: '^[A-Za-z0-9-,/\\s]*$' , pattern: /^[A-Za-z0-9/,-\s]+$/, label: 'Enrollment Number', formType:'text', decor: "", id: 'enrollmentNumber', properties: props.enrollmentNumber}
   ];
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
   return (
     <form  
     name='PersonalSubmit' method = "post"
     onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
     event.preventDefault();
-    props.dispatch({type: 'Next', payload: false})
-    props.settabIndex(props.tabIndex+1)
-    const data = {
-      firstName: props.firstName,
-      lastName: props.lastName,
-      fatherName: props.fatherName,
-      eMail: props.eMail,
-      contactNumber: props.contactNumber,
-      dateofBirth: props.dateofBirth,
-      enrollmentNumber: props.enrollmentNumber,
-      gender: props.Gender,
-      country: props.country,
-      religion: props.Religion,
-      MaritalStatus: props.MaritalStatus,
-      SpouseName: props.SpouseName,
-      Disabled: props.Disabled,
-      Orphan: props.Orphan,
-      Agreement: props.Agreement,
-    };
-    alert(JSON.stringify(data, null, 2));
+    if (props.passWord===props.ConfirmpassWord) {
+      props.dispatch({type: 'Next', payload: false})
+      props.settabIndex(props.tabIndex+1)
+      const data = {
+        firstName: props.firstName,
+        lastName: props.lastName,
+        fatherName: props.fatherName,
+        passWord: props.passWord,
+        ConfirmpassWord: props.ConfirmpassWord,
+        eMail: props.eMail,
+        contactNumber: props.contactNumber,
+        dateofBirth: props.dateofBirth,
+        enrollmentNumber: props.enrollmentNumber,
+        gender: props.Gender,
+        country: props.country,
+        religion: props.Religion,
+        MaritalStatus: props.MaritalStatus,
+        SpouseName: props.SpouseName,
+        Disabled: props.Disabled,
+        Orphan: props.Orphan,
+        Agreement: props.Agreement,
+      };
+      alert(JSON.stringify(data, null, 2));
+    }
   }}>
       <TabPanel value={0}>
         <Box sx={{pt: 3,pb: 10,display: 'grid',gridTemplateColumns: {  xs: '100%',  sm: 'minmax(120px, 30%) 1fr',  lg: '280px 1fr minmax(120px, 208px)',},
@@ -175,6 +186,56 @@ export function PersonalDetails(props: any) {
             </FormControl>
           </Box>
           <Divider role="presentation" />
+          <FormControl sx={{ display: { sm: 'contents' } }}>
+              <FormLabel>Password</FormLabel>
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder=''
+                endDecorator={<IconButton onClick={handleClickShowPassword}><VisibilityIcon /></IconButton>}
+                name='passWord'
+                required
+                slotProps={{
+                  input: {
+                    pattern: '^[A-Za-z0-9,/\\s]*$',
+                  },
+                }}
+                onKeyPress={(e) => {
+                  if (!/^[A-Za-z\s]+$/.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                value={props.passWord}
+                onChange={(e) =>
+                  props.dispatch({ type: 'passWord', payload: e.target.value })
+                }
+              />
+            </FormControl>
+            <Divider role="presentation" />
+            <FormControl sx={{ display: { sm: 'contents' } }}>
+              <FormLabel>Confirm Password</FormLabel>
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder=''
+                endDecorator={<IconButton onClick={handleClickShowPassword}><VisibilityIcon /></IconButton>}
+                name='ConfirmpassWord'
+                required
+                slotProps={{
+                  input: {
+                    pattern: '^[A-Za-z0-9,/\\s]*$',
+                  },
+                }}
+                onKeyPress={(e) => {
+                  if (!/^[A-Za-z\s]+$/.test(e.key)) {
+                    e.preventDefault();
+                  }
+                }}
+                value={props.ConfirmpassWord}
+                onChange={(e) =>
+                  props.dispatch({ type: 'ConfirmpassWord', payload: e.target.value })
+                }
+              />
+            </FormControl>
+            <Divider role="presentation" />
           {
             personalQuesList.map((ques: any, id: any) => (
               <React.Fragment key={id}>
@@ -1538,6 +1599,8 @@ export function NativeDetails(props:any) {
 const Personalinitstate = {
   firstName: '',
   lastName: '',
+  passWord: '',
+  ConfirmpassWord: '',
   fatherName: '',
   eMail: '',
   contactNumber: '',
@@ -1562,6 +1625,8 @@ function Personalreducer(state:any, action:any) {
   switch (action.type) {
     case 'firstName': return {...state, firstName: action.payload}
     case 'lastName': return {...state, lastName: action.payload}
+    case 'passWord': return {...state, passWord: action.payload}
+    case 'ConfirmpassWord': return {...state, ConfirmpassWord: action.payload}
     case 'fatherName': return {...state, fatherName: action.payload}
     case 'eMail': return {...state, eMail: action.payload}
     case 'contactNumber': return {...state, contactNumber: action.payload}
@@ -1708,6 +1773,7 @@ export default function SignUp() {
 
   const ProfileReview = [
     {id: 'firstName', data: Personalstate.firstName+' '+Personalstate.lastName, decor: '', label: 'Name'},
+    {id: 'passWord', data: Personalstate.passWord, decor: '', label: 'Password'},
     {id: 'fatherName', data: Personalstate.fatherName, decor: '', label: 'Father Name'},
     {id: 'eMail', data: Personalstate.eMail, decor: '', label: 'Email'},
     {id: 'contactNumber', data: Personalstate.contactNumber, decor: '', label: 'Contact Number'},
@@ -1913,7 +1979,7 @@ export default function SignUp() {
          contactNumber={Personalstate.contactNumber} dateofBirth={Personalstate.dateofBirth} enrollmentNumber={Personalstate.enrollmentNumber} Gender={Personalstate.Gender} Religion={Personalstate.Religion} HouseNo={Personalstate.HouseNo}
          Street={Personalstate.Street} Sector={Personalstate.Sector} City={Personalstate.City} Pincode={Personalstate.Pincode} Area={Personalstate.Area} MaritalStatus={Personalstate.MaritalStatus}
          SpouseName={Personalstate.SpouseName} Disabled={Personalstate.Disabled} Orphan={Personalstate.Orphan} Next={Personalstate.Next} tabIndex={tabIndex} settabIndex={settabIndex}
-         Agreement={Personalstate.Agreement}
+         Agreement={Personalstate.Agreement} passWord={Personalstate.passWord} ConfirmpassWord={Personalstate.ConfirmpassWord}
         />
         <AcademicDetails dispatch={Academicdispatch} Diploma={Academicstate.Diploma} TenthBoard={Academicstate.TenthBoard} TenthSchool={Academicstate.TenthSchool} TenthPercentage={Academicstate.TenthPercentage}
           TwelfthBoard={Academicstate.TwelfthBoard} TwelfthSchool={Academicstate.TwelfthSchool} TwelfthStream={Academicstate.TwelfthStream} TwelfthPercentage={Academicstate.TwelfthPercentage}
