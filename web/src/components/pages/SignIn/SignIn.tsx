@@ -12,6 +12,9 @@ import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import { useNavigate } from "react-router-dom";
 import ColorSchemeToggle from '../../utils/ColorSchemeToggle';
+import { IconButton } from '@mui/joy';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 interface FormElements extends HTMLFormControlsCollection {
   text: HTMLInputElement;
   password: HTMLInputElement;
@@ -29,8 +32,9 @@ export default function SignIn() {
   const navigate = useNavigate();
   function handleClickToSignUp() {
     navigate("/SignUp");
-   
   }
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
       <CssBaseline />
@@ -148,12 +152,12 @@ export default function SignIn() {
               }}
             >
               <FormControl required>
-                <FormLabel>UserID</FormLabel>
+                <FormLabel>Enrollment Number</FormLabel>
                 <Input type="text" name="text" />
               </FormControl>
               <FormControl required>
                 <FormLabel>Password</FormLabel>
-                <Input type="password" name="password" />
+                <Input type={showPassword ? "text" : "password"} name="password" endDecorator={<IconButton onClick={handleClickShowPassword}><VisibilityIcon /></IconButton>}/>
               </FormControl>
               <Box
                 sx={{
