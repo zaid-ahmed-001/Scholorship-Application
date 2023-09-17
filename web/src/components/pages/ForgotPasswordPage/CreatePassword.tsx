@@ -130,7 +130,7 @@ export default function CreatePassword() {
               >
               </Box>
               <Button type="submit"  fullWidth>
-                Sign in
+                Change Password
               </Button>
               <Link fontSize="sm" onClick={()=>navigate('../ForgotPassword')} fontWeight="lg">
                 Return to Previous Page!
