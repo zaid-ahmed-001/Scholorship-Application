@@ -20,11 +20,26 @@ import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import Link from '@mui/joy/Link';
 
 interface NativeFormElement extends HTMLFormElement {
-    readonly nativeBorn: HTMLInputElement;
-    readonly nativeEducation: HTMLInputElement;
+  readonly nativeBorn: HTMLInputElement;
+  readonly nativeEducation: HTMLInputElement;
 }
-
-export default function EditNativeDetails(props:any) {
+const NativeModifystate = {
+  nativeBorn: 'No',
+  nativeEducation: 'No',
+  Next: true,
+  Agreement: false
+}
+function Nativereducer(state:any, action:any) {
+  switch (action.type) {
+    case 'nativeBorn': return {...state, nativeBorn: action.payload}
+    case 'nativeEducation': return {...state, nativeEducation: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+export default function EditNativeDetails() {
+    const [Nativestate, Nativedispatch] = React.useReducer(Nativereducer, NativeModifystate);
     const [nativeCertificate , setnativeCertificate] = React.useState<File | null>(null);
     const [nativeCertificateuploadProgress, setnativeCertificateuploadProgress] = React.useState(0);
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -126,11 +141,11 @@ export default function EditNativeDetails(props:any) {
                 <form  
                 onSubmit={(event: React.FormEvent<NativeFormElement>) => {
                 event.preventDefault();
-                props.dispatch({type: 'Next', payload: false})
-                props.settabIndex(props.tabIndex+1)
+                Nativedispatch({type: 'Next', payload: false})
+                Nativestate.settabIndex(Nativestate.tabIndex+1)
                 const data = {
-                    nativeBorn: props.nativeBorn,
-                    nativeEducation: props.nativeEducation
+                    nativeBorn: Nativestate.nativeBorn,
+                    nativeEducation: Nativestate.nativeEducation
                 };
                 alert(JSON.stringify(data, null, 2));
                 }}>
@@ -158,8 +173,8 @@ export default function EditNativeDetails(props:any) {
                             name="nativeBorn"
                             orientation="horizontal"
                             sx={{ my: 1 }}
-                            value={props.nativeBorn}
-                            onChange={(e)=>props.dispatch({type: 'nativeBorn', payload: e.target.value})}>
+                            value={Nativestate.nativeBorn}
+                            onChange={(e)=>Nativedispatch({type: 'nativeBorn', payload: e.target.value})}>
                             <Radio required value="Yes" label="Yes" />
                             <Radio required value="No" label="No" />
                         </RadioGroup>
@@ -173,8 +188,8 @@ export default function EditNativeDetails(props:any) {
                             name="nativeEducation"
                             orientation="horizontal"
                             sx={{ my: 1 }}
-                            value={props.nativeEducation}
-                            onChange={(e)=>props.dispatch({type: 'nativeEducation', payload: e.target.value})}>
+                            value={Nativestate.nativeEducation}
+                            onChange={(e)=>Nativedispatch({type: 'nativeEducation', payload: e.target.value})}>
                             <Radio required value="Yes" label="Yes" />
                             <Radio required value="No" label="No" />
                         </RadioGroup>
@@ -224,7 +239,7 @@ export default function EditNativeDetails(props:any) {
                             }}
                         >
                         <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
-                            checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
+                            checked={Nativestate.Agreement} onChange={(e)=>Nativedispatch({type: 'Agreement', payload: e.target.checked})}/>
                         </Box>
                         </FormControl>
                         <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
