@@ -32,8 +32,59 @@ interface AcademicFormElement extends HTMLFormElement {
     readonly TwelfthStream: HTMLInputElement;
     readonly TwelfthPercentage: HTMLInputElement;
 }
-
-export default function EditAcademicDetails(props: any) {
+const AcademicModifystate = {
+  Diploma: 'No',
+  DiplomaCollege: '',
+  DiplomaBranch: '',
+  DiplomaCGPA: '',
+  TenthBoard: 'CBSE',
+  TenthSchool: 'ST PAUL SCHOOL',
+  TenthPercentage: '78',
+  TwelfthBoard: 'CBSE',
+  TwelfthSchool: 'ST PAUL SCHOOL',
+  TwelfthStream: 'PCM CS',
+  TwelfthPercentage: '89',
+  currentSemester: 1,
+  Next: true,
+  Agreement: false
+}
+const Academicinitstate = {
+  Diploma: '',
+  DiplomaCollege: '',
+  DiplomaBranch: '',
+  DiplomaCGPA: '',
+  TenthBoard: '',
+  TenthSchool: '',
+  TenthPercentage: '',
+  TwelfthBoard: '',
+  TwelfthSchool: '',
+  TwelfthStream: '',
+  TwelfthPercentage: '',
+  currentSemester: 1,
+  Next: true,
+  Agreement: false
+}
+function Academicreducer(state:any, action:any) {
+  switch (action.type) {
+    case 'Diploma': return {...state, Diploma: action.payload}
+    case 'DiplomaCollege': return {...state, DiplomaCollege: action.payload}
+    case 'DiplomaBranch': return {...state, DiplomaBranch: action.payload}
+    case 'DiplomaCGPA': return {...state, DiplomaCGPA: action.payload}
+    case 'TenthBoard': return {...state, TenthBoard: action.payload}
+    case 'TenthSchool': return {...state, TenthSchool: action.payload}
+    case 'TenthPercentage': return {...state, TenthPercentage: action.payload}
+    case 'TwelfthBoard': return {...state, TwelfthBoard: action.payload}
+    case 'TwelfthSchool': return {...state, TwelfthSchool: action.payload}
+    case 'TwelfthStream': return {...state, TwelfthStream: action.payload}
+    case 'TwelfthPercentage': return {...state, TwelfthPercentage: action.payload}
+    case 'currentSemester': return {...state, currentSemester: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+export default function EditAcademicDetails() {
+    const [Academicstate, Academicdispatch] = React.useReducer(Academicreducer, AcademicModifystate);
     const [TenthMarkSheet , setTenthMarkSheet] = React.useState<File | null>(null);
     const [TenthMarkSheetuploadProgress, setTenthMarkSheetUploadProgress] = React.useState(0);
     const [TwelfthMarkSheet , setTwelfthMarkSheet] = React.useState<File | null>(null);
@@ -143,18 +194,18 @@ export default function EditAcademicDetails(props: any) {
       }, 1000);
     };
     const diplomaQuesList = [
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Which college did you attend to complete your diploma?', formType:'text', decor: '', id: 'DiplomaCollege', properties: props.DiplomaCollege},
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'In which branch did you complete your diploma?', formType:'text', decor: '', id: 'DiplomaBranch', properties: props.DiplomaBranch},
-      {slotPattern: '^[0-9]*$' , pattern: /^[0-9]+$/, label: 'What was your CGPA when you completed your diploma?', formType:'number', decor: '', id: 'DiplomaCGPA', properties: props.DiplomaCGPA},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Which college did you attend to complete your diploma?', formType:'text', decor: '', id: 'DiplomaCollege', properties: Academicstate.DiplomaCollege},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'In which branch did you complete your diploma?', formType:'text', decor: '', id: 'DiplomaBranch', properties: Academicstate.DiplomaBranch},
+      {slotPattern: '^[0-9]*$' , pattern: /^[0-9]+$/, label: 'What was your CGPA when you completed your diploma?', formType:'number', decor: '', id: 'DiplomaCGPA', properties: Academicstate.DiplomaCGPA},
     ];
     const academicQuesList = [
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Exam board was in charge of your 10th-Grade Board Exams', formType:'text', decor: '', id: 'TenthBoard', properties: props.TenthBoard},
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Name of the school where you completed your 10th-Grade Board Education', formType:'text', decor: '', id: 'TenthSchool', properties: props.TenthSchool},
-      {slotPattern: '^[0-9]*$' , pattern: /^[0-9]+$/, label: 'Percentage you secured in your 10th-Grade Board Exams', formType:'number', decor: '', id: 'TenthPercentage', properties: props.TenthPercentage},
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Exam board was in charge of your 12th-Grade Board Exams', formType:'text', decor: '', id: 'TwelfthBoard', properties: props.TwelfthBoard},
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Name of the school where you completed your 12th-Grade Board Education', formType:'text', decor: '', id: 'TwelfthSchool', properties: props.TwelfthSchool},
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'What stream did you choose for your 12th-Grade?', formType:'text', decor: '', id: 'TwelfthStream', properties: props.TwelfthStream},
-      {slotPattern: '^[0-9]*$' , pattern: /^[0-9]+$/, label: 'Percentage you secured in your 12th-Grade Board Exams', formType:'number', decor: '', id: 'TwelfthPercentage', properties: props.TwelfthPercentage}
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Exam board was in charge of your 10th-Grade Board Exams', formType:'text', decor: '', id: 'TenthBoard', properties: Academicstate.TenthBoard},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Name of the school where you completed your 10th-Grade Board Education', formType:'text', decor: '', id: 'TenthSchool', properties: Academicstate.TenthSchool},
+      {slotPattern: '^[0-9]*$' , pattern: /^[0-9]+$/, label: 'Percentage you secured in your 10th-Grade Board Exams', formType:'number', decor: '', id: 'TenthPercentage', properties: Academicstate.TenthPercentage},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Exam board was in charge of your 12th-Grade Board Exams', formType:'text', decor: '', id: 'TwelfthBoard', properties: Academicstate.TwelfthBoard},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Name of the school where you completed your 12th-Grade Board Education', formType:'text', decor: '', id: 'TwelfthSchool', properties: Academicstate.TwelfthSchool},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'What stream did you choose for your 12th-Grade?', formType:'text', decor: '', id: 'TwelfthStream', properties: Academicstate.TwelfthStream},
+      {slotPattern: '^[0-9]*$' , pattern: /^[0-9]+$/, label: 'Percentage you secured in your 12th-Grade Board Exams', formType:'number', decor: '', id: 'TwelfthPercentage', properties: Academicstate.TwelfthPercentage}
     ];
     return (
     <>
@@ -219,38 +270,38 @@ export default function EditAcademicDetails(props: any) {
         <form  
         onSubmit={(event: React.FormEvent<AcademicFormElement>) => {
                 event.preventDefault();
-                props.dispatch({type: 'Next', payload: false})
-                props.settabIndex(props.tabIndex+1)
-                if (props.Diploma === 'Yes') {
+                Academicdispatch({type: 'Next', payload: false})
+                Academicstate.settabIndex(Academicstate.tabIndex+1)
+                if (Academicstate.Diploma === 'Yes') {
                 for (let index = 0; index < academicQuesList.length; index++) {
                     const element = academicQuesList[index].id;
-                    props.dispatch({type: element, payload: '-NA-'})
+                    Academicdispatch({type: element, payload: '-NA-'})
                 }
-                } else if (props.Diploma === 'No') {
+                } else if (Academicstate.Diploma === 'No') {
                 for (let index = 0; index < diplomaQuesList.length; index++) {
                     const element = diplomaQuesList[index].id;
-                    props.dispatch({type: element, payload: '-NA-'})
+                    Academicdispatch({type: element, payload: '-NA-'})
                 }
                 }
                 const data = {
-                Diploma: props.Diploma,
-                DiplomaCollege: props.DiplomaCollege,
-                DiplomaBranch: props.DiplomaBranch,
-                DiplomaCGPA: props.DiplomaCGPA,
-                TenthBoard: props.TenthBoard,
-                TenthSchool: props.TenthSchool,
-                TenthPercentage: props.TenthPercentage,
-                TwelfthBoard: props.TwelfthBoard,
-                TwelfthSchool: props.TwelfthSchool,
-                TwelfthStream: props.TwelfthStream,
-                TwelfthPercentage: props.TwelfthPercentage
+                Diploma: Academicstate.Diploma,
+                DiplomaCollege: Academicstate.DiplomaCollege,
+                DiplomaBranch: Academicstate.DiplomaBranch,
+                DiplomaCGPA: Academicstate.DiplomaCGPA,
+                TenthBoard: Academicstate.TenthBoard,
+                TenthSchool: Academicstate.TenthSchool,
+                TenthPercentage: Academicstate.TenthPercentage,
+                TwelfthBoard: Academicstate.TwelfthBoard,
+                TwelfthSchool: Academicstate.TwelfthSchool,
+                TwelfthStream: Academicstate.TwelfthStream,
+                TwelfthPercentage: Academicstate.TwelfthPercentage
                 };
                 alert(JSON.stringify(data, null, 2));
             }}>
             <Box sx={{ pt: 3, pb: 10, display: 'grid', gridTemplateColumns: { xs: '100%', sm: 'minmax(120px, 30%) 1fr', lg: '280px 1fr minmax(120px, 208px)', }, columnGap: { xs: 2, sm: 3, md: 4 }, rowGap: { xs: 2, sm: 2.5 }, '& > hr': { gridColumn: '1/-1', }, }} >
             <FormControl sx={{ display: { sm: 'contents' } }}>
                     <FormLabel>Enter Current Semester</FormLabel>
-                    <Select required name='currentSemester' value={props.currentSemester} onChange={(e, newValue) => props.dispatch({type: 'currentSemester', payload: newValue})}>
+                    <Select required name='currentSemester' value={Academicstate.currentSemester} onChange={(e, newValue) => Academicdispatch({type: 'currentSemester', payload: newValue})}>
                         <Option value={1}>First</Option>
                         <Option value={2}>Second</Option>
                         <Option value={3}>Third</Option>
@@ -261,7 +312,7 @@ export default function EditAcademicDetails(props: any) {
                         <Option value={8}>Eighth</Option>
                     </Select>
                     </FormControl>
-                    {(() => { if (props.currentSemester!=1)  {
+                    {(() => { if (Academicstate.currentSemester!=1)  {
                     return (
                         <>
                         <Divider role="presentation" />
@@ -312,9 +363,9 @@ export default function EditAcademicDetails(props: any) {
                     >
                         <RadioGroup
                             name="Diploma"
-                            value={props.Diploma}
+                            value={Academicstate.Diploma}
                             orientation="horizontal"
-                            onChange={(e)=>props.dispatch({type: 'Diploma', payload: e.target.value})}
+                            onChange={(e)=>Academicdispatch({type: 'Diploma', payload: e.target.value})}
                             sx={{ my: 1 }}
                         >
                         <Radio required value="Yes" label="Yes" />
@@ -323,7 +374,7 @@ export default function EditAcademicDetails(props: any) {
                     </Box>
                     </FormControl>
                     <Divider role="presentation" />
-                    {(() => { if (props.Diploma==='Yes')  {
+                    {(() => { if (Academicstate.Diploma==='Yes')  {
                     return (
                         <>
                         {
@@ -348,7 +399,7 @@ export default function EditAcademicDetails(props: any) {
                                     }
                                 }}
                                 value={ques.properties}
-                                onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                                onChange={(e)=>Academicdispatch({type: ques.id, payload: e.target.value})} />
                                 </FormControl>
                                 <Divider role="presentation" />
                             </React.Fragment>
@@ -386,7 +437,7 @@ export default function EditAcademicDetails(props: any) {
                         )}
                         </>
                     )
-                    } else if (props.Diploma==='No') {
+                    } else if (Academicstate.Diploma==='No') {
                     return (
                         <>
                         {
@@ -411,7 +462,7 @@ export default function EditAcademicDetails(props: any) {
                                     }
                                 }}
                                 value={ques.properties}
-                                onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                                onChange={(e)=>Academicdispatch({type: ques.id, payload: e.target.value})} />
                                 </FormControl>
                                 <Divider role="presentation" />
                             </React.Fragment>
@@ -490,7 +541,7 @@ export default function EditAcademicDetails(props: any) {
                             }}
                         >
                             <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
-                            checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
+                            checked={Academicstate.Agreement} onChange={(e)=>Academicdispatch({type: 'Agreement', payload: e.target.checked})}/>
                         </Box>
                         </FormControl>
                         <Divider role="presentation" />
