@@ -1,9 +1,12 @@
 import React from 'react';
+import ReviewApplicationsTable from './elements/ReviewApplications/ReviewApplicationsTable';
+import ReviewApplicationsList from './elements/ReviewApplications/ReviewApplicationsList';
 
 const ViewApplications = () => {
     return (
         <>
-            <h1>ViewApplications</h1>
+            <ReviewApplicationsList />
+            <ReviewApplicationsTable />
         </>
     );
 };
