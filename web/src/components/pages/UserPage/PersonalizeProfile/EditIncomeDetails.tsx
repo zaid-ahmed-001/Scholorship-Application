@@ -26,8 +26,29 @@ interface incomeFormElement extends HTMLFormElement {
     readonly familyMembers: HTMLInputElement;
     readonly incomeTotal: HTMLInputElement;
 }
-
-export default function EditIncomeDetails(props:any) {
+const IncomeModifystate = {
+  incomeAgriculture: '0',
+  incomeBusiness: '0',
+  incomeProperty: '0',
+  familyMembers: '2',
+  incomeTotal: 'More Than Rs: 7,00,000',
+  Next: true,
+  Agreement: false
+}
+function Incomereducer(state:any, action:any) {
+  switch (action.type) {
+    case 'incomeAgriculture': return {...state, incomeAgriculture: action.payload}
+    case 'incomeBusiness': return {...state, incomeBusiness: action.payload}
+    case 'incomeProperty': return {...state, incomeProperty: action.payload}
+    case 'familyMembers': return {...state, familyMembers: action.payload}
+    case 'incomeTotal': return {...state, incomeTotal: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+export default function EditIncomeDetails() {
+    const [Incomestate, Incomedispatch] = React.useReducer(Incomereducer, IncomeModifystate);
     const [incomeCertificate , setincomeCertificate] = React.useState<File | null>(null);
     const [incomeCertificateuploadProgress, setincomeCertificateuploadProgress] = React.useState(0);
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -66,10 +87,10 @@ export default function EditIncomeDetails(props:any) {
       }, 1000);
     };
     const incomeQuesList = [
-      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?', formType:'number', decor: 'Rs', id: 'incomeAgriculture', properties: props.incomeAgriculture},
-      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from your Business?', formType:'number', decor: 'Rs', id: 'incomeBusiness', properties: props.incomeBusiness},
-      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from your House Property?', formType:'number', decor: 'Rs', id: 'incomeProperty', properties: props.incomeProperty},
-      {slotPattern: '^[A-Za-z,\\s]*$' , pattern: /^[A-Za-z,\s]+$/, label: 'Members your Family Contains?', formType:'text', decor: '', id: 'familyMembers', properties: props.familyMembers},
+      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?', formType:'number', decor: 'Rs', id: 'incomeAgriculture', properties: Incomestate.incomeAgriculture},
+      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from your Business?', formType:'number', decor: 'Rs', id: 'incomeBusiness', properties: Incomestate.incomeBusiness},
+      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from your House Property?', formType:'number', decor: 'Rs', id: 'incomeProperty', properties: Incomestate.incomeProperty},
+      {slotPattern: '^[A-Za-z,\\s]*$' , pattern: /^[A-Za-z,\s]+$/, label: 'Members your Family Contains?', formType:'text', decor: '', id: 'familyMembers', properties: Incomestate.familyMembers},
     ];
     return (
       <>
@@ -134,14 +155,14 @@ export default function EditIncomeDetails(props:any) {
             <form  
                 onSubmit={(event: React.FormEvent<incomeFormElement>) => {
                 event.preventDefault();
-                props.dispatch({type: 'Next', payload: false})
-                props.settabIndex(props.tabIndex+1)
+                Incomedispatch({type: 'Next', payload: false})
+                Incomestate.settabIndex(Incomestate.tabIndex+1)
                 const data = {
-                    incomeAgriculture: props.incomeAgriculture,
-                    incomeBusiness: props.incomeBusiness,
-                    incomeProperty: props.incomeProperty,
-                    familyMembers: props.familyMembers,
-                    incomeTotal: props.incomeTotal
+                    incomeAgriculture: Incomestate.incomeAgriculture,
+                    incomeBusiness: Incomestate.incomeBusiness,
+                    incomeProperty: Incomestate.incomeProperty,
+                    familyMembers: Incomestate.familyMembers,
+                    incomeTotal: Incomestate.incomeTotal
                 };
                 alert(JSON.stringify(data, null, 2));
                 }}>
@@ -168,7 +189,7 @@ export default function EditIncomeDetails(props:any) {
                             }
                             }}
                             value={ques.properties}
-                            onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                            onChange={(e)=>Incomedispatch({type: ques.id, payload: e.target.value})} />
                         </FormControl>
                         <Divider role="presentation" />
                         </React.Fragment>
@@ -176,7 +197,7 @@ export default function EditIncomeDetails(props:any) {
                     }
                     <FormControl sx={{ display: { sm: 'contents' } }}>
                     <FormLabel>Total Income of Family</FormLabel>
-                    <Select required name='incomeTotal' value={props.incomeTotal} onChange={(e, newValue) => props.dispatch({type: 'incomeTotal', payload: newValue})}>
+                    <Select required name='incomeTotal' value={Incomestate.incomeTotal} onChange={(e, newValue) => Incomedispatch({type: 'incomeTotal', payload: newValue})}>
                         <Option value="Less Than 1,00,000">
                         Less Than Rs: 1,00,000
                         </Option>
@@ -246,7 +267,7 @@ export default function EditIncomeDetails(props:any) {
                         }}
                     >
                         <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
-                        checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
+                        checked={Incomestate.Agreement} onChange={(e)=>Incomedispatch({type: 'Agreement', payload: e.target.checked})}/>
                     </Box>
                     </FormControl>
                     <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }}>
