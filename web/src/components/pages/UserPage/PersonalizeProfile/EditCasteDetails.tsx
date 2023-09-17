@@ -25,8 +25,27 @@ interface CasteFormElement extends HTMLFormElement {
     readonly caste: HTMLInputElement;
     readonly subCaste: HTMLInputElement;
 }
-
-export default function EditCasteDetails(props:any) {
+const CasteModifystate = {
+  casteCertificateNumber: '0001-458-9128',
+  casteCertificateIssueDate: '2023/12/21',
+  caste: 'OBC',
+  subCaste: 'GG',
+  Next: true,
+  Agreement: false
+}
+function Castereducer(state:any, action:any) {
+  switch (action.type) {
+    case 'casteCertificateNumber': return {...state, casteCertificateNumber: action.payload}
+    case 'casteCertificateIssueDate': return {...state, casteCertificateIssueDate: action.payload}
+    case 'caste': return {...state, caste: action.payload}
+    case 'subCaste': return {...state, subCaste: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+export default function EditCasteDetails() {
+    const [Castestate, Castedispatch] = React.useReducer(Castereducer, CasteModifystate);
     const [casteCertificate , setcasteCertificate] = React.useState<File | null>(null);
     const [casteCertificateuploadProgress, setcasteCertificateuploadProgress] = React.useState(0);
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -65,10 +84,10 @@ export default function EditCasteDetails(props:any) {
       }, 1000);
     };
     const casteQuesList = [
-      {slotPattern: '^[0-9A-Za-z-/\\s]*$' , pattern: /^[0-9A-Za-z-/\s]+$/, label: 'Caste Certificate Number', formType:'text', decor: '', id: 'casteCertificateNumber', properties: props.casteCertificateNumber},
-      {slotPattern: '^[0-9-/,\s]*$' , pattern: /^[0-9-/,\s]+$/, label: 'Caste Certificate Issue Date', formType:'date', decor: '', id: 'casteCertificateIssueDate', properties: props.casteCertificateIssueDate},
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Caste', formType:'text', decor: '', id: 'caste', properties: props.caste},
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Sub-Caste', formType:'text', decor: '', id: 'subCaste', properties: props.subCaste},
+      {slotPattern: '^[0-9A-Za-z-/\\s]*$' , pattern: /^[0-9A-Za-z-/\s]+$/, label: 'Caste Certificate Number', formType:'text', decor: '', id: 'casteCertificateNumber', properties: Castestate.casteCertificateNumber},
+      {slotPattern: '^[0-9-/,\s]*$' , pattern: /^[0-9-/,\s]+$/, label: 'Caste Certificate Issue Date', formType:'date', decor: '', id: 'casteCertificateIssueDate', properties: Castestate.casteCertificateIssueDate},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Caste', formType:'text', decor: '', id: 'caste', properties: Castestate.caste},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Sub-Caste', formType:'text', decor: '', id: 'subCaste', properties: Castestate.subCaste},
     ];
     return (
       <>
@@ -133,13 +152,13 @@ export default function EditCasteDetails(props:any) {
             <form  
             onSubmit={(event: React.FormEvent<CasteFormElement>) => {
             event.preventDefault();
-            props.dispatch({type: 'Next', payload: false})
-            props.settabIndex(props.tabIndex+1)
+            Castedispatch({type: 'Next', payload: false})
+            Castestate.settabIndex(Castestate.tabIndex+1)
             const data = {
-                casteCertificateNumber: props.casteCertificateNumber,
-                casteCertificateIssueDate: props.casteCertificateIssueDate,
-                caste: props.caste,
-                subCaste: props.subCaste
+                casteCertificateNumber: Castestate.casteCertificateNumber,
+                casteCertificateIssueDate: Castestate.casteCertificateIssueDate,
+                caste: Castestate.caste,
+                subCaste: Castestate.subCaste
             };
             alert(JSON.stringify(data, null, 2));
             }}>
@@ -166,7 +185,7 @@ export default function EditCasteDetails(props:any) {
                             }
                         }}
                         value={ques.properties}
-                        onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                        onChange={(e)=>Castedispatch({type: ques.id, payload: e.target.value})} />
                         </FormControl>
                         <Divider role="presentation" />
                     </React.Fragment>
@@ -209,7 +228,7 @@ export default function EditCasteDetails(props:any) {
                     <FormLabel sx={{ display: { sm: 'none' } }}>Agreement</FormLabel>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', }} >
                     <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
-                        checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
+                        checked={Castestate.Agreement} onChange={(e)=>Castedispatch({type: 'Agreement', payload: e.target.checked})}/>
                     </Box>
                     </FormControl>
                     <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }}>
