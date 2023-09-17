@@ -80,10 +80,8 @@ export default function ReviewApplicationsTable() {
   const navigate = useNavigate();
 
   function HandleClick(eN: any) {
-    console.log(eN)
     navigate('../StudentProfile', {state: {enrollmentNumber: eN}})
   }
-
   const renderFilters = () => (
     <React.Fragment>
         <FormControl size="sm">
