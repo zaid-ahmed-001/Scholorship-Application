@@ -20,14 +20,35 @@ import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import Link from '@mui/joy/Link';
 
 interface SamagraFormElement extends HTMLFormElement {
-    readonly PersonalSamagraID: HTMLInputElement;
-    readonly FamilySamagraID: HTMLInputElement;
-    readonly HeadofFamily: HTMLInputElement;
-    readonly RelationnShipHeadofFamily: HTMLInputElement;
-    readonly GenderHeadofFamily: HTMLInputElement;
+  readonly PersonalSamagraID: HTMLInputElement;
+  readonly FamilySamagraID: HTMLInputElement;
+  readonly HeadofFamily: HTMLInputElement;
+  readonly RelationnShipHeadofFamily: HTMLInputElement;
+  readonly GenderHeadofFamily: HTMLInputElement;
 }
-
-export default function EditSamagraDetails(props:any) {
+const SamagraModifystate = {
+  PersonalSamagraID: '4520113',
+  FamilySamagraID: '8920113',
+  HeadofFamily: 'Top G',
+  RelationnShipHeadofFamily: 'Father G',
+  GenderHeadofFamily: 'Male',
+  Next: true,
+  Agreement: false
+}
+function Samagrareducer(state:any, action:any) {
+  switch (action.type) {
+    case 'PersonalSamagraID': return {...state, PersonalSamagraID: action.payload}
+    case 'FamilySamagraID': return {...state, FamilySamagraID: action.payload}
+    case 'HeadofFamily': return {...state, HeadofFamily: action.payload}
+    case 'RelationnShipHeadofFamily': return {...state, RelationnShipHeadofFamily: action.payload}
+    case 'GenderHeadofFamily': return {...state, GenderHeadofFamily: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+export default function EditSamagraDetails() {
+    const [Samagrastate, Samagradispatch] = React.useReducer(Samagrareducer, SamagraModifystate);
     const [samagraCertificate , setsamagraCertificate] = React.useState<File | null>(null);
     const [samagraCertificateuploadProgress, setsamagraCertificateuploadProgress] = React.useState(0);
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -66,10 +87,10 @@ export default function EditSamagraDetails(props:any) {
       }, 1000);
     };
     const samagraQuesList = [
-      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/,label: 'Your Samagra ID', formType:'number', decor: '', id: 'PersonalSamagraID', properties: props.PersonalSamagraID},
-      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/,label: 'Family Samagra ID', formType:'number', decor: '', id: 'FamilySamagraID', properties: props.FamilySamagraID},
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Name of Head of Family', formType:'text', decor: '', id: 'HeadofFamily', properties: props.HeadofFamily},
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Relationship with Head of Family', formType:'text', decor: '', id: 'RelationnShipHeadofFamily', properties: props.RelationnShipHeadofFamily},
+      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/,label: 'Your Samagra ID', formType:'number', decor: '', id: 'PersonalSamagraID', properties: Samagrastate.PersonalSamagraID},
+      {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/,label: 'Family Samagra ID', formType:'number', decor: '', id: 'FamilySamagraID', properties: Samagrastate.FamilySamagraID},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Name of Head of Family', formType:'text', decor: '', id: 'HeadofFamily', properties: Samagrastate.HeadofFamily},
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/,label: 'Relationship with Head of Family', formType:'text', decor: '', id: 'RelationnShipHeadofFamily', properties: Samagrastate.RelationnShipHeadofFamily},
     ];
     return (
       <>
@@ -134,14 +155,14 @@ export default function EditSamagraDetails(props:any) {
                 <form  
                 onSubmit={(event: React.FormEvent<SamagraFormElement>) => {
                 event.preventDefault();
-                props.dispatch({type: 'Next', payload: false})
-                props.settabIndex(props.tabIndex+1)
+                Samagradispatch({type: 'Next', payload: false})
+                Samagrastate.settabIndex(Samagrastate.tabIndex+1)
                 const data = {
-                    PersonalSamagraID: props.PersonalSamagraID,
-                    FamilySamagraID: props.FamilySamagraID,
-                    HeadofFamily: props.HeadofFamily,
-                    RelationnShipHeadofFamily: props.RelationnShipHeadofFamily,
-                    GenderHeadofFamily: props.GenderHeadofFamily
+                    PersonalSamagraID: Samagrastate.PersonalSamagraID,
+                    FamilySamagraID: Samagrastate.FamilySamagraID,
+                    HeadofFamily: Samagrastate.HeadofFamily,
+                    RelationnShipHeadofFamily: Samagrastate.RelationnShipHeadofFamily,
+                    GenderHeadofFamily: Samagrastate.GenderHeadofFamily
                 };
                 alert(JSON.stringify(data, null, 2));
                 }}>
@@ -168,7 +189,7 @@ export default function EditSamagraDetails(props:any) {
                                 }
                             }}
                             value={ques.properties}
-                            onChange={(e)=>props.dispatch({type: ques.id, payload: e.target.value})} />
+                            onChange={(e)=>Samagradispatch({type: ques.id, payload: e.target.value})} />
                             </FormControl>
                             <Divider role="presentation" />
                         </React.Fragment>
@@ -176,7 +197,7 @@ export default function EditSamagraDetails(props:any) {
                         }
                     <FormControl sx={{ display: { sm: 'contents' } }}>
                     <FormLabel>Gender of Head of Family</FormLabel>
-                        <Select required name='GenderHeadofFamily' value={props.GenderHeadofFamily} onChange={(e, newValue) => props.dispatch({type: 'GenderHeadofFamily', payload: newValue})} >
+                        <Select required name='GenderHeadofFamily' value={Samagrastate.GenderHeadofFamily} onChange={(e, newValue) => Samagradispatch({type: 'GenderHeadofFamily', payload: newValue})} >
                         <Option value="Female">Female</Option>
                         <Option value="Male">Male</Option>
                         <Option value="Others">Others</Option>
@@ -226,7 +247,7 @@ export default function EditSamagraDetails(props:any) {
                         }}
                     >
                     <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
-                    checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
+                    checked={Samagrastate.Agreement} onChange={(e)=>Samagradispatch({type: 'Agreement', payload: e.target.checked})}/>
                     </Box>
                     </FormControl>
                     <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
