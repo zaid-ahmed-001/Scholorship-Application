@@ -18,6 +18,7 @@ import Breadcrumbs from '@mui/joy/Breadcrumbs';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import Link from '@mui/joy/Link';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
 interface PersonlFormElement extends HTMLFormElement {
     readonly firstName: HTMLInputElement;
@@ -37,7 +38,88 @@ interface PersonlFormElement extends HTMLFormElement {
     readonly Agreement: HTMLInputElement;
 }
 
-export default function EditPersonalDetails(props: any) {
+const PersonalModifystate = {
+    firstName: 'Zaid',
+    lastName: 'Ahmed',
+    passWord: 'nig123',
+    ConfirmpassWord: 'nig123',
+    fatherName: 'Parvez Ahmed',
+    eMail: 'klick4278@gmail.com',
+    contactNumber: '8982570514',
+    enrollmentNumber: '0863CS221189',
+    dateofBirth: '2004-12-13',
+    Gender: 'Male',
+    Religion: 'Islam',
+    HouseNo: '39 GG',
+    Street: 'Vijay Nagar',
+    Sector: '54',
+    City: 'Indore',
+    Pincode: '452010',
+    Area: 'Urban',
+    MaritalStatus: 'Single',
+    SpouseName: '',
+    Disabled: 'No',
+    Orphan: 'No',
+    Next: true,
+    Agreement: false
+}
+
+const Personalinitstate = {
+    firstName: '',
+    lastName: '',
+    passWord: '',
+    ConfirmpassWord: '',
+    fatherName: '',
+    eMail: '',
+    contactNumber: '',
+    enrollmentNumber: '',
+    dateofBirth: '',
+    Gender: '',
+    Religion: '',
+    HouseNo: '',
+    Street: '',
+    Sector: '',
+    City: '',
+    Pincode: '',
+    Area: '',
+    MaritalStatus: '',
+    SpouseName: '',
+    Disabled: '',
+    Orphan: '',
+    Next: true,
+    Agreement: false
+}
+function Personalreducer(state:any, action:any) {
+    switch (action.type) {
+        case 'firstName': return {...state, firstName: action.payload}
+        case 'lastName': return {...state, lastName: action.payload}
+        case 'passWord': return {...state, passWord: action.payload}
+        case 'ConfirmpassWord': return {...state, ConfirmpassWord: action.payload}
+        case 'fatherName': return {...state, fatherName: action.payload}
+        case 'eMail': return {...state, eMail: action.payload}
+        case 'contactNumber': return {...state, contactNumber: action.payload}
+        case 'dateofBirth': return {...state, dateofBirth: action.payload}
+        case 'enrollmentNumber': return {...state, enrollmentNumber: action.payload}
+        case 'Gender': return {...state, Gender: action.payload}
+        case 'Religion': return {...state, Religion: action.payload}
+        case 'HouseNo': return {...state, HouseNo: action.payload}
+        case 'Street': return {...state, Street: action.payload}
+        case 'Sector': return {...state, Sector: action.payload}
+        case 'City': return {...state, City: action.payload}
+        case 'Pincode': return {...state, Pincode: action.payload}
+        case 'Area': return {...state, Area: action.payload}
+        case 'MaritalStatus': return {...state, MaritalStatus: action.payload}
+        case 'SpouseName': return {...state, SpouseName: action.payload}
+        case 'Disabled': return {...state, Disabled: action.payload}
+        case 'Orphan': return {...state, Orphan: action.payload}
+        case 'Agreement': return {...state, Agreement: action.payload}
+        case 'Next': return {...state, Next: action.payload}
+        default: throw new Error("Action not Found");
+    }
+}
+export default function EditPersonalDetails() {
+    const [Personalstate, Personaldispatch] = React.useReducer(Personalreducer, PersonalModifystate);
+
     const [PassportSize , setPassportSize] = React.useState<File | null>(null);
     const [PassportSizeuploadProgress, setPassportSizeuploadProgress] = React.useState(0);
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
@@ -76,11 +158,11 @@ export default function EditPersonalDetails(props: any) {
       }, 1000);
     };
     const personalQuesList = [
-      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Father`s Name', formType:'text', decor: '', id: 'fatherName', properties: props.fatherName},
-      {slotPattern: '^[/\S+@\S+\.\S+/]*$', pattern: /\S+@\S+\.\S+/, label: 'Email', formType:'email', decor: <i data-feather="mail" />, id: 'eMail', properties: props.eMail},
-      {slotPattern: '^[0-9-\\s]*$' , pattern: /^[0-9-\s]+$/, label: 'Contact Number', formType:'number', decor: "+91", id: 'contactNumber', properties: props.contactNumber},
-      {slotPattern: '^[0-9-,/\\s]*$' , pattern: /^[0-9/,-\s]+$/, label: 'Date of Birth', formType:'date', decor: "", id: 'dateofBirth', properties: props.dateofBirth},
-      {slotPattern: '^[A-Za-z0-9-,/\\s]*$' , pattern: /^[A-Za-z0-9/,-\s]+$/, label: 'Enrollment Number', formType:'text', decor: "", id: 'enrollmentNumber', properties: props.enrollmentNumber}
+      {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Father`s Name', formType:'text', decor: '', id: 'fatherName', properties: Personalstate.fatherName},
+      {slotPattern: '^[/\S+@\S+\.\S+/]*$', pattern: /\S+@\S+\.\S+/, label: 'Email', formType:'email', decor: <MailOutlineIcon />, id: 'eMail', properties: Personalstate.eMail},
+      {slotPattern: '^[0-9-\\s]*$' , pattern: /^[0-9-\s]+$/, label: 'Contact Number', formType:'number', decor: "+91", id: 'contactNumber', properties: Personalstate.contactNumber},
+      {slotPattern: '^[0-9-,/\\s]*$' , pattern: /^[0-9/,-\s]+$/, label: 'Date of Birth', formType:'date', decor: "", id: 'dateofBirth', properties: Personalstate.dateofBirth},
+      {slotPattern: '^[A-Za-z0-9-,/\\s]*$' , pattern: /^[A-Za-z0-9/,-\s]+$/, label: 'Enrollment Number', formType:'text', decor: "", id: 'enrollmentNumber', properties: Personalstate.enrollmentNumber}
     ];
     return (
         <Box
@@ -145,23 +227,23 @@ export default function EditPersonalDetails(props: any) {
             name='PersonalSubmit' method = "post"
             onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
             event.preventDefault();
-            props.dispatch({type: 'Next', payload: false})
+            Personaldispatch({type: 'Next', payload: false})
             const data = {
-                firstName: props.firstName,
-                lastName: props.lastName,
-                fatherName: props.fatherName,
-                eMail: props.eMail,
-                contactNumber: props.contactNumber,
-                dateofBirth: props.dateofBirth,
-                enrollmentNumber: props.enrollmentNumber,
-                gender: props.Gender,
-                country: props.country,
-                religion: props.Religion,
-                MaritalStatus: props.MaritalStatus,
-                SpouseName: props.SpouseName,
-                Disabled: props.Disabled,
-                Orphan: props.Orphan,
-                Agreement: props.Agreement,
+                firstName: Personalstate.firstName,
+                lastName: Personalstate.lastName,
+                fatherName: Personalstate.fatherName,
+                eMail: Personalstate.eMail,
+                contactNumber: Personalstate.contactNumber,
+                dateofBirth: Personalstate.dateofBirth,
+                enrollmentNumber: Personalstate.enrollmentNumber,
+                gender: Personalstate.Gender,
+                country: Personalstate.country,
+                religion: Personalstate.Religion,
+                MaritalStatus: Personalstate.MaritalStatus,
+                SpouseName: Personalstate.SpouseName,
+                Disabled: Personalstate.Disabled,
+                Orphan: Personalstate.Orphan,
+                Agreement: Personalstate.Agreement,
             };
             alert(JSON.stringify(data, null, 2));
             }}>
@@ -186,8 +268,8 @@ export default function EditPersonalDetails(props: any) {
                         }}
                         name="firstName"
                         required 
-                        value={props.firstName} 
-                        onChange={(e)=>props.dispatch({type: 'firstName', payload: e.target.value})} />
+                        value={Personalstate.firstName} 
+                        onChange={(e)=>Personaldispatch({type: 'firstName', payload: e.target.value})} />
                     </FormControl>
                     <FormControl  sx={{ flex: 1 }}>
                         <FormLabel sx={{ display: { sm: 'none' } }}>Last name</FormLabel>
@@ -202,7 +284,7 @@ export default function EditPersonalDetails(props: any) {
                             e.preventDefault();
                             }
                         }}
-                        name="lastName" required value={props.lastName} onChange={(e)=>props.dispatch({type: 'lastName', payload: e.target.value})} />
+                        name="lastName" required value={Personalstate.lastName} onChange={(e)=>Personaldispatch({type: 'lastName', payload: e.target.value})} />
                     </FormControl>
                     </Box>
                     <Divider role="presentation" />
@@ -236,7 +318,7 @@ export default function EditPersonalDetails(props: any) {
                             }}
                             value={ques.properties}
                             onChange={(e) =>
-                                props.dispatch({ type: ques.id, payload: e.target.value })
+                                Personaldispatch({ type: ques.id, payload: e.target.value })
                             }
                             />
                         </FormControl>
@@ -245,7 +327,7 @@ export default function EditPersonalDetails(props: any) {
                     ))
                     }
                 <FormControl sx={{ display: { sm: 'contents' } }}><FormLabel>Gender</FormLabel>
-                    <Select id="gender" name="gender" required value={props.Gender} onChange={(e, newValue) => props.dispatch({type: 'Gender', payload: newValue}) }>
+                    <Select id="gender" name="gender" required value={Personalstate.Gender} onChange={(e, newValue) => Personaldispatch({type: 'Gender', payload: newValue}) }>
                     <Option value="Female">Female</Option>
                     <Option value="Male">Male</Option>
                     <Option value="Others">Others</Option>
@@ -253,7 +335,7 @@ export default function EditPersonalDetails(props: any) {
                 </FormControl>
                 <Divider role="presentation" />
                 <FormControl sx={{ display: { sm: 'contents' } }}><FormLabel>Religion</FormLabel>
-                    <Select name="religion" required value={props.Religion} onChange={(e, newValue) => props.dispatch({type: 'Religion', payload: newValue}) }>
+                    <Select name="religion" required value={Personalstate.Religion} onChange={(e, newValue) => Personaldispatch({type: 'Religion', payload: newValue}) }>
                     <Option value="Hindu">Hindu</Option>
                     <Option value="Islam">Islam</Option>
                     <Option value="Sikh">Sikh</Option>
@@ -281,7 +363,7 @@ export default function EditPersonalDetails(props: any) {
                             e.preventDefault();
                         }
                         }}
-                        required placeholder="House No. / Building" value={props.HouseNo} onChange={(e)=>props.dispatch({type: 'HouseNo', payload: e.target.value})} />
+                        required placeholder="House No. / Building" value={Personalstate.HouseNo} onChange={(e)=>Personaldispatch({type: 'HouseNo', payload: e.target.value})} />
                     </FormControl>
                     <FormControl sx={{ flex: 1 }}>
                         <Input name="Street"
@@ -295,7 +377,7 @@ export default function EditPersonalDetails(props: any) {
                             e.preventDefault();
                         }
                         }}
-                        required placeholder="Street / Locality"  value={props.Street} onChange={(e)=>props.dispatch({type: 'Street', payload: e.target.value})} />
+                        required placeholder="Street / Locality"  value={Personalstate.Street} onChange={(e)=>Personaldispatch({type: 'Street', payload: e.target.value})} />
                     </FormControl>
                     </Box>
                     <Divider />
@@ -313,7 +395,7 @@ export default function EditPersonalDetails(props: any) {
                             e.preventDefault();
                         }
                         }}
-                        required placeholder="Area / Complex / Sector" value={props.Sector} onChange={(e)=>props.dispatch({type: 'Sector', payload: e.target.value})} />
+                        required placeholder="Area / Complex / Sector" value={Personalstate.Sector} onChange={(e)=>Personaldispatch({type: 'Sector', payload: e.target.value})} />
                     </FormControl>
                     <FormControl sx={{ flex: 1 }}>
                         <Input name="City"
@@ -327,7 +409,7 @@ export default function EditPersonalDetails(props: any) {
                             e.preventDefault();
                         }
                         }}
-                        required placeholder="Town / City / Village" value={props.City} onChange={(e)=>props.dispatch({type: 'City', payload: e.target.value})} />
+                        required placeholder="Town / City / Village" value={Personalstate.City} onChange={(e)=>Personaldispatch({type: 'City', payload: e.target.value})} />
                     </FormControl>
                     </Box>
                     <Divider />
@@ -345,7 +427,7 @@ export default function EditPersonalDetails(props: any) {
                             e.preventDefault();
                         }
                         }}
-                        required placeholder="Pincode" value={props.Pincode} onChange={(e)=>props.dispatch({type: 'Pincode', payload: e.target.value})} />
+                        required placeholder="Pincode" value={Personalstate.Pincode} onChange={(e)=>Personaldispatch({type: 'Pincode', payload: e.target.value})} />
                     </FormControl>
                     </Box>
                 <Divider role="presentation" />
@@ -355,9 +437,9 @@ export default function EditPersonalDetails(props: any) {
                     <FormLabel sx={{ display: { sm: 'none' } }}>Area</FormLabel>
                     <RadioGroup
                         name="Area"
-                        value={props.Area}
+                        value={Personalstate.Area}
                         orientation="horizontal"
-                        onChange={(e)=>props.dispatch({type: 'Area', payload: e.target.value})}
+                        onChange={(e)=>Personaldispatch({type: 'Area', payload: e.target.value})}
                         sx={{ my: 1 }}
                         >
                         <Radio required value="Rural" label="Rural" />
@@ -368,7 +450,7 @@ export default function EditPersonalDetails(props: any) {
                 <Divider role="presentation" />
                 <FormControl sx={{ display: { sm: 'contents' } }}>
                     <FormLabel>Marital Status</FormLabel>
-                    <Select name="MaritalStatus" required value={props.MaritalStatus} onChange={(e, newValue) => props.dispatch({type: 'MaritalStatus', payload: newValue}) }>
+                    <Select name="MaritalStatus" required value={Personalstate.MaritalStatus} onChange={(e, newValue) => Personaldispatch({type: 'MaritalStatus', payload: newValue}) }>
                     <Option value="Single">Single</Option>
                     <Option value="Married">Married</Option>
                     <Option value="Divorced">Divorced</Option>
@@ -377,7 +459,7 @@ export default function EditPersonalDetails(props: any) {
                     </Select>
                 </FormControl>
                 <Divider role="presentation" />
-                <FormControl sx={{ display: (props.MaritalStatus == 'Married') ? 'contents' : 'none'  } }>
+                <FormControl sx={{ display: (Personalstate.MaritalStatus == 'Married') ? 'contents' : 'none'  } }>
                     <FormLabel></FormLabel>
                     <Input
                     type="text"
@@ -393,19 +475,19 @@ export default function EditPersonalDetails(props: any) {
                         e.preventDefault();
                         }
                     }}
-                    value={props.SpouseName}
-                    onChange={(e)=>props.dispatch({type: 'SpouseName', payload: e.target.value})}
+                    value={Personalstate.SpouseName}
+                    onChange={(e)=>Personaldispatch({type: 'SpouseName', payload: e.target.value})}
                     />
                 </FormControl>
-                <Divider role="presentation" sx={{ display: (props.MaritalStatus == 'Married') ? 'content' : 'none' }} />
+                <Divider role="presentation" sx={{ display: (Personalstate.MaritalStatus == 'Married') ? 'content' : 'none' }} />
                 <FormControl sx={{ display: { sm: 'contents' } }}>
                     <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }}>Do you identify as a person with a disability?</FormLabel>
                     <Box sx={{ display: { xs: 'contents', sm: 'flex', flexDirection: 'column'  }, gap: 2 }}>
                     <FormLabel sx={{ display: { sm: 'none' } }}>Do you identify as a person with a disability?</FormLabel>
                     <RadioGroup
-                        value={props.Disabled}
+                        value={Personalstate.Disabled}
                         orientation="horizontal"
-                        onChange={(e)=>props.dispatch({type: 'Disabled', payload: e.target.value})}
+                        onChange={(e)=>Personaldispatch({type: 'Disabled', payload: e.target.value})}
                         sx={{ my: 1 }}
                         name="Disabled" 
                         >
@@ -421,9 +503,9 @@ export default function EditPersonalDetails(props: any) {
                     <Box sx={{ display: { xs: 'contents', sm: 'flex', flexDirection: 'column'  }, gap: 2 }}>
                     <RadioGroup
                         name="Orphan"
-                        value={props.Orphan}
+                        value={Personalstate.Orphan}
                         orientation="horizontal"
-                        onChange={(e)=>props.dispatch({type: 'Orphan', payload: e.target.value})}
+                        onChange={(e)=>Personaldispatch({type: 'Orphan', payload: e.target.value})}
                         sx={{ my: 1 }}
                         >
                         <Radio required value="Yes" label="Yes" />
@@ -474,11 +556,11 @@ export default function EditPersonalDetails(props: any) {
                     }}
                     >
                     <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." required name="Agreement"
-                    checked={props.Agreement} onChange={(e)=>props.dispatch({type: 'Agreement', payload: e.target.checked})}/>
+                    checked={Personalstate.Agreement} onChange={(e)=>Personaldispatch({type: 'Agreement', payload: e.target.checked})}/>
                     </Box>
                 </FormControl>
                 <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
-                    <Button name='PersonalSubmit' type='submit' size="sm">Next</Button>
+                    <Button name='PersonalSubmit' type='submit' size="sm">Update Details</Button>
                 </Box>
                 </Box>
                 </form>
