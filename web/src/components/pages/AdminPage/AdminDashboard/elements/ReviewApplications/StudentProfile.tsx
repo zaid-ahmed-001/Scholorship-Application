@@ -35,8 +35,6 @@ import WarningIcon from '@mui/icons-material/Warning';
 import ReportIcon from '@mui/icons-material/Report';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { title } from 'process';
-import { type } from 'os';
 import FileUpload from '../../../../../utils/FileUpload';
 import CountrySelector from '../../../../../utils/CountrySelector';
 import '../../../../../../App.css';
