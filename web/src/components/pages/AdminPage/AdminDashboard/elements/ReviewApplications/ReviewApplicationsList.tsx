@@ -32,45 +32,101 @@ import { Button, FormControl, FormLabel, Input, Modal, ModalClose, ModalDialog, 
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { useNavigate } from 'react-router-dom';
 
 export default function ReviewApplicationsList() {
-    const [open, setOpen] = React.useState(false);
-    const renderFilters = () => (
-        <React.Fragment>
-            <FormControl size="sm">
-                <FormLabel>Scholarship</FormLabel>
-                <Select size="sm" placeholder="All">
-                <Option value="all">All</Option>
-                <Option value="Anandam Scholarship Viddhya">Anandam Scholarship Viddhya</Option>
-                <Option value="Chavi Jain Scholarship">Chavi Jain Scholarship</Option>
-                </Select>
-            </FormControl>
-            <FormControl size="sm">
-                <FormLabel>Filter by Scholarship Status</FormLabel>
-                <Select
-                size="sm"
-                placeholder="All"
-                slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-                >
-                <Option value="All">All</Option>
-                <Option value="Approved">Approved</Option>
-                <Option value="In-Process">In-Process</Option>
-                <Option value="Rejected">Rejected</Option>
-                </Select>
-            </FormControl>
-          <FormControl size="sm">
-            <FormLabel>Filter by Payment Status</FormLabel>
-            <Select size="sm" placeholder="All">
-                <Option value="All">All</Option>
-                <Option value="Approved">Approved</Option>
-                <Option value="In-Process">In-Process</Option>
-                <Option value="Rejected">Rejected</Option>
+  type ScholarshipStatus = 'Approved' | 'InProcess' | 'Rejected';
+  const [open, setOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [selectedScholarship, setSelectedScholarship] = React.useState('All');
+  const [selectedScholarshipStatus, setSelectedScholarshipStatus] = React.useState('All');
+  const [selectedPaymentStatus, setSelectedPaymentStatus] = React.useState('All');
+
+  const data:any = [
+    {enrollmentNumber: '0863CS221189', studentName: 'Zaid Ahmed', Semester: 3, ApplyDate: '2023/12/13', scholarshipStatus: 'Approved', PaymentStatus: 'Approved', PaidDate: '2024/12/15',
+    Amount: '26000', ViewProfile: 'View Doc...', scholarship: 'Anandam Scholarship Viddhya'},
+    {enrollmentNumber: '0863CS221169', studentName: 'Shashank Mishra', Semester: 3, ApplyDate: '2023/08/13', scholarshipStatus: 'InProcess', PaymentStatus: 'Rejected', PaidDate: '',
+    Amount: '23500', ViewProfile: 'View Doc...', scholarship: 'Chavi Jain Scholarship'},
+  ];
+  
+  const filteredData = data.filter((item: any) => {
+    const enrollmentNumber = item.enrollmentNumber.toLowerCase();
+    const studentName = item.studentName.toLowerCase();
+    const searchQueryMatch = enrollmentNumber.includes(searchQuery.toLowerCase()) || studentName.includes(searchQuery.toLowerCase());
+    const scholarshipMatch = selectedScholarship === 'All' || item.scholarship === selectedScholarship;
+    const scholarshipStatusMatch = selectedScholarshipStatus === 'All' || item.scholarshipStatus === selectedScholarshipStatus;
+    const paymentStatusMatch = selectedPaymentStatus === 'All' || item.PaymentStatus === selectedPaymentStatus;
+
+    return searchQueryMatch && scholarshipMatch && scholarshipStatusMatch && paymentStatusMatch;
+  });
+  
+  const iconMap: Record<ScholarshipStatus, JSX.Element> = {
+    Approved: <CheckRoundedIcon />,
+    InProcess: <AutorenewRoundedIcon />,
+    Rejected: <BlockIcon />,
+  };
+
+  const colorMap: Record<ScholarshipStatus, ColorPaletteProp> = {
+    Approved: 'success',
+    InProcess: 'neutral',
+    Rejected: 'danger',
+  };
+    
+  const navigate = useNavigate();
+
+  function HandleClick(eN: any) {
+    console.log(eN)
+    navigate('../StudentProfile', {state: {enrollmentNumber: eN}})
+  }
+
+  const renderFilters = () => (
+    <React.Fragment>
+        <FormControl size="sm">
+            <FormLabel>Scholarship</FormLabel>
+            <Select 
+              placeholder="All" 
+              slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
+              value={selectedScholarship}
+              onChange={(e, newValue) => setSelectedScholarship(newValue ?? 'All')}
+            >
+              <Option value="All">All</Option>
+              <Option value="Anandam Scholarship Viddhya">Anandam Scholarship Viddhya</Option>
+              <Option value="Chavi Jain Scholarship">Chavi Jain Scholarship</Option>
             </Select>
-          </FormControl>
-        </React.Fragment>
-    );
+        </FormControl>
+        <FormControl size="sm">
+            <FormLabel>Filter by Scholarship Status</FormLabel>
+            <Select
+              size="sm"
+              placeholder="All"
+              slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
+              value={selectedScholarshipStatus}
+              onChange={(e, newValue) => setSelectedScholarshipStatus(newValue ?? 'All')}
+            >
+              <Option value="All">All</Option>
+              <Option value="Approved">Approved</Option>
+              <Option value="InProcess">InProcess</Option>
+              <Option value="Rejected">Rejected</Option>
+            </Select>
+        </FormControl>
+      <FormControl size="sm">
+        <FormLabel>Filter by Payment Status</FormLabel>
+        <Select size="sm" 
+          placeholder="All" 
+          slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
+          value={selectedPaymentStatus}
+          onChange={(e, newValue) => setSelectedPaymentStatus(newValue ?? 'All')}
+        >
+          <Option value="All">All</Option>
+          <Option value="Approved">Approved</Option>
+          <Option value="InProcess">InProcess</Option>
+          <Option value="Rejected">Rejected</Option>
+        </Select>
+      </FormControl>
+    </React.Fragment>
+  );
   return (
-  <Box >
+  <Box sx={{minWidth: '95%', px: 1, display: {xs: 'flex', sm: 'none'}}}>
       <Box sx={{ display: { xs: 'block', sm: 'none' } , mt: 9.5, width: '100%', ml: 1}}>
         <Box sx={{ display: {xs: 'flex', md: 'none', lg: 'none'}, alignItems: 'center' , mb: 2}}>
           <Breadcrumbs
@@ -99,27 +155,29 @@ export default function ReviewApplicationsList() {
           </Breadcrumbs>
         </Box>
         <Sheet
-            className="SearchAndFilters-mobile"
-            sx={{
+          className="SearchAndFilters-mobile"
+          sx={{
             display: {
-                xs: 'flex',
-                sm: 'none',
+              xs: 'flex',
+              sm: 'none',
             },
             my: 1,
             gap: 1,
-            }}
+          }}
         >
             <Input
-            size="sm"
-            placeholder="Search"
-            startDecorator={<SearchIcon />}
-            sx={{ flexGrow: 1, ml: 2 }}
+              size="sm"
+              placeholder="Search"
+              startDecorator={<SearchIcon />}
+              sx={{ flexGrow: 1}}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <IconButton
-            size="sm"
-            variant="outlined"
-            color="neutral"
-            onClick={() => setOpen(true)}
+              size="sm"
+              variant="outlined"
+              color="neutral"
+              onClick={() => setOpen(true)}
             >
             <FilterAltIcon />
             </IconButton>
@@ -139,8 +197,10 @@ export default function ReviewApplicationsList() {
             </ModalDialog>
             </Modal>
         </Sheet>
-      <List
-            key="1"
+
+        {filteredData.map((item: any) => (
+          <List
+            key={item.enrollmentNumber}
             size="sm"
             sx={{
               '--ListItem-paddingX': 0,
@@ -149,7 +209,7 @@ export default function ReviewApplicationsList() {
             <ListItem
               sx={{
                 display: 'flex',
-                justifyContent: 'space-between',
+                justifyContent: 'right',
                 alignItems: 'start',
               }}
             >
@@ -159,40 +219,28 @@ export default function ReviewApplicationsList() {
                 </ListItemDecorator>
                 <div>
                   <Typography level="body-sm" fontWeight={600} gutterBottom>
-                  Zaid Ahmed Siddique
+                    {item.studentName}
                   </Typography>
                   <Typography level="body-xs" gutterBottom>
-                  0863CS221189
+                    {item.enrollmentNumber}
                   </Typography>
                   <Typography level="body-xs" gutterBottom>
-                  Apply Date : 01 Sep 2023
+                  Apply Date : {item.ApplyDate}
                   </Typography>
                   <Typography level="body-xs" gutterBottom>
-                  Paid Date :  
+                  Paid Date : {item.PaidDate}
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                     <Typography level="body-xs" gutterBottom>
-                        Amount: Rs 26,000/-
+                        Amount: {item.Amount}
                     </Typography>
                     <Chip
                       variant="soft"
                       size="sm"
-                      startDecorator={
-                        {
-                          Paid: <CheckRoundedIcon />,
-                          Refunded: <AutorenewRoundedIcon />,
-                          Cancelled: <BlockIcon />,
-                        }['Refunded']
-                      }
-                      color={
-                        {
-                          Paid: 'success',
-                          Refunded: 'neutral',
-                          Cancelled: 'danger',
-                        }['Refunded'] as ColorPaletteProp
-                      }
+                      startDecorator={iconMap[item.PaymentStatus as ScholarshipStatus]}
+                      color={colorMap[item.PaymentStatus as ScholarshipStatus]}
                     >
-                    In-Process
+                      {item.PaymentStatus}
                     </Chip>
                   </Box>
                 <Typography level="body-xs" gutterBottom color='primary'>
@@ -216,29 +264,18 @@ export default function ReviewApplicationsList() {
                 </Select>
                 </div>
               </ListItemContent>
-              <Chip
-                variant="soft"
-                size="sm"
-                startDecorator={
-                  {
-                    Paid: <CheckRoundedIcon />,
-                    Refunded: <AutorenewRoundedIcon />,
-                    Cancelled: <BlockIcon />,
-                  }['Paid']
-                }
-                color={
-                  {
-                    Paid: 'success',
-                    Refunded: 'neutral',
-                    Cancelled: 'danger',
-                  }['Paid'] as ColorPaletteProp
-                }
-              >
-              Approved
-              </Chip>
+                <Chip
+                  variant="soft"
+                  size="sm"
+                  startDecorator={iconMap[item.scholarshipStatus as ScholarshipStatus]}
+                  color={colorMap[item.scholarshipStatus as ScholarshipStatus]}
+                >
+                  {item.scholarshipStatus}
+                </Chip>
             </ListItem>
             <ListDivider />
           </List>
+        ))}
       </Box>
   </Box>
   );
