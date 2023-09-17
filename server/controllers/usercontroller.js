@@ -10,10 +10,6 @@ const getusers = async (req, res) => {
   }
 };
 
-
-
-
-
 const getuser = async (req, res) => {
   try {
     const { id } = req.params;
