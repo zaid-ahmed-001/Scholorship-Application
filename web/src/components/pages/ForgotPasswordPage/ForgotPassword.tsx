@@ -120,7 +120,7 @@ export default function ForgotPassword() {
               >
               </Box>
               <Button type="submit"  fullWidth>
-                Sign in
+                Verify Email
               </Button>
               <Link fontSize="sm" onClick={()=>navigate('/')} fontWeight="lg">
                 Return to Home!
