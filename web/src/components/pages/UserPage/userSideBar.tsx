@@ -191,7 +191,7 @@ export default function UserSideBar() {
             <Typography fontSize="sm" fontWeight="lg">
             &nbsp;  Zaid Ahmed
             </Typography>
-            <Typography level="body-xs"> &nbsp;  @_zaidahmed__</Typography>
+            <Typography level="body-xs"> &nbsp;  @0863CS221189 </Typography>
           </Box>
         </Box>
         <IconButton sx={{ ml: 'auto', mt: 'auto' }} onClick={()=>navigate('/')}> <ExitToAppOutlinedIcon  /> </IconButton>
