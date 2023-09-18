@@ -7,6 +7,10 @@ const UserSchema = new Schema({
         type : String,
         required : true
     },
+    Enroll_no :{
+        type : String,
+        required : true
+    },
     mobile :{
         type : Number,
         required : true
