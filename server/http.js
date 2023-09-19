@@ -7,6 +7,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 4000;
+const port_ = process.env.PORT || 5000;
 
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
@@ -28,6 +29,10 @@ db.once('open', () => {
 const userRoutes = require('./routes/users');
 app.use('/api/users', userRoutes);
 
+// Import and use the ScholarRoutes
+const ScholarRoutes = require('./routes/Scholar');
+app.use('/api/Scholar', ScholarRoutes);
+
 // Centralized error handling middleware
 app.use((err, req, res, next) => {
   console.error('Error:', err);
@@ -37,4 +42,7 @@ app.use((err, req, res, next) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+});
+app.listen(port, () => {
+  console.log(`Server is running on port ${port_}`);
 });
