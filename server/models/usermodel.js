@@ -6,8 +6,7 @@ const UserSchema = new Schema({
     name :{
         type : String,
         required : true
-    },
-    
+    },   
     mobile :{
         type : Number,
         required : true
