@@ -32,8 +32,8 @@ const getUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { name, mobile, Email } = req.body;
-    const newUser = await userModel.create({ name, mobile, Email });
+    const { name, mobile, email } = req.body;
+    const newUser = await userModel.create({ name, mobile, email });
     res.status(201).json({ message: 'User created successfully', user: newUser });
   } catch (error) {
     res.status(400).json({ error: error.message });

@@ -172,6 +172,21 @@ export default function AdminSideBar() {
             </ListItemButton>
           </ListItem>
         </List>
+
+        <List
+          sx={{
+            '--ListItem-radius': '8px',
+            '--List-gap': '4px',
+            '--List-nestedInsetStart': '40px',
+          }}
+        >  
+          <ListItem nested >
+            <ListItemButton onClick={()=>navigate('./Users')}>
+              <ListItemDecorator> <PersonIcon />  </ListItemDecorator>
+              <ListItemContent >Users</ListItemContent>
+            </ListItemButton>
+          </ListItem>
+        </List>
         </Box>
         <Divider />
         <Box sx={(theme) => ({display: 'flex', gap: 1, alignItems: 'end', position: 'fixed', bottom: 10})}>
