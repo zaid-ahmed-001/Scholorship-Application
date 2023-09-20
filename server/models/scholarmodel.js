@@ -8,7 +8,7 @@ const ScholarSchema = new Schema({
         required : true
     },
     Deadline :{
-        type : Date,
+        type : String,
         required : true
     },
     Description :{
