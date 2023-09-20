@@ -34,7 +34,7 @@ const createScholar = async (req, res) => {
   try {
     const { Name, Deadline, Description, Eligibility, Doc_req } = req.body;
     const newScholar = await scholarModel.create({ Name, Deadline, Description, Eligibility, Doc_req });
-    res.status(201).json({ message: 'User created successfully', scholar: newScholar });
+    res.status(201).json({ message: 'Scholarship created successfully', scholar: newScholar });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -74,10 +74,10 @@ const updateScholar = async (req, res) => {
     });
 
     if (!updatedScholar) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Scholarship not found' });
     }
 
-    res.status(200).json({ message: 'User updated successfully', user: updatedScholar});
+    res.status(200).json({ message: 'Scholarship updated successfully', scholar: updatedScholar});
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
