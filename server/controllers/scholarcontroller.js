@@ -21,7 +21,7 @@ const getScholar = async (req, res) => {
     const foundScholar = await scholarModel.findById(id);
 
     if (!foundScholar) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Scholarship not found' });
     }
 
     res.status(200).json(foundScholar);
@@ -51,10 +51,10 @@ const deleteScholar = async (req, res) => {
     const deletedScholar = await scholarModel.findOneAndDelete({ _id: id });
 
     if (!deletedScholar) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: 'Scholarship not found' });
     }
 
-    res.status(200).json({ message: 'User deleted successfully', scholar: deletedScholar });
+    res.status(200).json({ message: 'Scholarship deleted successfully', scholar: deletedScholar });
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
