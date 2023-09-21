@@ -26,3 +26,4 @@ router.delete('/:id', deleteScholar);
 router.patch('/:id', updateScholar);
 
 module.exports = router;
+   
