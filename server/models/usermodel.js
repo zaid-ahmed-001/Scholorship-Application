@@ -43,7 +43,7 @@ const UserSchema = new Schema({
         type : String,
         required : true
     },
-    religion :{
+    Religion :{
         type : String,
         required : true
     },
