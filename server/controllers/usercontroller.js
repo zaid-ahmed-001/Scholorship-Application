@@ -38,7 +38,7 @@ const createUser = async (req, res) => {
       PassWord,
       ConfirmWord,
       email,
-      CnntactNumber,
+      ContactNumber,
       DateofBirth,
       Enrollno,
       Gender,
@@ -47,14 +47,15 @@ const createUser = async (req, res) => {
       SpouseName,
       Disabled,
       Orphan,
-      Agreement } = req.body;
+      Agreement,
+      Diploma } = req.body;
     const newUser = await userModel.create({ FirstName,
       LastName,
       FatherName,
       PassWord,
       ConfirmWord,
       email,
-      CnntactNumber,
+      ContactNumber,
       DateofBirth,
       Enrollno,
       Gender,
@@ -63,7 +64,8 @@ const createUser = async (req, res) => {
       SpouseName,
       Disabled,
       Orphan,
-      Agreement });
+      Agreement,
+      Diploma });
     res.status(201).json({ message: 'User created successfully', user: newUser });
   } catch (error) {
     res.status(400).json({ error: error.message });
