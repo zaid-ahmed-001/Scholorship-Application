@@ -31,7 +31,7 @@ const UserSchema = new Schema({
         type : String,
         required : true
     },
-    DateofBirth:{
+    DateofBirth :{
         type : String,
         required : true
     },
@@ -47,7 +47,7 @@ const UserSchema = new Schema({
         type : String,
         required : true
     },
-    MaritialStatus :{
+    MaritalStatus :{
         type : String,
         required : true
     },
@@ -63,7 +63,11 @@ const UserSchema = new Schema({
         type : String,
         required : true
     },
-    Aggrement :{
+    Agreement :{
+        type : String,
+        required : true
+    },
+    Diploma :{
         type : String,
         required : true
     }
