@@ -2,11 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
+const cors = require('cors')
+const multer = require('multer')
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 4000;
+
+app.use(cors())
 
 
 // Middleware to parse JSON request bodies
