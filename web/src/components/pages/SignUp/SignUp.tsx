@@ -200,7 +200,7 @@ export function PersonalDetails(props: any) {
                   },
                 }}
                 onKeyPress={(e) => {
-                  if (!/^[A-Za-z\s]+$/.test(e.key)) {
+                  if (!/^[A-Za-z0-9,/\\s]+$/.test(e.key)) {
                     e.preventDefault();
                   }
                 }}
@@ -225,7 +225,7 @@ export function PersonalDetails(props: any) {
                   },
                 }}
                 onKeyPress={(e) => {
-                  if (!/^[A-Za-z\s]+$/.test(e.key)) {
+                  if (!/^[A-Za-z0-9,/\\s]+$/.test(e.key)) {
                     e.preventDefault();
                   }
                 }}
