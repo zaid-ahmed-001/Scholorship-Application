@@ -2,8 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-const cors = require('cors')
-const multer = require('multer')
 
 dotenv.config();
 
@@ -12,7 +10,18 @@ const port = process.env.PORT || 4000;
 
 app.use(cors())
 
-
+connectDB();
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000"
+    ],
+    credentials: true,
+  })
+);
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
 

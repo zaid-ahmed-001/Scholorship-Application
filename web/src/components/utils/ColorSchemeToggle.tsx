@@ -27,7 +27,7 @@ export default function ColorSchemeToggle({ onClick, ...props }: IconButtonProps
         aria-label="toggle light/dark mode"
         {...props}
         onClick={(event) => {
-          if (mode === 'light') {
+          if (mode == 'light') {
             setMode('dark');
             ThemeMode = 'dark'
           } else {
@@ -37,7 +37,7 @@ export default function ColorSchemeToggle({ onClick, ...props }: IconButtonProps
           onClick?.(event);
         }}
       >
-        {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
+        {mode == 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
       </IconButton>
     );
 }

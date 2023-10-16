@@ -40,9 +40,9 @@ export default function ScholarshipForm() {
     const uploaded: File[] = [...uploadedFiles];
     let limitExceeded = false;
     files.some((file) => {
-      if (uploaded.findIndex((f) => f.name === file.name) === -1) {
+      if (uploaded.findIndex((f) => f.name == file.name) == -1) {
         uploaded.push(file);
-        if (uploaded.length === arr.length) setFileLimit(true);
+        if (uploaded.length == arr.length) setFileLimit(true);
           if (uploaded.length > arr.length) {
             alert(`You can only add a maximum of ${arr.length} files`);
             setFileLimit(false);

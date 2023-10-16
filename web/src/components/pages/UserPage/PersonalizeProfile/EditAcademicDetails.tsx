@@ -272,12 +272,12 @@ export default function EditAcademicDetails() {
                 event.preventDefault();
                 Academicdispatch({type: 'Next', payload: false})
                 Academicstate.settabIndex(Academicstate.tabIndex+1)
-                if (Academicstate.Diploma === 'Yes') {
+                if (Academicstate.Diploma == 'Yes') {
                 for (let index = 0; index < academicQuesList.length; index++) {
                     const element = academicQuesList[index].id;
                     Academicdispatch({type: element, payload: '-NA-'})
                 }
-                } else if (Academicstate.Diploma === 'No') {
+                } else if (Academicstate.Diploma == 'No') {
                 for (let index = 0; index < diplomaQuesList.length; index++) {
                     const element = diplomaQuesList[index].id;
                     Academicdispatch({type: element, payload: '-NA-'})
@@ -374,7 +374,7 @@ export default function EditAcademicDetails() {
                     </Box>
                     </FormControl>
                     <Divider role="presentation" />
-                    {(() => { if (Academicstate.Diploma==='Yes')  {
+                    {(() => { if (Academicstate.Diploma=='Yes')  {
                     return (
                         <>
                         {
@@ -437,7 +437,7 @@ export default function EditAcademicDetails() {
                         )}
                         </>
                     )
-                    } else if (Academicstate.Diploma==='No') {
+                    } else if (Academicstate.Diploma=='No') {
                     return (
                         <>
                         {
