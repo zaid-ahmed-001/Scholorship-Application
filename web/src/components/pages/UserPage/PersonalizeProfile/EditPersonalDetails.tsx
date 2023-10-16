@@ -306,7 +306,7 @@ export default function EditPersonalDetails() {
                             }}
                             onKeyPress={(e) => {
                                 console.log(ques.formType)
-                                if (ques.formType === 'email') {
+                                if (ques.formType == 'email') {
                                 if (ques.pattern.test(e.key)) {
                                     e.preventDefault();
                                 }

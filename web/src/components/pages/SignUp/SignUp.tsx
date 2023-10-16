@@ -119,7 +119,7 @@ export function PersonalDetails(props: any) {
     name='PersonalSubmit' method = "post"
     onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
     event.preventDefault();
-    if (props.passWord===props.ConfirmpassWord) {
+    if (props.passWord==props.ConfirmpassWord) {
       props.dispatch({type: 'Next', payload: false})
       props.settabIndex(props.tabIndex+1)
       const data = {
@@ -254,7 +254,7 @@ export function PersonalDetails(props: any) {
                     }}
                     onKeyPress={(e) => {
                       console.log(ques.formType)
-                      if (ques.formType === 'email') {
+                      if (ques.formType == 'email') {
                         if (ques.pattern.test(e.key)) {
                           e.preventDefault();
                         }
@@ -659,12 +659,12 @@ export function AcademicDetails(props: any) {
           event.preventDefault();
           props.dispatch({type: 'Next', payload: false})
           props.settabIndex(props.tabIndex+1)
-          if (props.Diploma === 'Yes') {
+          if (props.Diploma == 'Yes') {
             for (let index = 0; index < academicQuesList.length; index++) {
               const element = academicQuesList[index].id;
               props.dispatch({type: element, payload: '-NA-'})
             }
-          } else if (props.Diploma === 'No') {
+          } else if (props.Diploma == 'No') {
             for (let index = 0; index < diplomaQuesList.length; index++) {
               const element = diplomaQuesList[index].id;
               props.dispatch({type: element, payload: '-NA-'})
@@ -762,7 +762,7 @@ export function AcademicDetails(props: any) {
                 </Box>
               </FormControl>
               <Divider role="presentation" />
-              {(() => { if (props.Diploma==='Yes')  {
+              {(() => { if (props.Diploma=='Yes')  {
                 return (
                   <>
                     {
@@ -825,7 +825,7 @@ export function AcademicDetails(props: any) {
                   )}
                   </>
                 )
-              } else if (props.Diploma==='No') {
+              } else if (props.Diploma=='No') {
                 return (
                   <>
                     {
@@ -2006,7 +2006,7 @@ export default function SignUp() {
               {
                 ProfileReview.map((ques:any, id:any) => (
                   <React.Fragment key={id}>
-                    <FormControl sx={{ display: (ques.data==='' || ques.data==='-NA-') ? 'none' : { sm: 'contents', sx: 'flex' } }}>
+                    <FormControl sx={{ display: (ques.data=='' || ques.data=='-NA-') ? 'none' : { sm: 'contents', sx: 'flex' } }}>
                       <FormLabel>{ques.label}</FormLabel>
                       <Input 
                       type='text'
@@ -2037,7 +2037,7 @@ export default function SignUp() {
                 <Button name='FinalSubmit' type='submit' size="sm" onClick={()=>onFinalSubmit()}>Submit</Button>
               </Box>
           </Box>
-            {(() => { if (alertSubmit.color==='warning')  {
+            {(() => { if (alertSubmit.color=='warning')  {
             return (
               <Box sx={{pb: 10, display: 'flex', gap: 2, width: '100%', flexDirection: 'row' , justifyContent: 'flex-end', alignItems: 'flex-start'}}>
                 <Alert key={alertSubmit.title} sx={{zIndex: 999, textAlign: 'center',width: '100%', display: 'flex' ,justifyContent: 'center', borderRadius: '10px'}} variant="outlined" color="warning" >
@@ -2048,7 +2048,7 @@ export default function SignUp() {
                 </Alert>
               </Box>   
             )
-          } else if (alertSubmit.color==='success') {
+          } else if (alertSubmit.color=='success') {
             return (
             <Box sx={{pb: 10, display: alertSubmit.display, gap: 2, width: '100%', flexDirection: 'column' , justifyContent: 'center', alignItems: 'flex-end'}}>
               <Alert key={alertSubmit.title} sx={{zIndex: 999, textAlign: 'center',width: '100%', display: 'flex' ,justifyContent: 'center', borderRadius: '10px'}} variant="outlined" color="success" >

@@ -102,7 +102,7 @@ export default function CreatePassword() {
                 event.preventDefault();
                 const formElements = event.currentTarget.elements;
                 setAlertDisplay('flex')
-                if (formElements.password.value === formElements.confirmpassword.value) {
+                if (formElements.password.value == formElements.confirmpassword.value) {
                   const data = {
                       text: formElements.password.value,
                   };

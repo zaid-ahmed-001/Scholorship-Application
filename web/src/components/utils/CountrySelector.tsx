@@ -17,7 +17,7 @@ export default function CountrySelector({ sx, ...props }: FormControlProps) {
       <Autocomplete
         autoHighlight
         name='country'
-        isOptionEqualToValue={(option, value) => option.code === value.code}
+        isOptionEqualToValue={(option, value) => option.code == value.code}
         defaultValue={{ code: 'IN', label: 'India', phone: '91' }}
         options={countries}
         renderOption={(optionProps, option) => (

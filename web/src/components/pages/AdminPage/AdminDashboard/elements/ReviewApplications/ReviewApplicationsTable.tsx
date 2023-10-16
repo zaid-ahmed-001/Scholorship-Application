@@ -57,9 +57,9 @@ export default function ReviewApplicationsTable() {
     const enrollmentNumber = item.enrollmentNumber.toLowerCase();
     const studentName = item.studentName.toLowerCase();
     const searchQueryMatch = enrollmentNumber.includes(searchQuery.toLowerCase()) || studentName.includes(searchQuery.toLowerCase());
-    const scholarshipMatch = selectedScholarship === 'All' || item.scholarship === selectedScholarship;
-    const scholarshipStatusMatch = selectedScholarshipStatus === 'All' || item.scholarshipStatus === selectedScholarshipStatus;
-    const paymentStatusMatch = selectedPaymentStatus === 'All' || item.PaymentStatus === selectedPaymentStatus;
+    const scholarshipMatch = selectedScholarship == 'All' || item.scholarship == selectedScholarship;
+    const scholarshipStatusMatch = selectedScholarshipStatus == 'All' || item.scholarshipStatus == selectedScholarshipStatus;
+    const paymentStatusMatch = selectedPaymentStatus == 'All' || item.PaymentStatus == selectedPaymentStatus;
 
     return searchQueryMatch && scholarshipMatch && scholarshipStatusMatch && paymentStatusMatch;
   });
