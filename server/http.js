@@ -2,13 +2,25 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
-
+const cors = require("cors");
+const connectDB = require("./config/db");
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 4000;
 
-
+connectDB();
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000"
+    ],
+    credentials: true,
+  })
+);
 // Middleware to parse JSON request bodies
 app.use(bodyParser.json());
 
