@@ -43,6 +43,9 @@ import { type } from 'os';
 import { IconButton } from '@mui/joy';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import { getAllUsers, signUpUser } from '../../../Backen API/testapi';
+
+
 
 interface PersonlFormElement extends HTMLFormElement {
   readonly firstName: HTMLInputElement;
@@ -71,6 +74,21 @@ export function PersonalDetails(props: any) {
   const [PassportSize , setPassportSize] = React.useState<File | null>(null);
   const [PassportSizeuploadProgress, setPassportSizeuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+
+  const handleSubmit = async () => {
+
+   console.log('test hitting')
+
+    try {
+      const res = await getAllUsers();
+      console.log(res)
+   
+    } catch (error) {
+      console.log(error)
+    }
+   
+  };
+
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0 ) {
       if (event.target.files[0].type == 'application/pdf') {
@@ -117,33 +135,36 @@ export function PersonalDetails(props: any) {
   return (
     <form  
     name='PersonalSubmit' method = "post"
-    onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
-    event.preventDefault();
-    if (props.passWord==props.ConfirmpassWord) {
-      props.dispatch({type: 'Next', payload: false})
-      props.settabIndex(props.tabIndex+1)
-      const data = {
-        firstName: props.firstName,
-        lastName: props.lastName,
-        fatherName: props.fatherName,
-        passWord: props.passWord,
-        ConfirmpassWord: props.ConfirmpassWord,
-        eMail: props.eMail,
-        contactNumber: props.contactNumber,
-        dateofBirth: props.dateofBirth,
-        enrollmentNumber: props.enrollmentNumber,
-        gender: props.Gender,
-        country: props.country,
-        religion: props.Religion,
-        MaritalStatus: props.MaritalStatus,
-        SpouseName: props.SpouseName,
-        Disabled: props.Disabled,
-        Orphan: props.Orphan,
-        Agreement: props.Agreement,
-      };
-      alert(JSON.stringify(data, null, 2));
-    }
-  }}>
+    // onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
+    // event.preventDefault();
+    // if (props.passWord==props.ConfirmpassWord) {
+    //   props.dispatch({type: 'Next', payload: false})
+    //   props.settabIndex(props.tabIndex+1)
+    //   const data = {
+    //     firstName: props.firstName,
+    //     lastName: props.lastName,
+    //     fatherName: props.fatherName,
+    //     passWord: props.passWord,
+    //     ConfirmpassWord: props.ConfirmpassWord,
+    //     eMail: props.eMail,
+    //     contactNumber: props.contactNumber,
+    //     dateofBirth: props.dateofBirth,
+    //     enrollmentNumber: props.enrollmentNumber,
+    //     gender: props.Gender,
+    //     country: props.country,
+    //     religion: props.Religion,
+    //     MaritalStatus: props.MaritalStatus,
+    //     SpouseName: props.SpouseName,
+    //     Disabled: props.Disabled,
+    //     Orphan: props.Orphan,
+    //     Agreement: props.Agreement,
+    //   };
+    //   alert(JSON.stringify(data, null, 2));
+    // }
+
+  // }}
+  onSubmit={(event: React.FormEvent<PersonlFormElement>)=>handleSubmit}
+  >
       <TabPanel value={0}>
         <Box sx={{pt: 3,pb: 10,display: 'grid',gridTemplateColumns: {  xs: '100%',  sm: 'minmax(120px, 30%) 1fr',  lg: '280px 1fr minmax(120px, 208px)',},
           columnGap: { xs: 2, sm: 3, md: 4 },rowGap: { xs: 2, sm: 2.5 },'& > hr': {  gridColumn: '1/-1',},}} >
@@ -508,7 +529,12 @@ export function PersonalDetails(props: any) {
           </Box>
         </FormControl>
         <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
-          <Button name='PersonalSubmit' type='submit' size="sm">Next</Button>
+          <Button name='PersonalSubmit' type='submit' size="sm" 
+         
+          onClick={()=>handleSubmit}
+          >Next
+          </Button>
+                   <Button    type='button' size="sm"   onClick={handleSubmit}>Test</Button>
         </Box>
       </Box>
     </TabPanel>
@@ -1589,6 +1615,7 @@ export function NativeDetails(props:any) {
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
                 <Button name='PersonalSubmit' type='submit' size="sm" >Next</Button>
               </Box>
+     
           </Box>
         </TabPanel>
       </form>
