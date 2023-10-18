@@ -1340,7 +1340,7 @@ export function IncomeDetails(props:any) {
     {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?', formType:'number', decor: 'Rs', id: 'incomeAgriculture', properties: props.incomeAgriculture},
     {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from your Business?', formType:'number', decor: 'Rs', id: 'incomeBusiness', properties: props.incomeBusiness},
     {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'What`s your yearly income from your House Property?', formType:'number', decor: 'Rs', id: 'incomeProperty', properties: props.incomeProperty},
-    {slotPattern: '^[A-Za-z,\\s]*$' , pattern: /^[A-Za-z,\s]+$/, label: 'Members your Family Contains?', formType:'text', decor: '', id: 'familyMembers', properties: props.familyMembers},
+    {slotPattern: '^[0-9]$' , pattern: /^[0-9]+$/, label: 'Members your Family Contains?', formType:'number', decor: '', id: 'familyMembers', properties: props.familyMembers},
   ];
   return (
     <>
@@ -1932,7 +1932,7 @@ export default function SignUp() {
     {id: 'incomeAgriculture', data: Incomestate.incomeAgriculture, decor: '', label: 'What`s your yearly income from the hectares / acres of agricultural land you own in the village?'},
     {id: 'incomeBusiness', data: Incomestate.incomeBusiness, decor: 'Rs', label: 'What`s your yearly income from your Business?'},
     {id: 'incomeProperty', data: Incomestate.incomeProperty, decor: 'Rs', label: 'What`s your yearly income from your House Property?'},
-    {id: 'familyMembers', data: Incomestate.familyMembers, decor: 'Rs', label: 'Members your Family Contains?'},
+    {id: 'familyMembers', data: Incomestate.familyMembers, decor: '', label: 'Members your Family Contains?'},
     {id: 'incomeTotal', data: Incomestate.incomeTotal, decor: '', label: 'Total Income of Family'},
     {id: 'PersonalSamagraID', data: Samagrastate.PersonalSamagraID, decor: '', label: 'Your Samagra ID'},
     {id: 'FamilySamagraID', data: Samagrastate.FamilySamagraID, decor: '', label: 'Family Samagra ID'},
