@@ -1,19 +1,16 @@
 import * as React from 'react';
 import { useState } from "react";
-import { CssVarsProvider, useColorScheme, ColorPaletteProp } from '@mui/joy/styles';
+import { CssVarsProvider } from '@mui/joy/styles';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import CssBaseline from '@mui/joy/CssBaseline';
-import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
-import Chip, { chipClasses } from '@mui/joy/Chip';
+import { chipClasses } from '@mui/joy/Chip';
 import Divider from '@mui/joy/Divider';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Input from '@mui/joy/Input';
-import Textarea from '@mui/joy/Textarea';
-import Stack from '@mui/joy/Stack';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import Typography from '@mui/joy/Typography';
@@ -24,28 +21,17 @@ import FileUpload from '../../utils/FileUpload';
 import CountrySelector from '../../utils/CountrySelector';
 import RadioGroup from '@mui/joy/RadioGroup';
 import Radio from '@mui/joy/Radio';
-import { display } from '@mui/system';
 import TabPanel from '@mui/joy/TabPanel';
 import Checkbox from '@mui/joy/Checkbox';
-import Card, { CardProps } from '@mui/joy/Card';
-import Link from '@mui/joy/Link';
+import Card from '@mui/joy/Card';
 import '../../../App.css';
 import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/joy/Alert';
-import { Label } from '@mui/icons-material';
-import InfoIcon from '@mui/icons-material/Info';
-import WarningIcon from '@mui/icons-material/Warning';
-import ReportIcon from '@mui/icons-material/Report';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import { title } from 'process';
-import { type } from 'os';
+import { InfoOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/joy';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
-import { getAllUsers, signUpUser } from '../../../Backen API/testapi';
-
-
+import { getAllUsers } from '../../../Backen API/testapi';
 
 interface PersonlFormElement extends HTMLFormElement {
   readonly firstName: HTMLInputElement;
@@ -66,33 +52,94 @@ interface PersonlFormElement extends HTMLFormElement {
   readonly Orphan: HTMLInputElement;
   readonly Agreement: HTMLInputElement;
 }
+var PassPortSizeFile:any = null;
+const Personalinitstate = {
+  firstName: '',
+  lastName: '',
+  passWord: '',
+  ConfirmpassWord: '',
+  fatherName: '',
+  eMail: '',
+  contactNumber: '',
+  enrollmentNumber: '',
+  dateofBirth: '',
+  Gender: '',
+  Religion: '',
+  HouseNo: '',
+  Street: '',
+  Sector: '',
+  City: '',
+  Pincode: '',
+  Area: '',
+  MaritalStatus: '',
+  SpouseName: '',
+  Disabled: '',
+  Orphan: '',
+  Next: true,
+  Agreement: false
+}
+function Personalreducer(state:any, action:any) {
+  switch (action.type) {
+    case 'firstName': return {...state, firstName: action.payload}
+    case 'lastName': return {...state, lastName: action.payload}
+    case 'passWord': return {...state, passWord: action.payload}
+    case 'ConfirmpassWord': return {...state, ConfirmpassWord: action.payload}
+    case 'fatherName': return {...state, fatherName: action.payload}
+    case 'eMail': return {...state, eMail: action.payload}
+    case 'contactNumber': return {...state, contactNumber: action.payload}
+    case 'dateofBirth': return {...state, dateofBirth: action.payload}
+    case 'enrollmentNumber': return {...state, enrollmentNumber: action.payload}
+    case 'Gender': return {...state, Gender: action.payload}
+    case 'Religion': return {...state, Religion: action.payload}
+    case 'HouseNo': return {...state, HouseNo: action.payload}
+    case 'Street': return {...state, Street: action.payload}
+    case 'Sector': return {...state, Sector: action.payload}
+    case 'City': return {...state, City: action.payload}
+    case 'Pincode': return {...state, Pincode: action.payload}
+    case 'Area': return {...state, Area: action.payload}
+    case 'MaritalStatus': return {...state, MaritalStatus: action.payload}
+    case 'SpouseName': return {...state, SpouseName: action.payload}
+    case 'Disabled': return {...state, Disabled: action.payload}
+    case 'Orphan': return {...state, Orphan: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
+
 export function PersonalDetails(props: any) {
   React.useEffect(() => {
     document.title = "SignUp - EduFundr";
     return () => {};
   }, []);
+  const personalQuesList = [
+    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Father`s Name', formType:'text', decor: '', id: 'fatherName', properties: props.fatherName},
+    {slotPattern: '^[0-9-,/\\s]*$' , pattern: /^[0-9/,-\s]+$/, label: 'Date of Birth', formType:'date', decor: "", id: 'dateofBirth', properties: props.dateofBirth},
+    {slotPattern: '^[A-Za-z0-9-,/\\s]*$' , pattern: /^[A-Za-z0-9/,-\s]+$/, label: 'Enrollment Number', formType:'text', decor: "", id: 'enrollmentNumber', properties: props.enrollmentNumber}
+  ];
+  const handleSubmit = async () => {
+
+    console.log('test hitting')
+ 
+     try {
+       const res = await getAllUsers();
+       console.log(res)
+    
+     } catch (error) {
+       console.log(error)
+     }
+    
+  };
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
   const [PassportSize , setPassportSize] = React.useState<File | null>(null);
   const [PassportSizeuploadProgress, setPassportSizeuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
-
-  const handleSubmit = async () => {
-
-   console.log('test hitting')
-
-    try {
-      const res = await getAllUsers();
-      console.log(res)
-   
-    } catch (error) {
-      console.log(error)
-    }
-   
-  };
-
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0 ) {
       if (event.target.files[0].type == 'application/pdf') {
-        setPassportSize(event.target.files[0]);
+        setPassportSize(event.target.files[0])
+        PassPortSizeFile = event.target.files[0];
         setPassportSizeuploadProgress(0);
         setSelectedFile(event.target.files[0]);
         var name:string = event?.target.name;
@@ -123,56 +170,47 @@ export function PersonalDetails(props: any) {
       setPassportSizeuploadProgress(0)
     }, 1000);
   };
-  const personalQuesList = [
-    {slotPattern: '^[A-Za-z\\s]*$' , pattern: /^[A-Za-z\s]+$/, label: 'Father`s Name', formType:'text', decor: '', id: 'fatherName', properties: props.fatherName},
-    {slotPattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$', pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, label: 'Email', formType:'email', decor: <MailOutlineIcon />, id: 'eMail', properties: props.eMail},
-    {slotPattern: '^[0-9-\\s]*$' , pattern: /^[0-9-\s]+$/, label: 'Contact Number', formType:'number', decor: "+91", id: 'contactNumber', properties: props.contactNumber},
-    {slotPattern: '^[0-9-,/\\s]*$' , pattern: /^[0-9/,-\s]+$/, label: 'Date of Birth', formType:'date', decor: "", id: 'dateofBirth', properties: props.dateofBirth},
-    {slotPattern: '^[A-Za-z0-9-,/\\s]*$' , pattern: /^[A-Za-z0-9/,-\s]+$/, label: 'Enrollment Number', formType:'text', decor: "", id: 'enrollmentNumber', properties: props.enrollmentNumber}
-  ];
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+
   return (
     <form  
-    name='PersonalSubmit' method = "post"
-    // onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
-    // event.preventDefault();
-    // if (props.passWord==props.ConfirmpassWord) {
-    //   props.dispatch({type: 'Next', payload: false})
-    //   props.settabIndex(props.tabIndex+1)
-    //   const data = {
-    //     firstName: props.firstName,
-    //     lastName: props.lastName,
-    //     fatherName: props.fatherName,
-    //     passWord: props.passWord,
-    //     ConfirmpassWord: props.ConfirmpassWord,
-    //     eMail: props.eMail,
-    //     contactNumber: props.contactNumber,
-    //     dateofBirth: props.dateofBirth,
-    //     enrollmentNumber: props.enrollmentNumber,
-    //     gender: props.Gender,
-    //     country: props.country,
-    //     religion: props.Religion,
-    //     MaritalStatus: props.MaritalStatus,
-    //     SpouseName: props.SpouseName,
-    //     Disabled: props.Disabled,
-    //     Orphan: props.Orphan,
-    //     Agreement: props.Agreement,
-    //   };
-    //   alert(JSON.stringify(data, null, 2));
-    // }
-
-  // }}
-  onSubmit={(event: React.FormEvent<PersonlFormElement>)=>handleSubmit}
+      name='PersonalSubmit' method = "post"
+      onSubmit={(event: React.FormEvent<PersonlFormElement>) => {
+      event.preventDefault();
+      if ( props.passWord === props.ConfirmpassWord && /^[6-9]\d{9}$/.test(props.contactNumber) === true  && /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(props.eMail) === true ) {
+        props.dispatch({type: 'Next', payload: false})
+        props.settabIndex(props.tabIndex+1)
+        const data = {
+          firstName: props.firstName,
+          lastName: props.lastName,
+          fatherName: props.fatherName,
+          passWord: props.passWord,
+          ConfirmpassWord: props.ConfirmpassWord,
+          eMail: props.eMail,
+          contactNumber: props.contactNumber,
+          dateofBirth: props.dateofBirth,
+          enrollmentNumber: props.enrollmentNumber,
+          gender: props.Gender,
+          country: props.country,
+          religion: props.Religion,
+          MaritalStatus: props.MaritalStatus,
+          SpouseName: props.SpouseName,
+          Disabled: props.Disabled,
+          Orphan: props.Orphan,
+          Agreement: props.Agreement,
+        };
+        alert(JSON.stringify(data, null, 2));
+      }}
+    } 
   >
       <TabPanel value={0}>
         <Box sx={{pt: 3,pb: 10,display: 'grid',gridTemplateColumns: {  xs: '100%',  sm: 'minmax(120px, 30%) 1fr',  lg: '280px 1fr minmax(120px, 208px)',},
           columnGap: { xs: 2, sm: 3, md: 4 },rowGap: { xs: 2, sm: 2.5 },'& > hr': {  gridColumn: '1/-1',},}} >
           <FormLabel sx={{ display: { xs: 'none', sm: 'block' } }} >Name</FormLabel>
           <Box sx={{ display: { xs: 'contents', sm: 'flex' }, gap: 2 }}>
-            <FormControl  sx={{ flex: 1 }} >
+            <FormControl  sx={{ flex: 1 }}>
               <FormLabel sx={{ display: { sm: 'none' } }}>First name</FormLabel>
-              <Input 
+              <Input
               type='text'
               placeholder="" 
               slotProps={{
@@ -232,7 +270,7 @@ export function PersonalDetails(props: any) {
               />
             </FormControl>
             <Divider role="presentation" />
-            <FormControl sx={{ display: { sm: 'contents' } }}>
+            <FormControl sx={{ display: { sm: 'contents' } }} error={props.passWord!=props.ConfirmpassWord ? true: false}>
               <FormLabel>Confirm Password</FormLabel>
               <Input
                 type={showPassword ? "text" : "password"}
@@ -255,12 +293,60 @@ export function PersonalDetails(props: any) {
                   props.dispatch({ type: 'ConfirmpassWord', payload: e.target.value })
                 }
               />
+                <FormHelperText sx={{ display: props.passWord===props.ConfirmpassWord ? 'none' : 'inline'}} >
+                  <InfoOutlined />
+                  Passwords Not Matching!
+                </FormHelperText>
+            </FormControl>
+            <Divider role="presentation" />
+            <FormControl sx={{ display: { sm: 'contents' } }} error = { /^[6-9]\d{9}$/.test(props.contactNumber) === true || props.contactNumber === '' ? false : true } >
+                  <FormLabel>Contact Number</FormLabel>
+                  <Input
+                    type='number'
+                    placeholder=''
+                    startDecorator={'+91'}
+                    name='contactNumber'
+                    required
+                    slotProps={{
+                      input: {
+                        pattern: '^[0-9-\\s]*$',
+                      },
+                    }}
+                    value={props.contactNumber}
+                    onChange={(e) =>
+                      props.dispatch({ type: 'contactNumber', payload: e.target.value })
+                    }
+                  />
+                  <FormHelperText sx={{ display: /^[6-9]\d{9}$/.test(props.contactNumber) === true || props.contactNumber === '' ? 'none' : 'inline'}} >
+                  <InfoOutlined />
+                  Incorrect Phone Number!
+                </FormHelperText>
+            </FormControl>
+            <Divider role="presentation" />
+
+            <FormControl sx={{ display: { sm: 'contents' } }} error = { /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(props.eMail) === true || props.eMail === '' ? false : true } >
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    type='email'
+                    placeholder=''
+                    startDecorator={ <MailOutlineIcon /> }
+                    name='eMail'
+                    required
+                    value={props.eMail}
+                    onChange={(e) =>
+                      props.dispatch({ type: 'eMail', payload: e.target.value })
+                    }
+                  />
+                  <FormHelperText sx={{ display: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(props.eMail) === true || props.eMail === '' ? 'none' : 'inline'}} >
+                  <InfoOutlined />
+                  Incorrect Email ID!
+                </FormHelperText>
             </FormControl>
             <Divider role="presentation" />
           {
             personalQuesList.map((ques: any, id: any) => (
               <React.Fragment key={id}>
-                <FormControl sx={{ display: { sm: 'contents' } }}>
+                <FormControl sx={{ display: { sm: 'contents' } }} >
                   <FormLabel>{ques.label}</FormLabel>
                   <Input
                     type={ques.formType}
@@ -555,6 +641,45 @@ interface AcademicFormElement extends HTMLFormElement {
   readonly TwelfthStream: HTMLInputElement;
   readonly TwelfthPercentage: HTMLInputElement;
 }
+var TenthMarkSheetFile:any = null;
+var TwelfthMarkSheetFile:any = null;
+var diplomaDegreeFile:any = null;
+var previousSemMarkesheetFile:any = null;
+const Academicinitstate = {
+  Diploma: '',
+  DiplomaCollege: '',
+  DiplomaBranch: '',
+  DiplomaCGPA: '',
+  TenthBoard: '',
+  TenthSchool: '',
+  TenthPercentage: '',
+  TwelfthBoard: '',
+  TwelfthSchool: '',
+  TwelfthStream: '',
+  TwelfthPercentage: '',
+  currentSemester: 1,
+  Next: true,
+  Agreement: false
+}
+function Academicreducer(state:any, action:any) {
+  switch (action.type) {
+    case 'Diploma': return {...state, Diploma: action.payload}
+    case 'DiplomaCollege': return {...state, DiplomaCollege: action.payload}
+    case 'DiplomaBranch': return {...state, DiplomaBranch: action.payload}
+    case 'DiplomaCGPA': return {...state, DiplomaCGPA: action.payload}
+    case 'TenthBoard': return {...state, TenthBoard: action.payload}
+    case 'TenthSchool': return {...state, TenthSchool: action.payload}
+    case 'TenthPercentage': return {...state, TenthPercentage: action.payload}
+    case 'TwelfthBoard': return {...state, TwelfthBoard: action.payload}
+    case 'TwelfthSchool': return {...state, TwelfthSchool: action.payload}
+    case 'TwelfthStream': return {...state, TwelfthStream: action.payload}
+    case 'TwelfthPercentage': return {...state, TwelfthPercentage: action.payload}
+    case 'currentSemester': return {...state, currentSemester: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
 export function AcademicDetails(props: any) {
   const [TenthMarkSheet , setTenthMarkSheet] = React.useState<File | null>(null);
   const [TenthMarkSheetuploadProgress, setTenthMarkSheetUploadProgress] = React.useState(0);
@@ -571,18 +696,22 @@ export function AcademicDetails(props: any) {
       if (event.target.files[0].type == 'application/pdf') {
         switch (event.target.name) {
           case 'TenthMarkSheet':
+            TenthMarkSheetFile = event.target.files[0];
             setTenthMarkSheet(event.target.files[0]);
             setTenthMarkSheetUploadProgress(0);
             break;
           case 'TwelfthMarkSheet':
+            TwelfthMarkSheetFile = event.target.files[0];
             setTwelfthMarkSheet(event.target.files[0]);
             setTwelfthMarkSheetuploadProgress(0);
             break;
           case 'previousSemMarkesheet':
+            previousSemMarkesheetFile = event.target.files[0];
             setpreviousSemMarkesheet(event.target.files[0]);
             setpreviousSemMarkesheetuploadProgress(0);
             break;
           case 'diplomaDegree':
+            diplomaDegreeFile = event.target.files[0];
             setdiplomaDegree(event.target.files[0]);
             setdiplomaDegreeuploadProgress(0);
             break;  
@@ -979,17 +1108,38 @@ interface CasteFormElement extends HTMLFormElement {
   readonly caste: HTMLInputElement;
   readonly subCaste: HTMLInputElement;
 }
+var casteCertificateFile:any = null;
+const Casteinitstate = {
+  casteCertificateNumber: '',
+  casteCertificateIssueDate: '',
+  caste: '',
+  subCaste: '',
+  Next: true,
+  Agreement: false
+}
+function Castereducer(state:any, action:any) {
+  switch (action.type) {
+    case 'casteCertificateNumber': return {...state, casteCertificateNumber: action.payload}
+    case 'casteCertificateIssueDate': return {...state, casteCertificateIssueDate: action.payload}
+    case 'caste': return {...state, caste: action.payload}
+    case 'subCaste': return {...state, subCaste: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
 export function CasteDetails(props:any) {
   const [casteCertificate , setcasteCertificate] = React.useState<File | null>(null);
   const [casteCertificateuploadProgress, setcasteCertificateuploadProgress] = React.useState(0);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
-      if (event.target.files[0].type == 'application/pdf') { 
-      setcasteCertificate(event.target.files[0]);
-      setcasteCertificateuploadProgress(0);
-      setSelectedFile(event.target.files[0]);
-      var name:string = event?.target.name;
+      if (event.target.files[0].type == 'application/pdf') {
+        casteCertificateFile = event.target.files[0];
+        setcasteCertificate(event.target.files[0]);
+        setcasteCertificateuploadProgress(0);
+        setSelectedFile(event.target.files[0]);
+        var name:string = event?.target.name;
       } else {
         return
       }
@@ -1125,6 +1275,28 @@ interface incomeFormElement extends HTMLFormElement {
   readonly familyMembers: HTMLInputElement;
   readonly incomeTotal: HTMLInputElement;
 }
+var incomeCertificateFile:any = null;
+const Incomeinitstate = {
+  incomeAgriculture: '',
+  incomeBusiness: '',
+  incomeProperty: '',
+  familyMembers: '',
+  incomeTotal: '',
+  Next: true,
+  Agreement: false
+}
+function Incomereducer(state:any, action:any) {
+  switch (action.type) {
+    case 'incomeAgriculture': return {...state, incomeAgriculture: action.payload}
+    case 'incomeBusiness': return {...state, incomeBusiness: action.payload}
+    case 'incomeProperty': return {...state, incomeProperty: action.payload}
+    case 'familyMembers': return {...state, familyMembers: action.payload}
+    case 'incomeTotal': return {...state, incomeTotal: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
 export function IncomeDetails(props:any) {
   const [incomeCertificate , setincomeCertificate] = React.useState<File | null>(null);
   const [incomeCertificateuploadProgress, setincomeCertificateuploadProgress] = React.useState(0);
@@ -1132,6 +1304,7 @@ export function IncomeDetails(props:any) {
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       if (event.target.files[0].type == 'application/pdf') {
+        incomeCertificateFile = event.target.files[0];
         setincomeCertificate(event.target.files[0]);
         setincomeCertificateuploadProgress(0);
         setSelectedFile(event.target.files[0]);
@@ -1307,6 +1480,28 @@ interface SamagraFormElement extends HTMLFormElement {
   readonly RelationnShipHeadofFamily: HTMLInputElement;
   readonly GenderHeadofFamily: HTMLInputElement;
 }
+var samagraCertificateFile:any = null;
+const Samagrainitstate = {
+  PersonalSamagraID: '',
+  FamilySamagraID: '',
+  HeadofFamily: '',
+  RelationnShipHeadofFamily: '',
+  GenderHeadofFamily: '',
+  Next: true,
+  Agreement: false
+}
+function Samagrareducer(state:any, action:any) {
+  switch (action.type) {
+    case 'PersonalSamagraID': return {...state, PersonalSamagraID: action.payload}
+    case 'FamilySamagraID': return {...state, FamilySamagraID: action.payload}
+    case 'HeadofFamily': return {...state, HeadofFamily: action.payload}
+    case 'RelationnShipHeadofFamily': return {...state, RelationnShipHeadofFamily: action.payload}
+    case 'GenderHeadofFamily': return {...state, GenderHeadofFamily: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
 export function SamagraDetails(props:any) {
   const [samagraCertificate , setsamagraCertificate] = React.useState<File | null>(null);
   const [samagraCertificateuploadProgress, setsamagraCertificateuploadProgress] = React.useState(0);
@@ -1314,6 +1509,7 @@ export function SamagraDetails(props:any) {
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       if (event.target.files[0].type == 'application/pdf') {
+        samagraCertificateFile = event.target.files[0];
         setsamagraCertificate(event.target.files[0]);
         setsamagraCertificateuploadProgress(0);
         setSelectedFile(event.target.files[0]);
@@ -1466,6 +1662,22 @@ interface NativeFormElement extends HTMLFormElement {
   readonly nativeBorn: HTMLInputElement;
   readonly nativeEducation: HTMLInputElement;
 }
+var nativeCertificateFile:any = null;
+const Nativeinitstate = {
+  nativeBorn: '',
+  nativeEducation: '',
+  Next: true,
+  Agreement: false
+}
+function Nativereducer(state:any, action:any) {
+  switch (action.type) {
+    case 'nativeBorn': return {...state, nativeBorn: action.payload}
+    case 'nativeEducation': return {...state, nativeEducation: action.payload}
+    case 'Agreement': return {...state, Agreement: action.payload}
+    case 'Next': return {...state, Next: action.payload}
+    default: throw new Error("Action not Found");
+  }
+}
 export function NativeDetails(props:any) {
   const [nativeCertificate , setnativeCertificate] = React.useState<File | null>(null);
   const [nativeCertificateuploadProgress, setnativeCertificateuploadProgress] = React.useState(0);
@@ -1473,6 +1685,7 @@ export function NativeDetails(props:any) {
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       if (event.target.files[0].type == 'application/pdf') {
+        nativeCertificateFile = event.target.files[0];
         setnativeCertificate(event.target.files[0]);
         setnativeCertificateuploadProgress(0);
         setSelectedFile(event.target.files[0]);
@@ -1623,171 +1836,6 @@ export function NativeDetails(props:any) {
   )
 }
 
-const Personalinitstate = {
-  firstName: '',
-  lastName: '',
-  passWord: '',
-  ConfirmpassWord: '',
-  fatherName: '',
-  eMail: '',
-  contactNumber: '',
-  enrollmentNumber: '',
-  dateofBirth: '',
-  Gender: '',
-  Religion: '',
-  HouseNo: '',
-  Street: '',
-  Sector: '',
-  City: '',
-  Pincode: '',
-  Area: '',
-  MaritalStatus: '',
-  SpouseName: '',
-  Disabled: '',
-  Orphan: '',
-  Next: true,
-  Agreement: false
-}
-function Personalreducer(state:any, action:any) {
-  switch (action.type) {
-    case 'firstName': return {...state, firstName: action.payload}
-    case 'lastName': return {...state, lastName: action.payload}
-    case 'passWord': return {...state, passWord: action.payload}
-    case 'ConfirmpassWord': return {...state, ConfirmpassWord: action.payload}
-    case 'fatherName': return {...state, fatherName: action.payload}
-    case 'eMail': return {...state, eMail: action.payload}
-    case 'contactNumber': return {...state, contactNumber: action.payload}
-    case 'dateofBirth': return {...state, dateofBirth: action.payload}
-    case 'enrollmentNumber': return {...state, enrollmentNumber: action.payload}
-    case 'Gender': return {...state, Gender: action.payload}
-    case 'Religion': return {...state, Religion: action.payload}
-    case 'HouseNo': return {...state, HouseNo: action.payload}
-    case 'Street': return {...state, Street: action.payload}
-    case 'Sector': return {...state, Sector: action.payload}
-    case 'City': return {...state, City: action.payload}
-    case 'Pincode': return {...state, Pincode: action.payload}
-    case 'Area': return {...state, Area: action.payload}
-    case 'MaritalStatus': return {...state, MaritalStatus: action.payload}
-    case 'SpouseName': return {...state, SpouseName: action.payload}
-    case 'Disabled': return {...state, Disabled: action.payload}
-    case 'Orphan': return {...state, Orphan: action.payload}
-    case 'Agreement': return {...state, Agreement: action.payload}
-    case 'Next': return {...state, Next: action.payload}
-    default: throw new Error("Action not Found");
-  }
-}
-const Academicinitstate = {
-  Diploma: '',
-  DiplomaCollege: '',
-  DiplomaBranch: '',
-  DiplomaCGPA: '',
-  TenthBoard: '',
-  TenthSchool: '',
-  TenthPercentage: '',
-  TwelfthBoard: '',
-  TwelfthSchool: '',
-  TwelfthStream: '',
-  TwelfthPercentage: '',
-  currentSemester: 1,
-  Next: true,
-  Agreement: false
-}
-function Academicreducer(state:any, action:any) {
-  switch (action.type) {
-    case 'Diploma': return {...state, Diploma: action.payload}
-    case 'DiplomaCollege': return {...state, DiplomaCollege: action.payload}
-    case 'DiplomaBranch': return {...state, DiplomaBranch: action.payload}
-    case 'DiplomaCGPA': return {...state, DiplomaCGPA: action.payload}
-    case 'TenthBoard': return {...state, TenthBoard: action.payload}
-    case 'TenthSchool': return {...state, TenthSchool: action.payload}
-    case 'TenthPercentage': return {...state, TenthPercentage: action.payload}
-    case 'TwelfthBoard': return {...state, TwelfthBoard: action.payload}
-    case 'TwelfthSchool': return {...state, TwelfthSchool: action.payload}
-    case 'TwelfthStream': return {...state, TwelfthStream: action.payload}
-    case 'TwelfthPercentage': return {...state, TwelfthPercentage: action.payload}
-    case 'currentSemester': return {...state, currentSemester: action.payload}
-    case 'Agreement': return {...state, Agreement: action.payload}
-    case 'Next': return {...state, Next: action.payload}
-    default: throw new Error("Action not Found");
-  }
-}
-const Casteinitstate = {
-  casteCertificateNumber: '',
-  casteCertificateIssueDate: '',
-  caste: '',
-  subCaste: '',
-  Next: true,
-  Agreement: false
-}
-function Castereducer(state:any, action:any) {
-  switch (action.type) {
-    case 'casteCertificateNumber': return {...state, casteCertificateNumber: action.payload}
-    case 'casteCertificateIssueDate': return {...state, casteCertificateIssueDate: action.payload}
-    case 'caste': return {...state, caste: action.payload}
-    case 'subCaste': return {...state, subCaste: action.payload}
-    case 'Agreement': return {...state, Agreement: action.payload}
-    case 'Next': return {...state, Next: action.payload}
-    default: throw new Error("Action not Found");
-  }
-}
-const Incomeinitstate = {
-  incomeAgriculture: '',
-  incomeBusiness: '',
-  incomeProperty: '',
-  familyMembers: '',
-  incomeTotal: '',
-  Next: true,
-  Agreement: false
-}
-function Incomereducer(state:any, action:any) {
-  switch (action.type) {
-    case 'incomeAgriculture': return {...state, incomeAgriculture: action.payload}
-    case 'incomeBusiness': return {...state, incomeBusiness: action.payload}
-    case 'incomeProperty': return {...state, incomeProperty: action.payload}
-    case 'familyMembers': return {...state, familyMembers: action.payload}
-    case 'incomeTotal': return {...state, incomeTotal: action.payload}
-    case 'Agreement': return {...state, Agreement: action.payload}
-    case 'Next': return {...state, Next: action.payload}
-    default: throw new Error("Action not Found");
-  }
-}
-const Samagrainitstate = {
-  PersonalSamagraID: '',
-  FamilySamagraID: '',
-  HeadofFamily: '',
-  RelationnShipHeadofFamily: '',
-  GenderHeadofFamily: '',
-  Next: true,
-  Agreement: false
-}
-function Samagrareducer(state:any, action:any) {
-  switch (action.type) {
-    case 'PersonalSamagraID': return {...state, PersonalSamagraID: action.payload}
-    case 'FamilySamagraID': return {...state, FamilySamagraID: action.payload}
-    case 'HeadofFamily': return {...state, HeadofFamily: action.payload}
-    case 'RelationnShipHeadofFamily': return {...state, RelationnShipHeadofFamily: action.payload}
-    case 'GenderHeadofFamily': return {...state, GenderHeadofFamily: action.payload}
-    case 'Agreement': return {...state, Agreement: action.payload}
-    case 'Next': return {...state, Next: action.payload}
-    default: throw new Error("Action not Found");
-  }
-}
-const Nativeinitstate = {
-  nativeBorn: '',
-  nativeEducation: '',
-  Next: true,
-  Agreement: false
-}
-function Nativereducer(state:any, action:any) {
-  switch (action.type) {
-    case 'nativeBorn': return {...state, nativeBorn: action.payload}
-    case 'nativeEducation': return {...state, nativeEducation: action.payload}
-    case 'Agreement': return {...state, Agreement: action.payload}
-    case 'Next': return {...state, Next: action.payload}
-    default: throw new Error("Action not Found");
-  }
-}
-
 export default function SignUp() {
   const navigate = useNavigate();
   const [Personalstate, Personaldispatch] = React.useReducer(Personalreducer, Personalinitstate);
@@ -1797,6 +1845,60 @@ export default function SignUp() {
   const [Samagrastate, Samagradispatch] = React.useReducer(Samagrareducer, Samagrainitstate);
   const [Nativestate, Nativedispatch] = React.useReducer(Nativereducer, Nativeinitstate);
   const [tabIndex, settabIndex] = React.useState(0);
+
+  const UserData = [
+    {id: 'firstName' , data: Personalstate.firstName},
+    {id: 'lastName' , data: Personalstate.lastName},
+    {id: 'passWord' , data: Personalstate.passWord},
+    {id: 'fatherName' , data: Personalstate.fatherName},
+    {id: 'eMail' , data: Personalstate.eMail},
+    {id: 'contactNumber' , data: Personalstate.contactNumber},
+    {id: 'enrollmentNumber' , data: Personalstate.enrollmentNumber},
+    {id: 'dateofBirth' , data: Personalstate.dateofBirth},
+    {id: 'gender' , data: Personalstate.gender},
+    {id: 'religion' , data: Personalstate.religion},
+    {id: 'country' , data: Personalstate.country},
+    {id: 'MaritalStatus' , data: Personalstate.MaritalStatus},
+    {id: 'SpouseName' , data: Personalstate.SpouseName},
+    {id: 'Disabled' , data: Personalstate.Disabled},
+    {id: 'Orphan' , data: Personalstate.Orphan},
+    {id: 'PassPortSizeFile', data: PassPortSizeFile},
+    {id: 'Diploma' , data: Academicstate.Diploma},
+    {id: 'TenthBoard' , data: Academicstate.TenthBoard},
+    {id: 'TenthSchool' , data: Academicstate.TenthSchool},
+    {id: 'TenthPercentage' , data: Academicstate.TenthPercentage},
+    {id: 'DiplomaCollege' , data: Academicstate.DiplomaCollege},
+    {id: 'DiplomaBranch' , data: Academicstate.DiplomaBranch},
+    {id: 'DiplomaCGPA' , data: Academicstate.DiplomaCGPA},
+    {id: 'TwelfthBoard' , data: Academicstate.TwelfthBoard},
+    {id: 'TwelfthSchool' , data: Academicstate.TwelfthSchool},
+    {id: 'TwelfthStream' , data: Academicstate.TwelfthStream},
+    {id: 'TwelfthPercentage' , data: Academicstate.TwelfthPercentage},
+    {id: 'casteCertificateNumber' , data: Castestate.casteCertificateNumber},
+    {id: 'casteCertificateIssueDate' , data: Castestate.casteCertificateIssueDate},
+    {id: 'caste' , data: Castestate.caste},
+    {id: 'subCaste' , data: Castestate.subCaste},
+    {id: 'incomeAgriculture' , data: Incomestate.incomeAgriculture},
+    {id: 'incomeBusiness' , data: Incomestate.incomeBusiness},
+    {id: 'incomeProperty' , data: Incomestate.incomeProperty},
+    {id: 'familyMembers' , data: Incomestate.familyMembers},
+    {id: 'incomeTotal' , data: Incomestate.incomeTotal},
+    {id: 'PersonalSamagraID' , data: Samagrastate.PersonalSamagraID},
+    {id: 'FamilySamagraID' , data: Samagrastate.FamilySamagraID},
+    {id: 'HeadofFamily' , data: Samagrastate.HeadofFamily},
+    {id: 'RelationnShipHeadofFamily' , data: Samagrastate.RelationnShipHeadofFamily},
+    {id: 'GenderHeadofFamily' , data: Samagrastate.GenderHeadofFamily},
+    {id: 'nativeBorn' , data: Nativestate.nativeBorn},
+    {id: 'nativeEducation' , data: Nativestate.nativeEducation},
+    {id: 'TenthMarkSheetFile', data: TenthMarkSheetFile},
+    {id: 'TwelfthMarkSheetFile', data: TwelfthMarkSheetFile},
+    {id: 'diplomaDegreeFile', data: diplomaDegreeFile},
+    {id: 'previousSemMarkesheetFile', data: previousSemMarkesheetFile},
+    {id: 'casteCertificateFile', data: casteCertificateFile},
+    {id: 'incomeCertificateFile', data: incomeCertificateFile},
+    {id: 'samagraCertificateFile', data: samagraCertificateFile},
+    {id: 'nativeCertificateFile', data: nativeCertificateFile},
+  ]
 
   const ProfileReview = [
     {id: 'firstName', data: Personalstate.firstName+' '+Personalstate.lastName, decor: '', label: 'Name'},
@@ -1848,9 +1950,13 @@ export default function SignUp() {
   };
   const [alertSubmit, setalertSubmit] = React.useState(alertInitial);
   function onFinalSubmit() {
+    for (let index = 0; index < UserData.length; index++) {
+      const element = UserData[index];
+      console.log(element.id, element.data)
+    }
+
     for (let index = 0; index < ProfileReview.length; index++) {
       const element = ProfileReview[index];
-      console.log(element.label, element.data)
       if (element.data == ' ' || element.data == '' || element.data == '  Sector  ,  Pincode  , ' || element.data == null || element.data == "null " ) {
         setalertSubmit({title:'The '+ element.label+' field is missing. Please fill it out before submitting.', color:'warning',  icon: '', display: 'flex'})
         setTimeout(() => {
@@ -2057,7 +2163,7 @@ export default function SignUp() {
                     alignItems: 'center',
                   }}
                 >
-                  <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." checked name="ReviewAgreement" />
+                  <Checkbox size="sm" label="I acknowledge that the information provided above is accurate and true to the best of my knowledge." name="ReviewAgreement" />
                 </Box>
               </FormControl>
               <Box sx={{ gridColumn: '1/-1', justifySelf: 'flex-end', display: 'flex', gap: 1, }} >
