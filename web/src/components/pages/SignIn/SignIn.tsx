@@ -202,10 +202,10 @@ export default function SignIn() {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
           backgroundImage:
-            'url(https://cdn.discordapp.com/attachments/1144894054505664612/1144895631958229022/sidePickLightMode.png?auto=format&w=1000&dpr=2)',
+            'url("/images/sidePickLightMode.png")',
           [theme.getColorSchemeSelector('dark')]: {
             backgroundImage:
-              'url(https://cdn.discordapp.com/attachments/1144894054505664612/1144896167289819207/sidePickDarkMode.png?auto=format&w=1000&dpr=2)',
+              'url("/images/sidePanelDark.png")',
           },
         })}
       />

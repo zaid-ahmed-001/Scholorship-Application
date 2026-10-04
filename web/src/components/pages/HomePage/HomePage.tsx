@@ -164,6 +164,8 @@ function ContactUs() {
     )
 }
 
+
+
 function Body() {
     return (
     <div id='home'>
@@ -175,10 +177,9 @@ function Body() {
            justifyContent: 'center',
            alignItems: 'center',
            backgroundSize: 'cover',
-           backgroundImage:
-           'url("https://cdn.discordapp.com/attachments/1144894054505664612/1151938554944028712/bg_3_1.png")',
+           backgroundImage:'url("/images/backgroundBlack.png")',
            [theme.getColorSchemeSelector('dark')]: {
-               backgroundImage: 'url("https://cdn.discordapp.com/attachments/1144894054505664612/1151228548749725767/bg_4.png")',
+               backgroundImage: 'url("/images/backgroundWhite.png")',
            },
            p: 8,
        })} >
@@ -239,12 +240,12 @@ function HomePageCardsGroup () {
             </Box>
             <Box  sx={{overflow:'hidden', pb: 2, ml: {lg: 7, xs: 2}, width: '94%'}}> 
                 <ScrollContainer style={{display: 'flex', justifyContent: 'left', gap: 15 }}>
-                    <HomePageCards Title="Kalash Jain" Desc="This website was a game-changer for my education funding" Image="https://cdn.discordapp.com/attachments/1144894054505664612/1151195914145370262/profile.png" />
-                    <HomePageCards Title="Rishi Vyas" Desc="Effortless scholarship discovery and straightforward applications" Image="https://cdn.discordapp.com/attachments/1144894054505664612/1151195914145370262/profile.png" />
-                    <HomePageCards Title="Bittu" Desc="A lifesaver with hidden scholarships and timely reminders" Image="https://cdn.discordapp.com/attachments/1144894054505664612/1151195914145370262/profile.png" />
-                    <HomePageCards Title="Aryan" Desc="Funding success and improved writing skills" Image="https://cdn.discordapp.com/attachments/1144894054505664612/1151195914145370262/profile.png" />
-                    <HomePageCards Title="Kunal Sahu" Desc="Motivating community for a debt-free education" Image="https://cdn.discordapp.com/attachments/1144894054505664612/1151195914145370262/profile.png" />
-                    <HomePageCards Title="Ullah" Desc="Game-changer for affordable education" Image="https://cdn.discordapp.com/attachments/1144894054505664612/1151195914145370262/profile.png" />
+                    <HomePageCards Title="User 1" Desc="This website was a game-changer for my education funding" Image='/images/ProfilePhoto.png' />
+                    <HomePageCards Title="User 2" Desc="Effortless scholarship discovery and straightforward applications" Image="/images/ProfilePhoto.png" />
+                    <HomePageCards Title="User 3" Desc="A lifesaver with hidden scholarships and timely reminders" Image="/images/ProfilePhoto.png" />
+                    <HomePageCards Title="User 4" Desc="Funding success and improved writing skills" Image="/images/ProfilePhoto.png" />
+                    <HomePageCards Title="User 5" Desc="Motivating community for a debt-free education" Image="/images/ProfilePhoto.png" />
+                    <HomePageCards Title="User 6" Desc="Game-changer for affordable education" Image="/images/ProfilePhoto.png" />
                 </ScrollContainer>
             </Box>
         </Box>
@@ -265,9 +266,9 @@ function HomePageCards(props:any) {
             <AspectRatio ratio="1" sx={{ width: 90 }}>
             <img
                 src={props.Image}
-                srcSet="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90&dpr=2 2x"
                 loading="lazy"
                 alt=""
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                 />
             </AspectRatio>
             <CardContent>
@@ -506,7 +507,7 @@ function Header() {
                         <MenuIcon />
                     </IconButton>
                     <Typography component="h1" fontWeight="xl" sx={{ml: {lg: 5}}}>
-                        <img src='https://cdn.discordapp.com/attachments/1144894054505664612/1149414171901960242/Logo.png' style={{height: 25}} />
+                        <img src='/images/Logo.png' style={{height: 25}} />
                     </Typography>
                     
                 </Box>
